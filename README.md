@@ -128,9 +128,6 @@ echo $renderer->render([
     'theme' => 'light' // 'light' or 'dark'
 ]);
 ```
-Here is a detailed README.md file for your project based on the provided context:
-
-```
 
 ## Installation
 

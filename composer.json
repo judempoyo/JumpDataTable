@@ -1,9 +1,9 @@
 {
-    "name": "Jump/jump-data-table",
+    "name": "jump/jump-data-table",
     "description": "Un composant de tableau réutilisable pour PHP",
     "autoload": {
         "psr-4": {
-            "JUMP\\JumpDataTable\\": "src/"
+            "Jump\\JumpDataTable\\": "src/"
         }
     },
     "type": "library",
@@ -21,8 +21,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "JUMP\\JumpDataTable\\JumpDataTableServiceProvider"
+                "Jump\\JumpDataTable\\JumpDataTableServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.1"
     }
 }

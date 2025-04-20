@@ -128,6 +128,12 @@ class TailwindTheme implements ThemeInterface
         return "p-1.5 rounded-full transition duration-200 text-$textColor hover:bg-$hoverBg";
     }
 
+    /**
+     * Get the CSS classes for the filters container.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the filters container.
+     */
     public static function getFiltersContainerClasses(bool $darkMode): string
     {
         $bgColor = $darkMode 
@@ -137,6 +143,12 @@ class TailwindTheme implements ThemeInterface
         return "p-4 mt-2 rounded-lg bg-$bgColor";
     }
 
+    /**
+     * Get the CSS classes for the filter input field.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the filter input field.
+     */
     public static function getFilterInputClasses(bool $darkMode): string
     {
         $borderColor = $darkMode 
@@ -151,6 +163,12 @@ class TailwindTheme implements ThemeInterface
         return "w-full px-3 py-2 text-sm border rounded-lg shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border-$borderColor bg-$bgColor text-$textColor placeholder-$placeholderColor";
     }
 
+    /**
+     * Get the CSS classes for the filter label.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the filter label.
+     */
     public static function getFilterLabelClasses(bool $darkMode): string
     {
         $textColor = $darkMode ? 'gray-300' : 'gray-700';
@@ -158,6 +176,12 @@ class TailwindTheme implements ThemeInterface
         return "block mb-1 text-sm font-medium text-$textColor";
     }
 
+    /**
+     * Get the CSS classes for the table element.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the table element.
+     */
     public static function getTableClasses(bool $darkMode): string
     {
         $divideColor = $darkMode 
@@ -167,6 +191,12 @@ class TailwindTheme implements ThemeInterface
         return "min-w-full divide-y divide-$divideColor";
     }
 
+    /**
+     * Get the CSS classes for the table header.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the table header.
+     */
     public static function getTableHeaderClasses(bool $darkMode): string
     {
         $bgColor = $darkMode 
@@ -176,6 +206,12 @@ class TailwindTheme implements ThemeInterface
         return "bg-$bgColor";
     }
 
+    /**
+     * Get the CSS classes for the table header cells.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the table header cells.
+     */
     public static function getTableHeaderCellClasses(bool $darkMode): string
     {
         $textColor = $darkMode ? 'gray-300' : 'gray-500';
@@ -183,6 +219,12 @@ class TailwindTheme implements ThemeInterface
         return "px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-$textColor";
     }
 
+    /**
+     * Get the CSS classes for the table body.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the table body.
+     */
     public static function getTableBodyClasses(bool $darkMode): string
     {
         $bgColor = $darkMode 
@@ -195,6 +237,12 @@ class TailwindTheme implements ThemeInterface
         return "bg-$bgColor divide-$divideColor";
     }
 
+    /**
+     * Get the CSS classes for table rows.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for table rows.
+     */
     public static function getTableRowClasses(bool $darkMode): string
     {
         $hoverBg = $darkMode 
@@ -204,6 +252,12 @@ class TailwindTheme implements ThemeInterface
         return "transition duration-150 hover:bg-$hoverBg";
     }
 
+    /**
+     * Get the CSS classes for table cells.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for table cells.
+     */
     public static function getTableCellClasses(bool $darkMode): string
     {
         $textColor = $darkMode ? 'gray-100' : 'gray-900';
@@ -211,6 +265,12 @@ class TailwindTheme implements ThemeInterface
         return "px-6 py-4 whitespace-nowrap text-sm text-$textColor";
     }
 
+    /**
+     * Get the CSS classes for the empty state message.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the empty state message.
+     */
     public static function getEmptyStateClasses(bool $darkMode): string
     {
         $textColor = $darkMode ? 'gray-400' : 'gray-500';
@@ -218,6 +278,12 @@ class TailwindTheme implements ThemeInterface
         return "flex flex-col items-center justify-center text-$textColor";
     }
 
+    /**
+     * Get the CSS classes for the filter icon.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the filter icon.
+     */
     public static function getFilterIconClasses(bool $darkMode): string
     {
         $textColor = $darkMode ? 'gray-300' : 'gray-500';
@@ -226,21 +292,46 @@ class TailwindTheme implements ThemeInterface
         return "w-5 h-5 text-$textColor group-hover:text-$hoverColor";
     }
 
+    /**
+     * Get the CSS classes for the export icon.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the export icon.
+     */
     public static function getExportIconClasses(bool $darkMode): string
     {
         return self::getFilterIconClasses($darkMode);
     }
 
+    /**
+     * Get the CSS classes for the add icon.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the add icon.
+     */
     public static function getAddIconClasses(bool $darkMode): string
     {
         return "w-5 h-5 text-white";
     }
 
+    /**
+     * Get the CSS classes for the pagination container.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return string The CSS classes for the pagination container.
+     */
     public static function getPaginationClasses(bool $darkMode): string
     {
         return "flex items-center space-x-1";
     }
 
+    /**
+     * Get the CSS classes for a pagination item.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @param bool $active Whether the pagination item is active.
+     * @return string The CSS classes for a pagination item.
+     */
     public static function getPageItemClasses(bool $darkMode, bool $active = false): string
     {
         if ($active) {
@@ -252,6 +343,13 @@ class TailwindTheme implements ThemeInterface
         return "bg-$bgColor border-$borderColor";
     }
 
+    /**
+     * Get the CSS classes for a pagination link.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @param bool $active Whether the pagination link is active.
+     * @return string The CSS classes for a pagination link.
+     */
     public static function getPageLinkClasses(bool $darkMode, bool $active = false): string
     {
         if ($active) {
@@ -268,14 +366,35 @@ class TailwindTheme implements ThemeInterface
         return "text-$textColor bg-$bgColor border-$borderColor hover:bg-$hoverBg";
     }
 
+    /**
+     * Get the CSS animation classes.
+     *
+     * @param string $animation The animation name.
+     * @return string The CSS animation classes.
+     */
     public static function getAnimationClasses(string $animation): string
     {
         return "animate__animated animate__$animation";
     }
 
+   /**
+             * Configuration for the Tailwind theme's CDN resources.
+             *
+             * This array contains the URLs or paths to the necessary resources
+             * for the Tailwind theme to function properly. These resources may
+             * include stylesheets, scripts, or other assets that are loaded
+             * from a Content Delivery Network (CDN).
+             *
+             * Example:
+             * 'cdn' => [
+             *     'css' => 'https://cdn.example.com/tailwind.min.css',
+             *     'js' => 'https://cdn.example.com/tailwind.min.js',
+             * ]
+             */
     public static function getCssLinks(): array
     {
         return [
+           
             'cdn' => [
                 'https://cdn.tailwindcss.com',
                 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'
@@ -284,6 +403,11 @@ class TailwindTheme implements ThemeInterface
         ];
     }
 
+    /**
+     * Get the JavaScript links for the theme.
+     *
+     * @return array The JavaScript links.
+     */
     public static function getJsLinks(): array
     {
         return [
@@ -292,6 +416,11 @@ class TailwindTheme implements ThemeInterface
         ];
     }
 
+    /**
+     * Get the available presets for the theme.
+     *
+     * @return array The available presets.
+     */
     public static function getAvailablePresets(): array
     {
         return array_keys(self::$presets);

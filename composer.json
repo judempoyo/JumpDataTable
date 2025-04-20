@@ -1,0 +1,28 @@
+{
+    "name": "Jump/jump-data-table",
+    "description": "Un composant de tableau réutilisable pour PHP",
+    "autoload": {
+        "psr-4": {
+            "JUMP\\JumpDataTable\\": "src/"
+        }
+    },
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jude mpoyo",
+            "email": "mpoyojude0@gmail.com"
+        }
+    ],
+    "require": {
+         "php": "^8.0",
+        "ext-json": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JUMP\\JumpDataTable\\JumpDataTableServiceProvider"
+            ]
+        }
+    }
+}

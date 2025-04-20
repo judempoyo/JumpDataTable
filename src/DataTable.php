@@ -4,6 +4,7 @@ namespace Jump\JumpDataTable;
 
 class DataTable
 {
+    
     protected string $title = 'Liste des éléments';
     protected string $createUrl = '#';
     protected array $columns = [];

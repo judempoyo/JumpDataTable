@@ -15,13 +15,14 @@ class DataTable
     protected string $sort = '';
     protected string $direction = 'asc';
     protected string $publicUrl = '/';
+    protected array $pagination = [];
 
     public static function make(): self
     {
         return new self();
     }
 
-    // Setters avec fluent interface
+    // Setters with fluent interface
     public function title(string $title): self
     {
         $this->title = $title;
@@ -88,6 +89,30 @@ class DataTable
         return $this;
     }
 
+    public function pagination(array $pagination): self
+    {
+        $this->pagination = $pagination;
+        return $this;
+    }
+
+    public function addColumn(array $column): self
+    {
+        $this->columns[] = $column;
+        return $this;
+    }
+
+    public function addAction(array $action): self
+    {
+        $this->actions[] = $action;
+        return $this;
+    }
+
+    public function addFilter(array $filter): self
+    {
+        $this->filters[] = $filter;
+        return $this;
+    }
+
     public function render(): string
     {
         $renderer = new DataTableRenderer();
@@ -108,6 +133,7 @@ class DataTable
             'sort' => $this->sort,
             'direction' => $this->direction,
             'publicUrl' => $this->publicUrl,
+            'pagination' => $this->pagination,
         ];
     }
 }

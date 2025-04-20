@@ -4,37 +4,42 @@ namespace Jump\JumpDataTable;
 
 class DataTableRenderer
 {
-    protected string $viewPath;
+    protected string $theme;
+    protected string $themeClass;
 
-    public function __construct(string $viewPath = __DIR__ . '/Resources/views/table.php')
+    public function __construct(string $theme = 'tailwind')
     {
-        $this->viewPath = $viewPath;
+        $this->theme = $theme;
+        $this->themeClass = "Jump\\JumpDataTable\\Themes\\" . ucfirst($theme) . "Theme";
+        
+        if (!class_exists($this->themeClass)) {
+            throw new \InvalidArgumentException("Theme {$theme} is not supported");
+        }
     }
 
     public function render(array $params): string
     {
-        if (!file_exists($this->viewPath)) {
-            throw new \RuntimeException("View file not found: {$this->viewPath}");
-        }
-
-        $params['publicUrl'] = $params['publicUrl'] ?? '/';
+        $theme = $params['theme'] ?? 'light';
+        $darkMode = $theme === 'dark';
         
-        extract($params, EXTR_SKIP); 
-        ob_start();
+        // Génère toutes les classes CSS nécessaires
+        $themeClasses = [
+            'container' => $this->themeClass::getContainerClasses($darkMode),
+            'title' => $this->themeClass::getTitleClasses($darkMode),
+            'countBadge' => $this->themeClass::getCountBadgeClasses($darkMode),
+            // ... toutes les autres classes
+        ];
 
-        try {
-            include $this->viewPath;
-        } catch (\Throwable $e) {
-            ob_end_clean(); 
-            throw new \RuntimeException("An error occurred while rendering the view: " . $e->getMessage(), 0, $e);
+        $params['themeClasses'] = $themeClasses;
+        $viewPath = $this->themeClass::getViewPath();
+
+        if (!file_exists($viewPath)) {
+            throw new \RuntimeException("View file not found: {$viewPath}");
         }
 
+        extract($params);
+        ob_start();
+        include $viewPath;
         return ob_get_clean();
-    }
-
-    public function setViewPath(string $viewPath): self
-    {
-        $this->viewPath = $viewPath;
-        return $this;
     }
 }

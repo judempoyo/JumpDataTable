@@ -7,6 +7,12 @@ class DataTableRenderer
     protected string $theme;
     protected string $themeClass;
 
+    /**
+     * Constructor for the DataTableRenderer.
+     *
+     * @param string $theme The theme name (e.g., 'tailwind', 'bootstrap').
+     * @throws \InvalidArgumentException If the theme class does not exist.
+     */
     public function __construct(string $theme = 'tailwind')
     {
         $this->theme = $theme;
@@ -17,6 +23,12 @@ class DataTableRenderer
         }
     }
 
+    /**
+     * Render the DataTable with the given parameters.
+     *
+     * @param array $params The parameters for rendering the DataTable.
+     * @return string The rendered HTML for the DataTable.
+     */
     public function render(array $params): string
     {
         $darkMode = ($params['theme'] ?? 'light') === 'dark';
@@ -31,6 +43,12 @@ class DataTableRenderer
         return ob_get_clean();
     }
 
+    /**
+     * Generate the CSS classes for the current theme.
+     *
+     * @param bool $darkMode Whether dark mode is enabled.
+     * @return array An array of CSS classes for the theme.
+     */
     protected function generateThemeClasses(bool $darkMode): array
     {
         return [
@@ -39,7 +57,7 @@ class DataTableRenderer
             'title' => $this->themeClass::getTitleClasses($darkMode),
             'countBadge' => $this->themeClass::getCountBadgeClasses($darkMode),
             
-            // Boutons
+            // Buttons
             'filterButton' => $this->themeClass::getFilterButtonClasses($darkMode),
             'exportButton' => $this->themeClass::getExportButtonClasses($darkMode),
             'addButton' => $this->themeClass::getAddButtonClasses($darkMode),
@@ -47,12 +65,12 @@ class DataTableRenderer
             'applyButton' => $this->themeClass::getApplyButtonClasses($darkMode),
             'actionButton' => $this->themeClass::getActionButtonClasses($darkMode),
             
-            // Filtres
+            // Filters
             'filtersContainer' => $this->themeClass::getFiltersContainerClasses($darkMode),
             'filterInput' => $this->themeClass::getFilterInputClasses($darkMode),
             'filterLabel' => $this->themeClass::getFilterLabelClasses($darkMode),
             
-            // Tableau
+            // Table
             'table' => $this->themeClass::getTableClasses($darkMode),
             'tableHeader' => $this->themeClass::getTableHeaderClasses($darkMode),
             'tableHeaderCell' => $this->themeClass::getTableHeaderCellClasses($darkMode),
@@ -60,10 +78,10 @@ class DataTableRenderer
             'tableRow' => $this->themeClass::getTableRowClasses($darkMode),
             'tableCell' => $this->themeClass::getTableCellClasses($darkMode),
             
-            // États
+            // Empty state
             'emptyState' => $this->themeClass::getEmptyStateClasses($darkMode),
             
-            // Icônes
+            // Icons
             'filterIcon' => $this->themeClass::getFilterIconClasses($darkMode),
             'exportIcon' => $this->themeClass::getExportIconClasses($darkMode),
             'addIcon' => $this->themeClass::getAddIconClasses($darkMode),
@@ -78,7 +96,11 @@ class DataTableRenderer
         ];
     }
 
-    
+    /**
+     * Get the path to the view file for the current theme.
+     *
+     * @return string The path to the view file.
+     */
     protected function getViewPath(): string
     {
         return __DIR__ . '/Resources/views/' . ucfirst($this->theme) . '/table.php';

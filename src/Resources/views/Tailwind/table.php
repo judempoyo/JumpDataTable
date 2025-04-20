@@ -55,7 +55,7 @@
         <!-- Header Section -->
         <div class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-bold <?= $theme === 'dark' ? 'text-white' : 'text-gray-800' ?> md:text-3xl animate__animated animate__fadeInLeft">
+                <h1 class="text-2xl font-bold  md:text-3xl animate__animated animate__fadeInLeft">
                     <?= htmlspecialchars($title) ?>
                 </h1>
                 <?php if (!empty($data) && count($data) > 0): ?>
@@ -140,7 +140,7 @@
         <div class="overflow-x-auto rounded-lg shadow-md animate__animated animate__fadeInUp">
             <table class="min-w-full divide-y <?= $theme === 'dark' ? 'divide-dark-600' : 'divide-gray-200' ?>">
                 <thead class="<?= $theme === 'dark' ? 'bg-dark-700' : 'bg-gray-50' ?>">
-                    <tr>
+                    <tr class="<?= $theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900' ?></tr>">
                         <?php foreach ($columns as $column): ?>
                             <th scope="col"
                                 class="px-6 py-3 text-xs font-medium tracking-wider text-left <?= $theme === 'dark' ? 'text-gray-300' : 'text-gray-500' ?> uppercase">

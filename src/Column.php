@@ -4,6 +4,14 @@ namespace Jump\JumpDataTable;
 
 class Column
 {
+    /**
+     * Create a basic column configuration.
+     *
+     * @param string $key The key for the column (used for data mapping).
+     * @param string $label The label for the column (displayed in the table header).
+     * @param array $options Additional options for the column.
+     * @return array The configuration array for the column.
+     */
     public static function make(string $key, string $label, array $options = []): array
     {
         return array_merge([
@@ -12,6 +20,14 @@ class Column
         ], $options);
     }
 
+    /**
+     * Create a date column configuration.
+     *
+     * @param string $key The key for the column (used for data mapping).
+     * @param string $label The label for the column (displayed in the table header).
+     * @param string $format The date format to use for displaying the data.
+     * @return array The configuration array for the date column.
+     */
     public static function date(string $key, string $label, string $format = 'd/m/Y H:i'): array
     {
         return [
@@ -22,6 +38,14 @@ class Column
         ];
     }
 
+    /**
+     * Create a boolean column configuration.
+     *
+     * @param string $key The key for the column (used for data mapping).
+     * @param string $label The label for the column (displayed in the table header).
+     * @param array $icons Optional icons for true/false values.
+     * @return array The configuration array for the boolean column.
+     */
     public static function boolean(string $key, string $label, array $icons = []): array
     {
         return [
@@ -35,6 +59,15 @@ class Column
         ];
     }
 
+    /**
+     * Create a custom column configuration.
+     *
+     * @param string $key The key for the column (used for data mapping).
+     * @param string $label The label for the column (displayed in the table header).
+     * @param callable $render A callable function to render the column content.
+     * @param array $options Additional options for the column.
+     * @return array The configuration array for the custom column.
+     */
     public static function custom(string $key, string $label, callable $render, array $options = []): array
     {
         return array_merge([
@@ -44,6 +77,14 @@ class Column
         ], $options);
     }
 
+    /**
+     * Create a status column configuration.
+     *
+     * @param string $key The key for the column (used for data mapping).
+     * @param string $label The label for the column (displayed in the table header).
+     * @param array $statuses An array of statuses with their corresponding styles or labels.
+     * @return array The configuration array for the status column.
+     */
     public static function status(string $key, string $label, array $statuses): array
     {
         return [

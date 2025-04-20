@@ -119,6 +119,8 @@ class DataTable
         return $renderer->render($this->toArray());
     }
 
+    
+
     public function toArray(): array
     {
         return [

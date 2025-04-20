@@ -12,10 +12,16 @@ class DataTableRendererTest extends TestCase
         $renderer->render([]);
     }
 
-    public function testRenderOutputsHtml()
+      public function testRenderOutputsHtml()
     {
         $renderer = new DataTableRenderer(__DIR__ . '/../src/Resources/views/table.php');
-        $output = $renderer->render(['title' => 'Test Table']);
+        $output = $renderer->render([
+            'title' => 'Test Table',
+            'data' => [],
+            'columns' => [['key' => 'name', 'label' => 'Name']],
+            'actions' => [],
+            'publicUrl' => '/test-url/', // Provide a publicUrl value
+        ]);
         $this->assertStringContainsString('<title>Test Table</title>', $output);
     }
 }

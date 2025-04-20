@@ -17,6 +17,8 @@ class DataTableRenderer
             throw new \RuntimeException("View file not found: {$this->viewPath}");
         }
 
+        $params['publicUrl'] = $params['publicUrl'] ?? '/';
+        
         extract($params, EXTR_SKIP); 
         ob_start();
 

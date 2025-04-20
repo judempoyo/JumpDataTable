@@ -144,6 +144,6 @@
             </table>
         </div>
     </div>
-    <script src="./assets/js/main.js"></script> <!-- Link to your JS file -->
+    <script src="./../JumpDataTable/src/resources/assets/js/main.js"></script> 
 </body>
 </html>

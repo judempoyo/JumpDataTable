@@ -144,6 +144,37 @@
             </table>
         </div>
     </div>
-    <script src="./../JumpDataTable/src/resources/assets/js/main.js"></script> 
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function toggleFilters() {
+            const container = document.getElementById('filtersContainer');
+            if (container) {
+                container.classList.toggle('hidden');
+            }
+        }
+        
+        window.toggleFilters = toggleFilters;
+    });
+
+
+
+
+function toggleFilters() {
+  const container = document.getElementById('filtersContainer');
+  if (container) {
+      container.classList.toggle('hidden');
+      localStorage.setItem('filtersVisible', container.classList.contains('hidden') ? 'false' : 'true');
+  }
+}
+
+window.addEventListener('load', function() {
+  const filtersVisible = localStorage.getItem('filtersVisible');
+  const container = document.getElementById('filtersContainer');
+  
+  if (container && filtersVisible === 'true') {
+      container.classList.remove('hidden');
+  }
+});
+    </script>
 </body>
 </html>

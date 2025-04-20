@@ -4,6 +4,7 @@ namespace Jump\JumpDataTable;
 
 class DataTable
 {
+
     protected string $title = 'Liste des éléments';
     protected string $createUrl = '#';
     protected array $columns = [];
@@ -16,6 +17,33 @@ class DataTable
     protected string $direction = 'asc';
     protected string $publicUrl = '/';
     protected array $pagination = [];
+
+    protected string $theme = 'tailwind';
+    protected array $config = [];
+    protected array $themes = [
+        'tailwind' => Themes\TailwindTheme::class,
+        'bootstrap' => Themes\BootstrapTheme::class,
+    ];
+
+    public function useTheme(string $theme, array $customConfig = []): self
+    {
+        if (!array_key_exists($theme, $this->themes)) {
+            throw new \InvalidArgumentException("Thème $theme non supporté");
+        }
+
+        $this->theme = $theme;
+        $this->config = array_merge($this->getDefaultConfig(), $customConfig);
+
+        return $this;
+    }
+
+    protected function getDefaultConfig(): array
+    {
+        $themeClass = $this->themes[$this->theme];
+        return $themeClass::getDefaultConfig();
+    }
+
+
 
     public static function make(): self
     {
@@ -113,13 +141,18 @@ class DataTable
         return $this;
     }
 
+    /*  public function render(): string
+     {
+         $renderer = new DataTableRenderer();
+         return $renderer->render($this->toArray());
+     }
+  */
     public function render(): string
     {
-        $renderer = new DataTableRenderer();
+        $renderer = new DataTableRenderer($this->theme);
         return $renderer->render($this->toArray());
     }
 
-    
 
     public function toArray(): array
     {

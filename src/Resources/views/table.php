@@ -14,9 +14,9 @@
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white md:text-3xl animate__animated animate__fadeInLeft">
                     <?= htmlspecialchars($title) ?>
                 </h1>
-                <?php if ($data && $data->total() > 0): ?>
+                <?php if (!empty($data) && (is_array($data) || $data instanceof Countable) && count($data) > 0): ?>
                     <span class="px-3 py-1 text-sm font-medium text-teal-800 bg-teal-100 rounded-full dark:bg-teal-900 dark:text-teal-200">
-                        <?= $data->total() ?> élément<?= $data->total() > 1 ? 's' : '' ?>
+                        <?= count($data) ?> élément<?= count($data) > 1 ? 's' : '' ?>
                     </span>
                 <?php endif; ?>
             </div>
@@ -106,7 +106,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                    <?php if ($data && $data->count() > 0): ?>
+                    <?php if (!empty($data) && (is_array($data) || $data instanceof Countable) && count($data) > 0): ?>
                         <?php foreach ($data as $item): ?>
                             <tr class="transition duration-150 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                 <?php foreach ($columns as $column): ?>
@@ -143,6 +143,6 @@
             </table>
         </div>
     </div>
-    <script src="./assets/js/man.js"></script> <!-- Link to your JS file -->
+    <script src="./assets/js/main.js"></script> <!-- Link to your JS file -->
 </body>
 </html>

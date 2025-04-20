@@ -130,54 +130,7 @@ echo $renderer->render([
 ```
 Here is a detailed README.md file for your project based on the provided context:
 
-```md
-# Jump DataTable
-
-Jump DataTable is a lightweight and flexible PHP library for creating dynamic and customizable data tables in web applications. It provides an easy way to manage, render, and manipulate tabular data with features such as sorting, filtering, pagination, and theming.
-
-## Features
-
-- **Dynamic Columns**: Easily define and configure table columns.
-- **Customizable Themes**: Support for Tailwind and Bootstrap themes with light and dark modes.
-- **Sorting and Filtering**: Built-in support for sorting and filtering data.
-- **Pagination**: Manage large datasets with pagination.
-- **Custom Actions**: Add custom actions like view, edit, and delete.
-- **Flexible Rendering**: Render tables using customizable templates.
-- **Lightweight**: Minimal dependencies and easy to integrate into any PHP project.
-
----
-
-## Project Structure
-
-The project is organized as follows:
-
 ```
-JumpDataTable
-├── src
-│   ├── DataTable.php          # Main class for managing data table functionality
-│   ├── DataTableRenderer.php  # Class responsible for rendering the data table in HTML
-│   ├── Column.php             # Class defining the structure of a column in the data table
-│   ├── Action.php             # Class representing actions like view, edit, and delete
-│   ├── Themes                 # Directory for theme implementations
-│   │   ├── ThemeInterface.php # Interface for theme classes
-│   │   ├── TailwindTheme.php  # Tailwind CSS theme implementation
-│   │   ├── BootstrapTheme.php # Bootstrap theme implementation
-│   │   └── Presets            # Presets for specific theme configurations
-│   │       ├── Tailwind
-│   │       │   ├── ModernTheme.php
-│   │       │   ├── ClassicTheme.php
-│   │       │   └── DarkTheme.php
-│   │       └── PresetInterface.php
-│   └── Resources
-│       ├── views
-│       │   └── table.php      # HTML template for rendering the data table
-│       └── assets             # Directory for JavaScript and CSS files
-├── tests                      # Directory for unit tests
-├── composer.json              # Composer configuration file
-└── README.md                  # Project documentation
-```
-
----
 
 ## Installation
 

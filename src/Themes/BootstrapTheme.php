@@ -133,28 +133,5 @@ class BootstrapTheme implements ThemeInterface
     {
         return 'animate__animated animate__' . $animation;
     }
-    public static function getCssLinks(): array
-{
-    return [
-        'cdn' => [
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
-            'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css'
-        ],
-        'local' => [
-            //'/css/bootstrap-datatable.css'
-        ]
-    ];
-}
 
-public static function getJsLinks(): array
-{
-    return [
-        'cdn' => [
-            'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'
-        ],
-        'local' => [
-            //'/js/bootstrap-datatable.js'
-        ]
-    ];
-}
 }

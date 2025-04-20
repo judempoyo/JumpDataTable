@@ -6,7 +6,6 @@ class DataTableRenderer
 {
     protected string $theme;
     protected string $themeClass;
-    protected string $footerJs = '';
 
     public function __construct(string $theme = 'tailwind')
     {
@@ -23,16 +22,13 @@ class DataTableRenderer
         $darkMode = ($params['theme'] ?? 'light') === 'dark';
         $themeClasses = $this->generateThemeClasses($darkMode);
 
-        $this->footerJs = '';
         $params['themeClasses'] = $themeClasses;
         $viewPath = $this->getViewPath();
-        $params['assetTags'] = $this->generateAssetTags();
 
         extract($params);
         ob_start();
         include $viewPath;
-        $content =  ob_get_clean();
-        return str_replace('<!-- FOOTER_JS -->', $this->footerJs, $content);
+        return ob_get_clean();
     }
 
     protected function generateThemeClasses(bool $darkMode): array
@@ -82,41 +78,7 @@ class DataTableRenderer
         ];
     }
 
-    protected function generateAssetTags(): string
-{
-    $cssLinks = $this->themeClass::getCssLinks();
-    $jsLinks = $this->themeClass::getJsLinks();
     
-    $tags = '';
-    
-    // CSS CDN
-    foreach ($cssLinks['cdn'] as $url) {
-        $tags .= '<link rel="stylesheet" href="' . $url . '">' . "\n";
-    }
-    
-    // CSS locaux
-    foreach ($cssLinks['local'] as $path) {
-        $tags .= '<link rel="stylesheet" href="' . $this->getAssetPath($path) . '">' . "\n";
-    }
-    
-    // JS CDN (en fin de body)
-    foreach ($jsLinks['cdn'] as $url) {
-        $tags = '<script src="' . $url . '"></script>' . "\n";
-    }
-    
-    // JS locaux (en fin de body)
-    foreach ($jsLinks['local'] as $path) {
-        $this->footerJs .= '<script src="' . $this->getAssetPath($path) . '"></script>' . "\n";
-    }
-    
-    return $tags;
-}
-
-protected function getAssetPath(string $path): string
-{
-    
-    return $path; 
-}
     protected function getViewPath(): string
     {
         return __DIR__ . '/Resources/views/' . ucfirst($this->theme) . '/table.php';

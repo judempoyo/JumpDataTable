@@ -155,4 +155,29 @@ class TailwindTheme implements ThemeInterface
     {
         return 'animate__animated animate__' . $animation;
     }
+    public static function getCssLinks(): array
+{
+    return [
+        'cdn' => [
+            //'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4'
+        ],
+        'local' => [
+            // Chemin vers vos fichiers CSS locaux si nécessaire
+            //'/css/tailwind-datatable.css'
+        ]
+    ];
+}
+
+public static function getJsLinks(): array
+{
+    return [
+        'cdn' => [
+            'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4'
+        ],
+        'local' => [
+            //'/js/tailwind-datatable.js'
+        ]
+    ];
+}
+
 }

@@ -45,4 +45,7 @@ interface ThemeInterface
     
     // Animations
     public static function getAnimationClasses(string $animation): string;
+
+    public static function getCssLinks(): array;
+public static function getJsLinks(): array;
 }

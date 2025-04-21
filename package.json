@@ -1,0 +1,10 @@
+{
+  "name": "jumpDataTable",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.1",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.1"
+  }
+}

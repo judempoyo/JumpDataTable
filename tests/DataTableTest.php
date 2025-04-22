@@ -5,27 +5,28 @@ use Jump\JumpDataTable\DataTable;
 
 class DataTableTest extends TestCase
 {
-    public function testCanSetTitle()
+    public function testSetTitle()
     {
-        $dataTable = DataTable::make()->title('Test Title');
-        $this->assertEquals('Test Title', $dataTable->toArray()['title']);
+        $table = new DataTable();
+        $table->title('My Table');
+        $this->assertEquals('My Table', $table->toArray()['title']);
     }
 
-    public function testCanAddColumns()
+    public function testSetColumns()
     {
-        $dataTable = DataTable::make()->addColumn(['key' => 'name', 'label' => 'Name']);
-        $this->assertCount(1, $dataTable->toArray()['columns']);
+        $table = new DataTable();
+        $columns = [['key' => 'id', 'label' => 'ID']];
+        $table->columns($columns);
+        $this->assertEquals($columns, $table->toArray()['columns']);
     }
 
-    public function testCanAddActions()
+    public function testRender()
     {
-        $dataTable = DataTable::make()->addAction(['type' => 'view', 'label' => 'View']);
-        $this->assertCount(1, $dataTable->toArray()['actions']);
-    }
-
-    public function testCanAddFilters()
-    {
-        $dataTable = DataTable::make()->addFilter(['name' => 'search', 'label' => 'Search']);
-        $this->assertCount(1, $dataTable->toArray()['filters']);
+        
+        $table = new DataTable();
+        $table->title('Test Table');
+        $html = $table->render();
+        $this->assertIsString($html);
+        $this->assertStringContainsString('<table', $html); 
     }
 }

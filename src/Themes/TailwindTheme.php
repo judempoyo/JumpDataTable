@@ -15,6 +15,33 @@ class TailwindTheme implements ThemeInterface
     protected static array $currentPreset = [];
     protected static array $customConfig = [];
 
+    public static function getDefaultConfig(): array
+    {
+        return [
+            'containerClass' => 'max-w-full p-6 mx-auto mt-8 bg-white rounded-lg shadow-xl animate__animated animate__fadeIn',
+            'titleClass' => 'text-2xl font-bold md:text-3xl animate__animated animate__fadeInLeft text-gray-900',
+            'countBadgeClass' => 'px-3 py-1 text-sm font-medium rounded-full text-teal-800 bg-teal-100',
+            'filterButtonClass' => 'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
+            'addButtonClass' => 'flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-all duration-300 bg-teal-500 hover:bg-teal-600',
+            'resetButtonClass' => 'px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
+            'applyButtonClass' => 'px-4 py-2 text-sm font-medium text-white rounded-lg bg-teal-500 hover:bg-teal-600',
+            'actionButtonClass' => 'p-1.5 rounded-full transition duration-200 text-gray-500 hover:bg-gray-100',
+            'filtersContainerClass' => 'p-4 mt-2 rounded-lg bg-gray-50',
+            'filterInputClass' => 'w-full px-3 py-2 text-sm border rounded-lg shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border-gray-300 bg-white text-gray-900 placeholder-gray-400',
+            'filterLabelClass' => 'block mb-1 text-sm font-medium text-gray-700',
+            'tableClass' => 'min-w-full divide-y divide-gray-200',
+            'tableHeaderClass' => 'bg-gray-50',
+            'tableHeaderCellClass' => 'px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-gray-500',
+            'tableBodyClass' => 'bg-white divide-y divide-gray-200',
+            'tableRowClass' => 'transition duration-150 hover:bg-gray-50',
+            'tableCellClass' => 'px-6 py-4 whitespace-nowrap text-sm text-gray-900',
+            'emptyStateClass' => 'flex flex-col items-center justify-center text-gray-500',
+            'paginationClass' => 'flex items-center space-x-1',
+            'pageItemClass' => 'bg-white border-gray-300',
+            'pageLinkClass' => 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50',
+            'animationClass' => 'animate__animated',
+        ];
+    }
     public static function usePreset(string $presetName): void
     {
         if (!isset(self::$presets[$presetName])) {

@@ -23,6 +23,7 @@ class DataTable
         'tailwind' => Themes\TailwindTheme::class,
         'bootstrap' => Themes\BootstrapTheme::class,
     ];
+    
 
     /**
      * Set the theme for the DataTable.
@@ -43,6 +44,11 @@ class DataTable
 
         return $this;
     }
+
+    public function hasTheme(string $theme): bool
+{
+    return array_key_exists($theme, $this->themes);
+}
 
     /**
      * Get the default configuration for the current theme.

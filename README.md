@@ -29,10 +29,20 @@ jump-datatable
 │   └── Resources
 │       ├── views
 │       │   └── table.php      # HTML template for displaying the data table
-│       └── Tailwind           
-│       |    └── table.php     # HTML template for displaying the data table with tailwindcss
-│       └── Bootstrap
-│       |    └── table.php     # HTML template for displaying the data table with bootstrap
+│       |    └── Tailwind           
+│       |    |   └── table.php     # HTML template for displaying the data table with tailwindcss
+│       |    └── Bootstrap
+│       |       └── table.php     # HTML template for displaying the data table with bootstrap
+│   └── Themes
+│       ├── Presets
+│       │   └── Tailwind     
+│       |   │   └── ClassicTheme.php    # classic theme preset
+│       |   │   └── DarkTheme.php       # dark theme preset
+│       |   │   └── ModernTheme.php     # modern theme preset
+│       │   └── PresetInterface.php      # Preset Interface
+│       └── BoostrapTheme.php   # class representing bootstrap Theme
+│       └── TailwindTheme.php   # class representing tailwindcss Theme
+│       └── ThemeInterface.php  # interface  Theme
 ├── tests                      # Directory for unit tests
 ├── composer.json              # Composer configuration file
 └── README.md                  # Project documentation

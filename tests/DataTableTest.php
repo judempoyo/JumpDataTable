@@ -148,10 +148,22 @@ class DataTableTest extends TestCase
     public function testUseTheme()
     {
         $result = $this->table->useTheme('tailwind', ['custom' => 'config']);
-        $this->assertEquals('tailwind', $this->table->theme);
-        $this->assertArrayHasKey('custom', $this->table->config);
+        
+        // Utilisation de la réflexion pour vérifier la propriété protégée
+        $reflection = new \ReflectionClass($this->table);
+        $themeProperty = $reflection->getProperty('theme');
+        $themeProperty->setAccessible(true);
+        $themeValue = $themeProperty->getValue($this->table);
+        
+        $configProperty = $reflection->getProperty('config');
+        $configProperty->setAccessible(true);
+        $configValue = $configProperty->getValue($this->table);
+        
+        $this->assertEquals('tailwind', $themeValue);
+        $this->assertArrayHasKey('custom', $configValue);
         $this->assertSame($this->table, $result);
     }
+
 
     public function testHasTheme()
     {
@@ -167,15 +179,23 @@ class DataTableTest extends TestCase
         $this->table->useTheme('invalid-theme');
     }
 
+
     public function testToArray()
     {
-        $data = [
+        // Configurez d'abord le tableau avec des valeurs spécifiques
+        $this->table->title('Test')
+              ->columns([['key' => 'id']])
+              ->data([['id' => 1]])
+              ->actions(['edit'])
+              ->filters(['status']);
+        
+        $expected = [
             'title' => 'Test',
             'createUrl' => '#',
-            'columns' => [],
-            'data' => null,
-            'actions' => [],
-            'filters' => [],
+            'columns' => [['key' => 'id']],
+            'data' => [['id' => 1]],
+            'actions' => ['edit'],
+            'filters' => ['status'],
             'modelName' => 'default',
             'showExport' => true,
             'sort' => '',
@@ -183,27 +203,42 @@ class DataTableTest extends TestCase
             'publicUrl' => '/',
             'pagination' => [],
         ];
-
-        $this->assertEquals($data, $this->table->toArray());
+        
+        $this->assertEquals($expected, $this->table->toArray());
     }
 
     public function testRender()
     {
-        // Mock the DataTableRenderer
-        $mockRenderer = $this->createMock(DataTableRenderer::class);
+        // Mock complet du renderer et de sa dépendance
+        $mockRenderer = $this->getMockBuilder(DataTableRenderer::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['render'])
+            ->getMock();
+        
         $mockRenderer->expects($this->once())
             ->method('render')
-            ->willReturn('<table>Test</table>');
-
-        // Use reflection to inject the mock renderer
+            ->willReturn('<table><tr><td>Test</td></tr></table>');
+        
+        // Utilisation de la réflexion pour injecter le mock
         $reflection = new \ReflectionClass($this->table);
-        $property = $reflection->getProperty('theme');
-        $property->setAccessible(true);
-        $property->setValue($this->table, 'tailwind');
-
-        // Test render output
+        
+        // Injecter le thème
+        $themeProperty = $reflection->getProperty('theme');
+        $themeProperty->setAccessible(true);
+        $themeProperty->setValue($this->table, 'tailwind');
+        
+        // Remplacer le renderer par le mock
+        $rendererProperty = $reflection->getProperty('renderer');
+        $rendererProperty->setAccessible(true);
+        $rendererProperty->setValue($this->table, $mockRenderer);
+        
+        // Configurer des données minimales
+        $this->table->columns([['key' => 'id', 'label' => 'ID']]);
+        
         $html = $this->table->render();
+        
         $this->assertIsString($html);
         $this->assertStringContainsString('<table>', $html);
+        $this->assertStringContainsString('</table>', $html);
     }
 }

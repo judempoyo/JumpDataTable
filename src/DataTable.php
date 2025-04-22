@@ -23,7 +23,13 @@ class DataTable
         'tailwind' => Themes\TailwindTheme::class,
         'bootstrap' => Themes\BootstrapTheme::class,
     ];
-    
+    protected DataTableRenderer $renderer;
+
+    public function __construct()
+{
+    $this->config = $this->getDefaultConfig();
+    $this->renderer = new DataTableRenderer($this->theme);
+}
 
     /**
      * Set the theme for the DataTable.
@@ -256,12 +262,16 @@ class DataTable
      *
      * @return string The rendered HTML for the DataTable.
      */
-    public function render(): string
+    /* public function render(): string
     {
         $renderer = new DataTableRenderer($this->theme);
         return $renderer->render($this->toArray());
+    } */
+    public function render(): string
+    {
+        return $this->renderer->render($this->toArray());
     }
-
+    
     /**
      * Convert the DataTable configuration to an array.
      *

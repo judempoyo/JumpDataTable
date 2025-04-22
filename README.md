@@ -1,298 +1,155 @@
-# Jump DataTable
-
-Jump DataTable is a lightweight and flexible PHP library for creating dynamic and customizable data tables in web applications. It provides an easy way to manage, render, and manipulate tabular data with features such as sorting, filtering, pagination, and theming.
-
-## Features
-
-- **Dynamic Columns**: Easily define and configure table columns.
-- **Customizable Themes**: Support for Tailwind and Bootstrap themes with light and dark modes.
-- **Sorting and Filtering**: Built-in support for sorting and filtering data.
-- **Pagination**: Manage large datasets with pagination.
-- **Custom Actions**: Add custom actions like view, edit, and delete.
-- **Flexible Rendering**: Render tables using customizable templates.
-- **Lightweight**: Minimal dependencies and easy to integrate into any PHP project.
+# JumpDataTable
 
 ---
 
-## Project Structure
+## English
 
-The project is organized as follows:
+# JumpDataTable
 
-```
-jump-datatable
-├── src
-│   ├── DataTable.php          # Main class for managing data table functionality
-│   ├── DataTableRenderer.php  # Class responsible for rendering the data table in HTML
-│   ├── Column.php             # Class defining the structure of a column in the data table
-│   ├── Action.php             # Class representing actions like sorting and filtering
-│   ├── Filter.php             # Class managing filtering options for the data table
-│   └── Resources
-│       ├── views
-│       │   └── table.php      # HTML template for displaying the data table
-│       |    └── Tailwind           
-│       |    |   └── table.php     # HTML template for displaying the data table with tailwindcss
-│       |    └── Bootstrap
-│       |       └── table.php     # HTML template for displaying the data table with bootstrap
-│   └── Themes
-│       ├── Presets
-│       │   └── Tailwind     
-│       |   │   └── ClassicTheme.php    # classic theme preset
-│       |   │   └── DarkTheme.php       # dark theme preset
-│       |   │   └── ModernTheme.php     # modern theme preset
-│       │   └── PresetInterface.php      # Preset Interface
-│       └── BoostrapTheme.php   # class representing bootstrap Theme
-│       └── TailwindTheme.php   # class representing tailwindcss Theme
-│       └── ThemeInterface.php  # interface  Theme
-├── tests                      # Directory for unit tests
-├── composer.json              # Composer configuration file
-└── README.md                  # Project documentation
-```
+JumpDataTable is a clean and powerful PHP package for generating interactive data tables with theming support (Tailwind & Bootstrap), advanced filters, bulk and row actions, sorting, custom rendering, and more.
 
-## Installation
+---
 
-To install the library, use Composer:
+### 📦 Installation
+
+Install the package via Composer:
 
 ```bash
-composer require jump/jump-data-table
-```
-
-## Usage
-
-Here’s an example of how to use Jump DataTable in your PHP application:
-
-1. Initialize the DataTable
-
-
-```php
-require 'vendor/autoload.php';
-
-use Jump\JumpDataTable;
-
-// Initialize the DataTable
-$dataTable = new DataTable();
-
-```
-2. Configure Columns
-Define the columns for your table:
-```php
-$columns = [
-    ['key' => 'id', 'label' => 'ID', 'sortable' => true],
-    ['key' => 'name', 'label' => 'Name', 'sortable' => true],
-    ['key' => 'email', 'label' => 'Email'],
-    [
-        'key' => 'status',
-        'label' => 'Status',
-        'render' => function ($item) {
-            $color = [
-                'active' => 'bg-green-100 text-green-800',
-                'inactive' => 'bg-yellow-100 text-yellow-800',
-                'pending' => 'bg-blue-100 text-blue-800',
-            ][$item['status']] ?? 'bg-gray-100 text-gray-800';
-
-            return '<span class="px-2 py-1 text-xs font-medium rounded-full ' . $color . '">' 
-                 . ucfirst($item['status']) . '</span>';
-        }
-    ]
-];
-```
-3. Add Data
-Provide the data to display in the table:
-```php
-$data = [
-    ['id' => 1, 'name' => 'John Doe', 'email' => 'john@example.com', 'status' => 'active'],
-    ['id' => 2, 'name' => 'Jane Smith', 'email' => 'jane@example.com', 'status' => 'inactive'],
-    ['id' => 3, 'name' => 'Alice Johnson', 'email' => 'alice@example.com', 'status' => 'pending'],
-];
-```
-4. Configure Actions
-Define actions like view, edit, and delete:
-```php
-$actions = [
-    [
-        'label' => 'Edit',
-        'url' => fn($item) => "/edit/{$item['id']}",
-        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>'
-    ],
-    [
-        'label' => 'Delete',
-        'url' => fn($item) => "/delete/{$item['id']}",
-        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>'
-    ]
-];
-```
-5. Render the Table
-Render the table using a renderer:
-```php
-use Jump\JumpDataTable\DataTableRenderer;
-
-$renderer = new DataTableRenderer('tailwind'); // Use 'bootstrap' for Bootstrap theme
-echo $renderer->render([
-    'title' => 'User List',
-    'columns' => $columns,
-    'data' => $data,
-    'actions' => $actions,
-    'createUrl' => '/create',
-    'publicUrl' => '/',
-    'modelName' => 'users',
-    'showExport' => true,
-    'filters' => [
-        ['name' => 'search', 'label' => 'Search', 'placeholder' => 'Search...']
-    ],
-    'theme' => 'light' // 'light' or 'dark'
-]);
-```
-
-## Installation
-
-To install the library, use Composer:
-
-```bash
-composer require jump/jump-data-table
+composer require jump/jumpdatatable
 ```
 
 ---
 
-## Usage
+### 🚀 Key Features
 
-Here’s an example of how to use Jump DataTable in your PHP application:
+- 🎨 **Multi-theme support**: Tailwind & Bootstrap
+- 🔎 **Advanced filters**: text, dropdowns, date ranges
+- 🔁 **Row actions**: view, edit, delete with confirmation
+- 🧩 **Custom cell rendering**
+- ✅ **Row selection** & bulk actions (export, delete, etc.)
+- 📤 **Built-in export** (CSV, Excel, etc.)
+- 🌓 **Light / Dark mode support**
 
-### 1. Initialize the DataTable
+---
+
+### 📄 Full Usage Example
 
 ```php
-require 'vendor/autoload.php';
-
 use Jump\JumpDataTable\DataTable;
 
-// Initialize the DataTable
-$dataTable = new DataTable();
-```
+$table = DataTable::make()
+    ->title('Users')
+    ->columns($columns)
+    ->data($data)
+    ->actions($actions)
+    ->filters($filters)
+    ->bulkActions($bulkActions)
+    ->enableRowSelection(true)
+    ->createUrl('/users/create')
+    ->publicUrl('/users')
+    ->modelName('users')
+    ->showExport(true)
+    ->setThemeMode('dark')
+    ->useTheme('tailwind');
 
-### 2. Configure Columns
-
-Define the columns for your table:
-
-```php
-$columns = [
-    ['key' => 'id', 'label' => 'ID', 'sortable' => true],
-    ['key' => 'name', 'label' => 'Name', 'sortable' => true],
-    ['key' => 'email', 'label' => 'Email'],
-    [
-        'key' => 'status',
-        'label' => 'Status',
-        'render' => function ($item) {
-            $color = [
-                'active' => 'bg-green-100 text-green-800',
-                'inactive' => 'bg-yellow-100 text-yellow-800',
-                'pending' => 'bg-blue-100 text-blue-800',
-            ][$item['status']] ?? 'bg-gray-100 text-gray-800';
-
-            return '<span class="px-2 py-1 text-xs font-medium rounded-full ' . $color . '">' 
-                 . ucfirst($item['status']) . '</span>';
-        }
-    ]
-];
-```
-
-### 3. Add Data
-
-Provide the data to display in the table:
-
-```php
-$data = [
-    ['id' => 1, 'name' => 'John Doe', 'email' => 'john@example.com', 'status' => 'active'],
-    ['id' => 2, 'name' => 'Jane Smith', 'email' => 'jane@example.com', 'status' => 'inactive'],
-    ['id' => 3, 'name' => 'Alice Johnson', 'email' => 'alice@example.com', 'status' => 'pending'],
-];
-```
-
-### 4. Configure Actions
-
-Define actions like view, edit, and delete:
-
-```php
-$actions = [
-    [
-        'label' => 'Edit',
-        'url' => fn($item) => "/edit/{$item['id']}",
-        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>'
-    ],
-    [
-        'label' => 'Delete',
-        'url' => fn($item) => "/delete/{$item['id']}",
-        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>'
-    ]
-];
-```
-
-### 5. Render the Table
-
-Render the table using a renderer:
-
-```php
-use Jump\JumpDataTable\DataTableRenderer;
-
-$renderer = new DataTableRenderer('tailwind'); // Use 'bootstrap' for Bootstrap theme
-echo $renderer->render([
-    'title' => 'User List',
-    'columns' => $columns,
-    'data' => $data,
-    'actions' => $actions,
-    'createUrl' => '/create',
-    'publicUrl' => '/',
-    'modelName' => 'users',
-    'showExport' => true,
-    'filters' => [
-        ['name' => 'search', 'label' => 'Search', 'placeholder' => 'Search...']
-    ],
-    'theme' => 'light' // 'light' or 'dark'
-]);
+echo $table->render();
 ```
 
 ---
 
-## Theming
+### 📜 License
 
-Jump DataTable supports multiple themes. You can switch between themes and customize their configurations.
-
-### Available Themes
-
-- **Tailwind**: A modern CSS framework.
-- **Bootstrap**: A popular CSS framework.
-
-### Customizing Themes
-
-You can override theme configurations using the `useTheme` method:
-
-```php
-$dataTable->useTheme('tailwind', [
-    'rounded' => 'md',
-    'shadow' => 'lg',
-    'colors' => [
-        'primary' => '#4caf50',
-        'secondary' => '#ff9800',
-    ]
-]);
-```
+This project is licensed under the MIT License.
 
 ---
 
-## Testing
+### 🤝 Contributors
 
-Run the unit tests using PHPUnit:
+Made with ❤️ by [Jude Mpoyo](mailto:mpoyojude@gmail.com)
+
+---
+
+### ✨ Coming Soon
+
+- AJAX Pagination
+- Livewire / Vue.js support
+- Laravel Facade Extension
+- Blade Directive Integration
+
+---
+
+## Français
+
+---
+
+# JumpDataTable 
+
+JumpDataTable est un package PHP élégant et puissant pour générer des tables de données interactives avec support de thèmes (Tailwind & Bootstrap), filtres avancés, actions individuelles et groupées, tri, rendus personnalisés, et plus encore.
+
+---
+
+### 📦 Installation
+
+Installez le package via Composer :
 
 ```bash
-vendor/bin/phpunit
+composer require jump/jumpdatatable
 ```
 
 ---
 
-## Contributing
+### 🚀 Fonctionnalités clés
 
-Contributions are welcome! If you have suggestions for improvements or new features, please open an issue or submit a pull request.
+- 🎨 **Support de plusieurs thèmes** : Tailwind & Bootstrap
+- 🔎 **Filtres avancés** : texte, listes déroulantes, plages de dates
+- 🔁 **Actions par ligne** : voir, modifier, supprimer avec confirmation
+- 🧩 **Rendu personnalisé pour chaque cellule**
+- ✅ **Sélection de lignes** & actions groupées (export, suppression, etc.)
+- 📤 **Export intégré** (CSV, Excel, etc.)
+- 🌓 **Support du mode clair / sombre**
 
 ---
 
-## License
+### 📄 Exemple complet d'utilisation
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+```php
+use Jump\JumpDataTable\DataTable;
+
+$table = DataTable::make()
+    ->title('Utilisateurs')
+    ->columns($columns)
+    ->data($data)
+    ->actions($actions)
+    ->filters($filters)
+    ->bulkActions($bulkActions)
+    ->enableRowSelection(true)
+    ->createUrl('/users/create')
+    ->publicUrl('/users')
+    ->modelName('users')
+    ->showExport(true)
+    ->setThemeMode('dark')
+    ->useTheme('tailwind');
+
+echo $table->render();
 ```
+
+---
+
+### 📜 Licence
+
+Ce projet est sous licence MIT.
+
+---
+
+### 🤝 Contributeurs
+
+Créé avec ❤️ par [Jude Mpoyo](mailto:mpoyojude@gmail.com)
+
+---
+
+### ✨ À venir
+
+- Pagination AJAX
+- Support Livewire / Vue.js
+- Extension Laravel Facade
+- Intégration des directives Blade

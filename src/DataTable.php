@@ -228,15 +228,79 @@ class DataTable
     /**
      * Set the pagination configuration.
      *
-     * @param array $pagination The pagination configuration array.
+     * @param array $paginationConfig Must content:
+     * - total:  total items
+     * - per_page: per page items
+     * - current_page: current page 
+     * - path: basis URL
+     * - links: table of pagination links 
      * @return self
      */
-    public function pagination(array $pagination): self
+
+    public function pagination(array $paginationConfig): self
+    {
+        $this->pagination = array_merge([
+            'total' => 0,
+            'per_page' => 10,
+            'current_page' => 1,
+            'last_page' => 1,
+            'path' => '/',
+            'links' => []
+        ], $paginationConfig);
+
+        return $this;
+    }
+
+    /**
+     * Generate pagination links (helper)
+     */
+    public function generatePaginationLinks(int $currentPage, int $lastPage, string $baseUrl): array
+    {
+        $links = [];
+        $queryParams = $_GET;
+        unset($queryParams['page']);
+
+        // Lien précédent
+        if ($currentPage > 1) {
+            $queryParams['page'] = $currentPage - 1;
+            $links[] = [
+                'url' => $baseUrl . '?' . http_build_query($queryParams),
+                'label' => '&lsaquo;',
+                'active' => false
+            ];
+        }
+
+        // Liens des pages
+        $start = max(1, $currentPage - 2);
+        $end = min($lastPage, $currentPage + 2);
+
+        for ($i = $start; $i <= $end; $i++) {
+            $queryParams['page'] = $i;
+            $links[] = [
+                'url' => $baseUrl . '?' . http_build_query($queryParams),
+                'label' => $i,
+                'active' => $i == $currentPage
+            ];
+        }
+
+        // Lien suivant
+        if ($currentPage < $lastPage) {
+            $queryParams['page'] = $currentPage + 1;
+            $links[] = [
+                'url' => $baseUrl . '?' . http_build_query($queryParams),
+                'label' => '&rsaquo;',
+                'active' => false
+            ];
+        }
+
+        return $links;
+    }
+    /* public function pagination(array $pagination): self
     {
         $this->pagination = $pagination;
         return $this;
     }
-
+ */
     /**
      * Add a column to the DataTable.
      *

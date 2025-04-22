@@ -204,7 +204,25 @@
             </tbody>
         </table>
     </div>
-
+    <?php extract($params); ?>
+<?php if(!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        <?php foreach($pagination['links'] as $link): ?>
+            <li class="page-item <?= $link['active'] ? 'active' : '' ?>">
+                <a class="page-link" href="<?= $link['url'] ?>">
+                    <?= $link['label'] ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <div class="text-center text-muted mt-2">
+        Affichage de <?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?> 
+        à <?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?> 
+        sur <?= $pagination['total'] ?> résultats
+    </div>
+</nav>
+<?php endif; ?>
    
     <script>
         // Gestion de la sélection multiple

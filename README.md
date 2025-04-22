@@ -29,7 +29,10 @@ jump-datatable
 │   └── Resources
 │       ├── views
 │       │   └── table.php      # HTML template for displaying the data table
-│       └── assets             # Directory for JavaScript and CSS files
+│       └── Tailwind           
+│       |    └── table.php     # HTML template for displaying the data table with tailwindcss
+│       └── Bootstrap
+│       |    └── table.php     # HTML template for displaying the data table with bootstrap
 ├── tests                      # Directory for unit tests
 ├── composer.json              # Composer configuration file
 └── README.md                  # Project documentation

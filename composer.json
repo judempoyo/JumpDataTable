@@ -1,5 +1,5 @@
 {
-    "name": "jump/jump-data-table",
+    "name": "jump/jump-datatable",
     "description": "JUmp DataTable is a lightweight and flexible library for creating dynamic data tables in PHP applications. It provides an easy way to manage, render, and manipulate tabular data with features such as sorting, filtering, and pagination.",
     "autoload": {
         "psr-4": {

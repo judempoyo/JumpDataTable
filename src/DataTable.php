@@ -24,12 +24,28 @@ class DataTable
         'bootstrap' => Themes\BootstrapTheme::class,
     ];
     protected DataTableRenderer $renderer;
+    // Dans votre classe DataTable
+    protected bool $enableRowSelection = false;
+    protected array $bulkActions = [];
+
+    public function enableRowSelection(bool $enable = true): self
+    {
+        $this->enableRowSelection = $enable;
+        return $this;
+    }
+
+    public function bulkActions(array $actions): self
+    {
+        $this->bulkActions = $actions;
+        return $this;
+    }
+
 
     public function __construct()
-{
-    $this->config = $this->getDefaultConfig();
-    $this->renderer = new DataTableRenderer($this->theme);
-}
+    {
+        $this->config = $this->getDefaultConfig();
+        $this->renderer = new DataTableRenderer($this->theme);
+    }
 
     /**
      * Set the theme for the DataTable.
@@ -52,9 +68,9 @@ class DataTable
     }
 
     public function hasTheme(string $theme): bool
-{
-    return array_key_exists($theme, $this->themes);
-}
+    {
+        return array_key_exists($theme, $this->themes);
+    }
 
     /**
      * Get the default configuration for the current theme.
@@ -271,7 +287,21 @@ class DataTable
     {
         return $this->renderer->render($this->toArray());
     }
-    
+    /**
+     * Set the theme mode (light/dark)
+     * 
+     * @param string $mode 'light' or 'dark'
+     * @return self
+     */
+    public function setThemeMode(string $mode): self
+    {
+        if (!in_array($mode, ['light', 'dark'])) {
+            throw new \InvalidArgumentException("Theme mode must be either 'light' or 'dark'");
+        }
+
+        $this->config['theme_mode'] = $mode;
+        return $this;
+    }
     /**
      * Convert the DataTable configuration to an array.
      *
@@ -292,6 +322,9 @@ class DataTable
             'direction' => $this->direction,
             'publicUrl' => $this->publicUrl,
             'pagination' => $this->pagination,
+            'enableRowSelection' => $this->enableRowSelection,
+            'bulkActions' => $this->bulkActions,
+            'theme' => $this->config['theme_mode'] ?? 'light'
         ];
     }
 }

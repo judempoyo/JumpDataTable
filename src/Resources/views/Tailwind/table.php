@@ -1,4 +1,33 @@
-<div class="max-w-full mx-auto p-6 mt-8 rounded-xl <?= $theme === 'dark' ? 'dark:bg-gray-900 bg-gray-900' : 'bg-white' ?> animate__animated animate__fadeIn">
+<div class="max-w-full mx-auto p-6 mt-8 rounded-xl <?= $theme === 'dark' ? 'dark:bg-gray-900 bg-gray-900' : 'bg-white shadow-sm' ?> animate__animated animate__fadeIn">
+    <!-- Bulk Actions Bar - Style amélioré -->
+    <?php if ($enableRowSelection && !empty($bulkActions)): ?>
+    <div id="bulkActionsBar" class="hidden flex items-center justify-between p-4 mb-4 rounded-lg border <?= $theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200' ?> shadow-sm transition-all duration-200">
+        <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 <?= $theme === 'dark' ? 'text-primary-400' : 'text-primary-500' ?>" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span id="selectedCount" class="text-sm font-medium <?= $theme === 'dark' ? 'text-gray-200' : 'text-gray-700' ?>">0 éléments sélectionnés</span>
+        </div>
+        <div class="flex gap-2">
+            <?php foreach ($bulkActions as $action): ?>
+                <button type="button" 
+                        class="bulk-action-btn flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors <?= $theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200' ?>"
+                        data-action="<?= htmlspecialchars($action['url']) ?>"
+                        title="<?= htmlspecialchars($action['label']) ?>">
+                    <?= $action['icon'] ?? '' ?>
+                    <span><?= htmlspecialchars($action['label']) ?></span>
+                </button>
+            <?php endforeach; ?>
+            <button type="button" id="clearSelection" class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md <?= $theme === 'dark' ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100' ?>">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>Annuler</span>
+            </button>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <!-- Header Section - Modern Card Style -->
     <div class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center p-6 rounded-xl <?= $theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50' ?>">
         <div class="flex items-center gap-4">
@@ -88,6 +117,11 @@
         <table class="min-w-full divide-y <?= $theme === 'dark' ? 'divide-gray-700' : 'divide-gray-200' ?>">
             <thead class="<?= $theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50' ?>">
                 <tr>
+                    <?php if ($enableRowSelection): ?>
+                    <th scope="col" class="w-12 px-4 py-3 text-center">
+                        <input type="checkbox" id="selectAll" class="h-4 w-4 rounded border-2 <?= $theme === 'dark' ? 'border-gray-500 bg-gray-700 text-primary-400 focus:ring-primary-400' : 'border-gray-300 bg-white text-primary-500 focus:ring-primary-500' ?> transition-colors">
+                    </th>
+                    <?php endif; ?>
                     <?php foreach ($columns as $column): ?>
                         <th scope="col"
                             class="px-6 py-4 text-xs font-semibold tracking-wider text-left <?= $theme === 'dark' ? 'text-gray-300' : 'text-gray-500' ?> uppercase">
@@ -120,7 +154,13 @@
             <tbody class="<?= $theme === 'dark' ? 'bg-gray-900 divide-gray-700' : 'bg-white divide-gray-200' ?>">
                 <?php if (!empty($data) && count($data) > 0): ?>
                     <?php foreach ($data as $item): ?>
-                        <tr class="transition-colors duration-150 <?= $theme === 'dark' ? 'hover:bg-gray-800/50' : 'hover:bg-gray-50' ?>">
+                        <tr class="transition-colors duration-150 <?= $theme === 'dark' ? 'hover:bg-gray-800/50' : 'hover:bg-gray-50' ?>"
+                            data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
+                            <?php if ($enableRowSelection): ?>
+                            <td class="px-4 py-3 whitespace-nowrap text-center">
+                                <input type="checkbox" class="row-checkbox h-4 w-4 rounded border-2 <?= $theme === 'dark' ? 'border-gray-500 bg-gray-700 text-primary-400 focus:ring-primary-400' : 'border-gray-300 bg-white text-primary-500 focus:ring-primary-500' ?> transition-colors">
+                            </td>
+                            <?php endif; ?>
                             <?php foreach ($columns as $column): ?>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm <?= $theme === 'dark' ? 'text-gray-200' : 'text-gray-800' ?>">
@@ -166,15 +206,90 @@
     </div>
 
     <script>
-    function toggleFilters() {
-        const container = document.getElementById('filtersContainer');
-        if (container) {
-            container.classList.toggle('hidden');
-            localStorage.setItem('filtersVisible', container.classList.contains('hidden') ? 'false' : 'true');
-        }
-    }
-
+    // Gestion de la sélection multiple
     document.addEventListener('DOMContentLoaded', function() {
+        <?php if ($enableRowSelection): ?>
+        const selectAll = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('.row-checkbox');
+        const bulkActionsBar = document.getElementById('bulkActionsBar');
+        const selectedCount = document.getElementById('selectedCount');
+        const clearSelection = document.getElementById('clearSelection');
+        
+        if (selectAll && checkboxes.length > 0) {
+        // Sélection/désélection globale
+        selectAll.addEventListener('change', function() {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+            updateBulkActionsBar();
+        });
+            
+            // Mise à jour de la case "Tout sélectionner"
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    selectAll.checked = [...checkboxes].every(cb => cb.checked);
+                    updateBulkActionsBar();
+                });
+            });
+            
+            // Mise à jour de la barre d'actions groupées
+            function updateBulkActionsBar() {
+                const selected = [...checkboxes].filter(cb => cb.checked).length;
+                if (selected > 0) {
+                    bulkActionsBar?.classList.remove('hidden');
+                    selectedCount.textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
+                } else {
+                    bulkActionsBar?.classList.add('hidden');
+                }
+            }
+            
+            // Annulation de la sélection
+            clearSelection?.addEventListener('click', function() {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                selectAll.checked = false;
+                updateBulkActionsBar();
+            });
+            
+            // Gestion des actions groupées
+            document.querySelectorAll('.bulk-action-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const selectedIds = [...checkboxes]
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.closest('tr').dataset.id);
+                    
+                    if (selectedIds.length === 0) {
+                        alert('Veuillez sélectionner au moins un élément');
+                        return;
+                    }
+                    
+                    const actionUrl = button.dataset.action;
+                    // Exemple avec une confirmation avant suppression
+                    if (button.textContent.includes('Supprimer')) {
+                        if (confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
+                            // Implémentez ici la logique de suppression
+                            console.log('Suppression des IDs:', selectedIds);
+                            // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
+                        }
+                    } else {
+                        // Autres actions
+                        console.log('Action:', actionUrl, 'IDs:', selectedIds);
+                        // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
+                    }
+                });
+            });
+        }
+        <?php endif; ?>
+        
+        function toggleFilters() {
+            const container = document.getElementById('filtersContainer');
+            if (container) {
+                container.classList.toggle('hidden');
+                localStorage.setItem('filtersVisible', container.classList.contains('hidden') ? 'false' : 'true');
+            }
+        }
+
         const filtersVisible = localStorage.getItem('filtersVisible');
         const container = document.getElementById('filtersContainer');
         

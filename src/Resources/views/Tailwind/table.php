@@ -1,4 +1,4 @@
-<!-- filepath: /var/www/html/Projets/JumpDataTable/JumpDataTable/src/Resources/views/Tailwind/table.php -->
+
 <div class="max-w-full mx-auto p-6 mt-8 bg-white rounded-xl shadow-xl <?= $theme === 'dark' ? 'dark:bg-dark-800' : '' ?> animate__animated animate__fadeIn">
     <!-- Header Section -->
     <div class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center">

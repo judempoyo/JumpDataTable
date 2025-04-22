@@ -5,23 +5,22 @@ use Jump\JumpDataTable\DataTableRenderer;
 
 class DataTableRendererTest extends TestCase
 {
-    public function testRenderThrowsExceptionForMissingView()
+    public function testConstructorWithValidTheme()
     {
-        $this->expectException(\RuntimeException::class);
-        $renderer = new DataTableRenderer('/invalid/path/to/view.php');
-        $renderer->render([]);
+        $renderer = new DataTableRenderer('tailwind');
+        $this->assertInstanceOf(DataTableRenderer::class, $renderer);
     }
 
-      public function testRenderOutputsHtml()
+    public function testConstructorWithInvalidTheme()
     {
-        $renderer = new DataTableRenderer(__DIR__ . '/../src/Resources/views/table.php');
-        $output = $renderer->render([
-            'title' => 'Test Table',
-            'data' => [],
-            'columns' => [['key' => 'name', 'label' => 'Name']],
-            'actions' => [],
-            'publicUrl' => '/test-url/', // Provide a publicUrl value
-        ]);
-        $this->assertStringContainsString('<title>Test Table</title>', $output);
+        $this->expectException(\InvalidArgumentException::class);
+        new DataTableRenderer('invalid-theme');
+    }
+
+    public function testRender()
+    {
+        $renderer = new DataTableRenderer('tailwind');
+        $html = $renderer->render(['theme' => 'light']);
+        $this->assertIsString($html);
     }
 }

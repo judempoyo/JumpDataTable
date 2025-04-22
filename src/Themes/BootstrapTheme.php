@@ -4,6 +4,22 @@ namespace Jump\JumpDataTable\Themes;
 
 class BootstrapTheme implements ThemeInterface
 {
+     /**
+     * Get the default configuration for the Bootstrap theme.
+     *
+     * @return array The default configuration array.
+     */
+    public static function getDefaultConfig(): array
+    {
+        return [
+            'tableClass' => 'table table-striped',
+            'headerClass' => 'thead-dark',
+            'rowClass' => 'table-hover',
+            'containerClass' => 'container p-4 mt-4 rounded shadow bg-white',
+            'titleClass' => 'h2 mb-0',
+            'buttonClass' => 'btn btn-primary',
+        ];
+    }
     public static function getContainerClasses(bool $darkMode): string
     {
         return 'container p-4 mt-4 rounded shadow ' . ($darkMode ? 'bg-dark text-white' : 'bg-white');

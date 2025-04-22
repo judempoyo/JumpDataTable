@@ -1,43 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($title ?? 'Liste des éléments') ?></title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        .dt-container {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            border-radius: 0.5rem;
-        }
-        .dt-table {
-            margin-bottom: 0;
-        }
-        .dt-table th {
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-        }
-        .dt-actions a {
-            transition: all 0.2s ease;
-            opacity: 0.7;
-        }
-        .dt-actions a:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        .dark-mode {
-            background-color: #212529;
-            color: #f8f9fa;
-        }
-    </style>
-</head>
-<body class="<?= $theme === 'dark' ? 'dark-mode' : '' ?>">
-    <div class="container dt-container mt-4 p-4 <?= $theme === 'dark' ? 'bg-dark text-white' : 'bg-white' ?>">
+<div class="max-w-full mx-auto p-6 mt-8 bg-white rounded-xl shadow-xl <?= $theme === 'dark' ? 'dark:bg-dark-800' : '' ?> animate__animated animate__fadeIn">
         <!-- Header Section -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
             <div class="d-flex align-items-center mb-3 mb-md-0">
@@ -201,5 +162,3 @@
         }
     });
     </script>
-</body>
-</html>

@@ -232,6 +232,25 @@
         </table>
     </div>
 
+    <?php extract($params); ?>
+<?php if(!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
+<div class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0">
+    <div class="text-sm text-gray-700 dark:text-gray-300">
+        Affichage de <span class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span> 
+        à <span class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span> 
+        sur <span class="font-medium"><?= $pagination['total'] ?></span> résultats
+    </div>
+    
+    <div class="flex items-center space-x-1">
+        <?php foreach($pagination['links'] as $link): ?>
+            <a href="<?= $link['url'] ?>" 
+               class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-primary-500 border-primary-500 dark:bg-primary-600 dark:border-primary-600' : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700' ?>">
+                <?= $link['label'] ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
     <script>
         // Gestion de la sélection multiple
         document.addEventListener('DOMContentLoaded', function () {

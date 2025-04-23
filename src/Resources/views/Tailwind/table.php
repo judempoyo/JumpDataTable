@@ -234,7 +234,7 @@
 
     <?php extract($params); ?>
 <?php if(!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
-<div class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0">
+<div class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 animate__animated animate__fadeInUp">
     <div class="text-sm text-gray-700 dark:text-gray-300">
         Affichage de <span class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span> 
         à <span class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span> 
@@ -242,12 +242,43 @@
     </div>
     
     <div class="flex items-center space-x-1">
-        <?php foreach($pagination['links'] as $link): ?>
-            <a href="<?= $link['url'] ?>" 
-               class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-primary-500 border-primary-500 dark:bg-primary-600 dark:border-primary-600' : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700' ?>">
-                <?= $link['label'] ?>
-            </a>
-        <?php endforeach; ?>
+        <!-- Premier -->
+        <a href="<?= $pagination['links'][0]['url'] ?? '#' ?>" 
+           class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500' : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700' ?>">
+            &laquo;
+        </a>
+        
+        <!-- Précédent -->
+        <a href="<?= $pagination['links'][1]['url'] ?? '#' ?>" 
+           class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500' : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700' ?>">
+            &lsaquo;
+        </a>
+        
+        <!-- Pages -->
+        <?php 
+        $startPage = max(1, $pagination['current_page'] - 2);
+        $endPage = min($pagination['last_page'], $pagination['current_page'] + 2);
+        
+        foreach ($pagination['links'] as $link): 
+            if (is_numeric($link['label'])): ?>
+                <a href="<?= $link['url'] ?>" 
+                   class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-teal-500 border-teal-500 dark:bg-teal-600 dark:border-teal-600' : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700' ?>">
+                    <?= $link['label'] ?>
+                </a>
+            <?php endif;
+        endforeach; ?>
+        
+        <!-- Suivant -->
+        <a href="<?= $pagination['links'][count($pagination['links']) - 2]['url'] ?? '#' ?>" 
+           class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700' : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500' ?>">
+            &rsaquo;
+        </a>
+        
+        <!-- Dernier -->
+        <a href="<?= end($pagination['links'])['url'] ?? '#' ?>" 
+           class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ?  'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700' : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500'  ?>">
+            &raquo;
+        </a>
     </div>
 </div>
 <?php endif; ?>
@@ -331,17 +362,17 @@
             function toggleFilters() {
                 const container = document.getElementById('filtersContainer');
                 if (container) {
-                    container.classList.toggle('hidden');
-                    localStorage.setItem('filtersVisible', container.classList.contains('hidden') ? 'false' : 'true');
-                }
+                container.classList.toggle('hidden');
+                localStorage.setItem('filtersVisible', container.classList.contains('hidden') ? 'false' : 'true');
             }
+        }
 
-            const filtersVisible = localStorage.getItem('filtersVisible');
-            const container = document.getElementById('filtersContainer');
+        const filtersVisible = localStorage.getItem('filtersVisible');
+        const container = document.getElementById('filtersContainer');
 
-            if (container && filtersVisible === 'true') {
-                container.classList.remove('hidden');
-            }
-        });
+        if (container && filtersVisible === 'true') {
+            container.classList.remove('hidden');
+        }
+            });
     </script>
 </div>

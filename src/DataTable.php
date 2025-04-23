@@ -24,7 +24,7 @@ class DataTable
         'bootstrap' => Themes\BootstrapTheme::class,
     ];
     protected DataTableRenderer $renderer;
-    // Dans votre classe DataTable
+    
     protected bool $enableRowSelection = false;
     protected array $bulkActions = [];
 

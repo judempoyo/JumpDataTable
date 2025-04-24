@@ -24,7 +24,7 @@ class BootstrapTheme implements ThemeInterface
             'filterInputClass' => 'form-control',
             'filterLabelClass' => 'form-label',
             'tableClass' => 'table table-striped',
-            'tableHeaderClass' => '',
+            'tableHeaderClass' => 'table-light',
             'tableHeaderCellClass' => 'align-middle',
             'tableBodyClass' => '',
             'tableRowClass' => '',
@@ -36,8 +36,6 @@ class BootstrapTheme implements ThemeInterface
             'animationClass' => 'animate__animated',
         ];
     }
-
-    
 
     public static function getContainerClasses(bool $darkMode): string
     {
@@ -61,7 +59,7 @@ class BootstrapTheme implements ThemeInterface
 
     public static function getExportButtonClasses(bool $darkMode): string
     {
-        return 'btn d-flex align-items-center gap-2 ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
+        return 'btn d-flex align-items-center gap-2 ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-success');
     }
 
     public static function getAddButtonClasses(bool $darkMode): string
@@ -106,13 +104,14 @@ class BootstrapTheme implements ThemeInterface
 
     public static function getTableHeaderClasses(bool $darkMode): string
     {
-        return $darkMode ? 'table-dark' : '';
+        return 'table-light ' . ($darkMode ? 'table-dark' : '');
     }
 
     public static function getTableHeaderCellClasses(bool $darkMode): string
-{
-    return 'align-middle ' . ($darkMode ? 'text-white' : '');
-}
+    {
+        return 'align-middle ' . ($darkMode ? 'text-white' : '');
+    }
+
     public static function getTableBodyClasses(bool $darkMode): string
     {
         return '';

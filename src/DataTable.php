@@ -27,7 +27,7 @@ class DataTable
     // Dans votre classe DataTable
     protected bool $enableRowSelection = false;
     protected array $bulkActions = [];
-
+    protected string $themeMode = 'light';
     public function enableRowSelection(bool $enable = true): self
     {
         $this->enableRowSelection = $enable;
@@ -39,15 +39,13 @@ class DataTable
         $this->bulkActions = $actions;
         return $this;
     }
-
-
     public function __construct()
     {
         $this->config = $this->getDefaultConfig();
         $this->renderer = new DataTableRenderer($this->theme);
     }
 
-    /**
+     /**
      * Set the theme for the DataTable.
      *
      * @param string $theme The theme name (e.g., 'tailwind', 'bootstrap').
@@ -58,21 +56,17 @@ class DataTable
     public function useTheme(string $theme, array $customConfig = []): self
     {
         if (!array_key_exists($theme, $this->themes)) {
-            throw new \InvalidArgumentException("Thème $theme non supporté");
+            throw new \InvalidArgumentException("Thème $theme non supporté. Disponibles: " . implode(', ', array_keys($this->themes)));
         }
 
         $this->theme = $theme;
+        $this->renderer = new DataTableRenderer($theme);
         $this->config = array_merge($this->getDefaultConfig(), $customConfig);
-
+        
         return $this;
     }
 
-    public function hasTheme(string $theme): bool
-    {
-        return array_key_exists($theme, $this->themes);
-    }
-
-    /**
+     /**
      * Get the default configuration for the current theme.
      *
      * @return array The default configuration array.
@@ -80,8 +74,134 @@ class DataTable
     protected function getDefaultConfig(): array
     {
         $themeClass = $this->themes[$this->theme];
-        return $themeClass::getDefaultConfig();
+        $config = $themeClass::getDefaultConfig();
+        
+        // Ensure required keys exist
+        $requiredKeys = [
+            'containerClass', 'titleClass', 'countBadgeClass', 'filterButtonClass',
+            'addButtonClass', 'resetButtonClass', 'applyButtonClass', 'actionButtonClass',
+            'filtersContainerClass', 'filterInputClass', 'filterLabelClass', 'tableClass',
+            'tableHeaderClass', 'tableHeaderCellClass', 'tableBodyClass', 'tableRowClass',
+            'tableCellClass', 'emptyStateClass', 'paginationClass', 'pageItemClass',
+            'pageLinkClass', 'animationClass'
+        ];
+        
+        foreach ($requiredKeys as $key) {
+            if (!array_key_exists($key, $config)) {
+                throw new \RuntimeException("Configuration key '$key' is missing in theme {$this->theme}");
+            }
+        }
+        
+        return $config;
     }
+
+    /**
+     * Set the theme mode (light/dark)
+     * 
+     * @param string $mode 'light' or 'dark'
+     * @return self
+     */
+    public function setThemeMode(string $mode): self
+    {
+        if (!in_array($mode, ['light', 'dark'])) {
+            throw new \InvalidArgumentException("Le mode de thème doit être 'light' ou 'dark'");
+        }
+        $this->themeMode = $mode;
+        return $this;
+    }
+
+     /**
+     * Set the pagination configuration.
+     *
+     * @param array $paginationConfig Must content:
+     * - total:  total items
+     * - per_page: per page items
+     * - current_page: current page 
+     * - path: basis URL
+     * - links: table of pagination links 
+     * @return self
+     */
+
+    public function pagination(array $paginationConfig): self
+    {
+        $requiredKeys = ['total', 'per_page', 'current_page', 'last_page', 'path'];
+        foreach ($requiredKeys as $key) {
+            if (!array_key_exists($key, $paginationConfig)) {
+                throw new \InvalidArgumentException("La configuration de pagination doit contenir la clé '$key'");
+            }
+        }
+
+        $this->pagination = array_merge([
+            'total' => 0,
+            'per_page' => 10,
+            'current_page' => 1,
+            'last_page' => 1,
+            'path' => '/',
+            'links' => []
+        ], $paginationConfig);
+
+        // Generate links if not provided
+        if (empty($this->pagination['links'])) {
+            $this->pagination['links'] = $this->generatePaginationLinks(
+                $this->pagination['current_page'],
+                $this->pagination['last_page'],
+                $this->pagination['path']
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the columns for the DataTable.
+     *
+     * @param array $columns An array of column configurations.
+     * @return self
+     */
+    public function columns(array $columns): self
+    {
+        foreach ($columns as $column) {
+            if (!isset($column['key'])) {
+                throw new \InvalidArgumentException("Chaque colonne doit avoir une clé 'key'");
+            }
+        }
+        $this->columns = $columns;
+        return $this;
+    }
+
+    /**
+     * Set the actions for the DataTable.
+     *
+     * @param array $actions An array of action configurations.
+     * @return self
+     */
+    public function actions(array $actions): self
+    {
+        foreach ($actions as $action) {
+            if (!isset($action['url']) || !is_callable($action['url'])) {
+                throw new \InvalidArgumentException("Chaque action doit avoir une URL callable");
+            }
+        }
+        $this->actions = $actions;
+        return $this;
+    }
+
+    /**
+     * Set the data for the DataTable.
+     *
+     * @param iterable|null $data The data to display in the table.
+     * @return self
+     */
+    public function data(?iterable $data): self
+    {
+        if ($data !== null && !is_iterable($data)) {
+            throw new \InvalidArgumentException("Les données doivent être iterables");
+        }
+        $this->data = $data;
+        return $this;
+    }
+
+   
 
     /**
      * Create a new instance of the DataTable.
@@ -114,42 +234,6 @@ class DataTable
     public function createUrl(string $url): self
     {
         $this->createUrl = $url;
-        return $this;
-    }
-
-    /**
-     * Set the columns for the DataTable.
-     *
-     * @param array $columns An array of column configurations.
-     * @return self
-     */
-    public function columns(array $columns): self
-    {
-        $this->columns = $columns;
-        return $this;
-    }
-
-    /**
-     * Set the data for the DataTable.
-     *
-     * @param iterable|null $data The data to display in the table.
-     * @return self
-     */
-    public function data(?iterable $data): self
-    {
-        $this->data = $data;
-        return $this;
-    }
-
-    /**
-     * Set the actions for the DataTable.
-     *
-     * @param array $actions An array of action configurations.
-     * @return self
-     */
-    public function actions(array $actions): self
-    {
-        $this->actions = $actions;
         return $this;
     }
 
@@ -225,32 +309,7 @@ class DataTable
         return $this;
     }
 
-    /**
-     * Set the pagination configuration.
-     *
-     * @param array $paginationConfig Must content:
-     * - total:  total items
-     * - per_page: per page items
-     * - current_page: current page 
-     * - path: basis URL
-     * - links: table of pagination links 
-     * @return self
-     */
-
-    public function pagination(array $paginationConfig): self
-    {
-        $this->pagination = array_merge([
-            'total' => 0,
-            'per_page' => 10,
-            'current_page' => 1,
-            'last_page' => 1,
-            'path' => '/',
-            'links' => []
-        ], $paginationConfig);
-
-        return $this;
-    }
-
+  
     /**
      * Generate pagination links (helper)
      */
@@ -301,6 +360,31 @@ class DataTable
         return $this;
     }
  */
+
+
+    /**
+     * Get the current theme name
+     */
+    public function getCurrentTheme(): string
+    {
+        return $this->theme;
+    }
+
+    /**
+     * Get the current theme mode
+     */
+    public function getThemeMode(): string
+    {
+        return $this->themeMode;
+    }
+
+    /**
+     * Check if a theme is available
+     */
+    public function hasTheme(string $theme): bool
+    {
+        return array_key_exists($theme, $this->themes);
+    }
     /**
      * Add a column to the DataTable.
      *
@@ -351,21 +435,7 @@ class DataTable
     {
         return $this->renderer->render($this->toArray());
     }
-    /**
-     * Set the theme mode (light/dark)
-     * 
-     * @param string $mode 'light' or 'dark'
-     * @return self
-     */
-    public function setThemeMode(string $mode): self
-    {
-        if (!in_array($mode, ['light', 'dark'])) {
-            throw new \InvalidArgumentException("Theme mode must be either 'light' or 'dark'");
-        }
-
-        $this->config['theme_mode'] = $mode;
-        return $this;
-    }
+ 
     /**
      * Convert the DataTable configuration to an array.
      *
@@ -373,6 +443,10 @@ class DataTable
      */
     public function toArray(): array
     {
+        if (empty($this->columns)) {
+            throw new \RuntimeException("Aucune colonne définie pour le DataTable");
+        }
+
         return [
             'title' => $this->title,
             'createUrl' => $this->createUrl,
@@ -388,7 +462,8 @@ class DataTable
             'pagination' => $this->pagination,
             'enableRowSelection' => $this->enableRowSelection,
             'bulkActions' => $this->bulkActions,
-            'theme' => $this->config['theme_mode'] ?? 'light'
+            'theme' => $this->themeMode
         ];
     }
+   
 }

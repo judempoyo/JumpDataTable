@@ -4,36 +4,35 @@ namespace Jump\JumpDataTable\Themes;
 
 class BootstrapTheme implements ThemeInterface
 {
-    /**
-     * Get the default configuration for the Bootstrap theme.
-     *
-     * @return array The default configuration array.
-     */
     public static function getDefaultConfig(): array
     {
         return [
             'containerClass' => 'container-fluid p-4 mt-4 bg-white rounded shadow',
             'titleClass' => 'h3 mb-0',
             'countBadgeClass' => 'badge bg-primary',
-            'filterButtonClass' => 'btn btn-outline-secondary d-flex align-items-center gap-2',
-            'addButtonClass' => 'btn btn-primary d-flex align-items-center gap-2',
+            'filterButtonClass' => 'btn btn-outline-secondary',
+            'exportButtonClass' => 'btn btn-outline-success',
+            'addButtonClass' => 'btn btn-primary',
             'resetButtonClass' => 'btn btn-outline-secondary',
             'applyButtonClass' => 'btn btn-primary',
             'actionButtonClass' => 'btn btn-sm btn-outline-secondary',
             'filtersContainerClass' => 'p-3 mb-3 bg-light rounded',
             'filterInputClass' => 'form-control',
-            'filterLabelClass' => 'form-label',
-            'tableClass' => 'table table-striped',
+            'filterLabelClass' => 'form-label mb-2',
+            'tableClass' => 'table table-striped table-hover',
             'tableHeaderClass' => '',
             'tableHeaderCellClass' => 'align-middle',
             'tableBodyClass' => '',
             'tableRowClass' => '',
             'tableCellClass' => '',
             'emptyStateClass' => 'text-center py-5 text-muted',
-            'paginationClass' => 'pagination',
+            'paginationClass' => 'pagination justify-content-center',
             'pageItemClass' => 'page-item',
             'pageLinkClass' => 'page-link',
             'animationClass' => 'animate__animated',
+            'bulkActionsContainer' => 'p-3 mb-3 bg-light rounded d-flex justify-content-between align-items-center',
+            'bulkActionButton' => 'btn btn-sm',
+            'clearSelectionButton' => 'btn btn-sm btn-outline-danger'
         ];
     }
 
@@ -54,17 +53,17 @@ class BootstrapTheme implements ThemeInterface
 
     public static function getFilterButtonClasses(bool $darkMode): string
     {
-        return 'btn d-flex align-items-center gap-2 ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
+        return 'btn ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
     }
 
     public static function getExportButtonClasses(bool $darkMode): string
     {
-        return 'btn d-flex align-items-center gap-2 ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
+        return 'btn ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-success');
     }
 
     public static function getAddButtonClasses(bool $darkMode): string
     {
-        return 'btn d-flex align-items-center gap-2 ' . ($darkMode ? 'btn-info' : 'btn-primary');
+        return 'btn ' . ($darkMode ? 'btn-info' : 'btn-primary');
     }
 
     public static function getResetButtonClasses(bool $darkMode): string
@@ -89,27 +88,27 @@ class BootstrapTheme implements ThemeInterface
 
     public static function getFilterInputClasses(bool $darkMode): string
     {
-        return 'form-control ' . ($darkMode ? 'bg-dark text-white border-dark' : '');
+        return 'form-control ' . ($darkMode ? 'bg-dark text-white border-secondary' : '');
     }
 
     public static function getFilterLabelClasses(bool $darkMode): string
     {
-        return 'form-label ' . ($darkMode ? 'text-white' : '');
+        return 'form-label mb-2 ' . ($darkMode ? 'text-white' : '');
     }
 
     public static function getTableClasses(bool $darkMode): string
     {
-        return 'table table-striped ' . ($darkMode ? 'table-dark' : '');
+        return 'table table-striped table-hover ' . ($darkMode ? 'table-dark' : '');
     }
 
     public static function getTableHeaderClasses(bool $darkMode): string
     {
-        return $darkMode ? 'table-dark' : '';
+        return $darkMode ? 'table-dark' : 'table-light';
     }
 
     public static function getTableHeaderCellClasses(bool $darkMode): string
     {
-        return 'align-middle';
+        return 'align-middle ' . ($darkMode ? 'text-white' : '');
     }
 
     public static function getTableBodyClasses(bool $darkMode): string
@@ -149,7 +148,7 @@ class BootstrapTheme implements ThemeInterface
 
     public static function getPaginationClasses(bool $darkMode): string
     {
-        return 'pagination';
+        return 'pagination justify-content-center';
     }
 
     public static function getPageItemClasses(bool $darkMode, bool $active = false): string
@@ -159,12 +158,28 @@ class BootstrapTheme implements ThemeInterface
 
     public static function getPageLinkClasses(bool $darkMode, bool $active = false): string
     {
-        return 'page-link ' . ($darkMode ? 'bg-dark text-white border-dark' : '');
+        return 'page-link ' . ($darkMode ? ($active ? '' : 'bg-dark text-white border-secondary') : '');
     }
 
     public static function getAnimationClasses(string $animation): string
     {
         return 'animate__animated animate__' . $animation;
+    }
+
+    public static function getBulkActionsContainerClasses(bool $darkMode): string
+    {
+        return 'p-3 mb-3 rounded d-flex justify-content-between align-items-center ' 
+            . ($darkMode ? 'bg-secondary text-white' : 'bg-light');
+    }
+
+    public static function getBulkActionButtonClasses(bool $darkMode): string
+    {
+        return 'btn btn-sm ' . ($darkMode ? 'btn-outline-light me-2' : 'btn-outline-secondary me-2');
+    }
+
+    public static function getClearSelectionButtonClasses(bool $darkMode): string
+    {
+        return 'btn btn-sm ' . ($darkMode ? 'btn-outline-danger' : 'btn-outline-danger');
     }
 
     public static function getCssLinks(): array

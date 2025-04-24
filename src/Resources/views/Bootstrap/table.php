@@ -1,60 +1,56 @@
 <div class="<?= $themeClasses['container'] ?> <?= $themeClasses['animation'] ?>">
     <!-- Bulk Actions Bar -->
     <?php if ($enableRowSelection && !empty($bulkActions)): ?>
-    <div id="bulkActionsBar" class="d-none d-flex align-items-center justify-content-between p-3 mb-3 rounded <?= $darkMode ? 'bg-secondary' : 'bg-light' ?> border">
-        <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-check2-circle <?= $darkMode ? 'text-info' : 'text-primary' ?>"></i>
-            <span id="selectedCount" class="<?= $darkMode ? 'text-white' : '' ?>">0 éléments sélectionnés</span>
-        </div>
-        <div class="d-flex gap-2">
-            <?php foreach ($bulkActions as $action): ?>
-                <button type="button" 
-                        class="bulk-action-btn btn btn-sm d-flex align-items-center gap-2 <?= $darkMode ? 'btn-dark' : 'btn-light' ?>"
-                        data-action="<?= htmlspecialchars($action['url']) ?>"
-                        title="<?= htmlspecialchars($action['label']) ?>">
-                    <?= $action['icon'] ?? '' ?>
-                    <span><?= htmlspecialchars($action['label']) ?></span>
+        <div id="bulkActionsBar" class="<?= $themeClasses['bulkActionsContainer'] ?> d-none">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-check2-circle me-2 <?= $darkMode ? 'text-info' : 'text-primary' ?>"></i>
+                <span id="selectedCount" class="<?= $darkMode ? 'text-white' : '' ?>">0 éléments sélectionnés</span>
+            </div>
+            <div>
+                <?php foreach ($bulkActions as $action): ?>
+                    <button type="button" 
+                            class="<?= $themeClasses['bulkActionButton'] ?>"
+                            data-action="<?= htmlspecialchars($action['url']) ?>" 
+                            title="<?= htmlspecialchars($action['label']) ?>">
+                        <?= $action['icon'] ?? '' ?>
+                        <?= htmlspecialchars($action['label']) ?>
+                    </button>
+                <?php endforeach; ?>
+                <button type="button" id="clearSelection" class="<?= $themeClasses['clearSelectionButton'] ?>">
+                    <i class="bi bi-x-lg"></i> Annuler
                 </button>
-            <?php endforeach; ?>
-            <button type="button" id="clearSelection" class="btn btn-sm <?= $darkMode ? 'btn-outline-light' : 'btn-outline-secondary' ?> d-flex align-items-center gap-2">
-                <i class="bi bi-x-lg"></i>
-                <span>Annuler</span>
-            </button>
+            </div>
         </div>
-    </div>
     <?php endif; ?>
 
     <!-- Header Section -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-4 p-3 rounded <?= $themeClasses['filtersContainer'] ?>">
-        <div class="d-flex align-items-center gap-3">
-            <h1 class="<?= $themeClasses['title'] ?>">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 p-3 <?= $themeClasses['filtersContainer'] ?>">
+        <div class="d-flex align-items-center mb-2 mb-md-0">
+            <h1 class="<?= $themeClasses['title'] ?> me-3">
                 <?= htmlspecialchars($title) ?>
-                <?php if (!empty($data) && count($data) > 0): ?>
-                    <span class="badge ms-2 <?= $themeClasses['countBadge'] ?>">
-                        <?= count($data) ?> élément<?= count($data) > 1 ? 's' : '' ?>
-                    </span>
-                <?php endif; ?>
             </h1>
+            <?php if (!empty($data) && count($data) > 0): ?>
+                <span class="<?= $themeClasses['countBadge'] ?>">
+                    <?= count($data) ?> élément<?= count($data) > 1 ? 's' : '' ?>
+                </span>
+            <?php endif; ?>
         </div>
-        
-        <div class="d-flex flex-wrap align-items-center gap-2">
+
+        <div class="d-flex flex-wrap gap-2">
             <?php if (!empty($filters)): ?>
                 <button type="button" onclick="toggleFilters()" class="<?= $themeClasses['filterButton'] ?>">
-                    <i class="<?= $themeClasses['filterIcon'] ?>"></i>
-                    Filtres
+                    <i class="<?= $themeClasses['filterIcon'] ?>"></i> Filtres
                 </button>
             <?php endif; ?>
-            
+
             <?php if ($showExport): ?>
                 <a href="<?= $publicUrl . $modelName ?>/export" class="<?= $themeClasses['exportButton'] ?>">
-                    <i class="<?= $themeClasses['exportIcon'] ?>"></i>
-                    Exporter
+                    <i class="<?= $themeClasses['exportIcon'] ?>"></i> Exporter
                 </a>
             <?php endif; ?>
-            
+
             <a href="<?= $createUrl ?>" class="<?= $themeClasses['addButton'] ?>">
-                <i class="<?= $themeClasses['addIcon'] ?>"></i>
-                Ajouter
+                <i class="<?= $themeClasses['addIcon'] ?>"></i> Ajouter
             </a>
         </div>
     </div>
@@ -78,7 +74,7 @@
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    
+
                     <div class="d-flex flex-wrap justify-content-end gap-2 mt-3">
                         <?php if (!empty($_GET)): ?>
                             <a href="<?= $publicUrl . $modelName ?>" class="<?= $themeClasses['resetButton'] ?>">
@@ -90,7 +86,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <input type="hidden" name="sort" value="<?= htmlspecialchars($_GET['sort'] ?? '') ?>">
                 <input type="hidden" name="direction" value="<?= htmlspecialchars($_GET['direction'] ?? '') ?>">
             </form>
@@ -103,9 +99,9 @@
             <thead class="<?= $themeClasses['tableHeader'] ?>">
                 <tr>
                     <?php if ($enableRowSelection): ?>
-                    <th scope="col" class="text-center" style="width: 50px;">
-                        <input type="checkbox" id="selectAll" class="form-check-input">
-                    </th>
+                        <th scope="col" class="text-center" style="width: 40px;">
+                            <input type="checkbox" id="selectAll" class="form-check-input">
+                        </th>
                     <?php endif; ?>
                     <?php foreach ($columns as $column): ?>
                         <th scope="col" class="<?= $themeClasses['tableHeaderCell'] ?>">
@@ -126,21 +122,21 @@
                             </div>
                         </th>
                     <?php endforeach; ?>
-                    
+
                     <?php if (!empty($actions)): ?>
                         <th scope="col" class="<?= $themeClasses['tableHeaderCell'] ?> text-end">Actions</th>
                     <?php endif; ?>
                 </tr>
             </thead>
-            
+
             <tbody class="<?= $themeClasses['tableBody'] ?>">
                 <?php if (!empty($data) && count($data) > 0): ?>
                     <?php foreach ($data as $item): ?>
                         <tr class="<?= $themeClasses['tableRow'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
                             <?php if ($enableRowSelection): ?>
-                            <td class="text-center">
-                                <input type="checkbox" class="row-checkbox form-check-input">
-                            </td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="row-checkbox form-check-input">
+                                </td>
                             <?php endif; ?>
                             <?php foreach ($columns as $column): ?>
                                 <td class="<?= $themeClasses['tableCell'] ?>">
@@ -153,7 +149,7 @@
                                     </div>
                                 </td>
                             <?php endforeach; ?>
-                            
+
                             <?php if (!empty($actions)): ?>
                                 <td class="<?= $themeClasses['tableCell'] ?> text-end">
                                     <div class="d-flex justify-content-end gap-2">
@@ -187,36 +183,32 @@
     <!-- Pagination -->
     <?php if(!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
     <div class="mt-4">
-        <div class="text-center <?= $darkMode ? 'text-white-50' : 'text-muted' ?> mb-2">
+        <div class="text-center mb-3 <?= $darkMode ? 'text-white-50' : 'text-muted' ?>">
             Affichage de <?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?> 
             à <?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?> 
             sur <?= $pagination['total'] ?> résultats
         </div>
         
         <nav aria-label="Page navigation">
-            <ul class="<?= $themeClasses['pagination'] ?> justify-content-center">
-                <!-- Premier -->
+            <ul class="<?= $themeClasses['pagination'] ?>">
                 <li class="<?= $themeClasses['pageItem'] ?> <?= $pagination['current_page'] == 1 ? 'disabled' : '' ?>">
-                    <a class="<?= $themeClasses['pageLink'] ?>" 
-                       href="<?= $pagination['links'][0]['url'] ?? '#' ?>">
+                    <a class="<?= $themeClasses['pageLink'] ?>" href="<?= $pagination['links'][0]['url'] ?? '#' ?>">
                         &laquo;
                     </a>
                 </li>
                 
-                <!-- Pages -->
-                <?php foreach($pagination['links'] as $link): ?>
-                    <li class="<?= $themeClasses['pageItem'] ?> <?= $link['active'] ? 'active' : '' ?>">
-                        <a class="<?= $themeClasses['pageLink'] ?>" 
-                           href="<?= $link['url'] ?>">
-                            <?= $link['label'] ?>
-                        </a>
-                    </li>
+                <?php foreach ($pagination['links'] as $link): ?>
+                    <?php if (is_numeric($link['label'])): ?>
+                        <li class="<?= $themeClasses['pageItem'] ?> <?= $link['active'] ? 'active' : '' ?>">
+                            <a class="<?= $themeClasses['pageLink'] ?>" href="<?= $link['url'] ?>">
+                                <?= $link['label'] ?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 <?php endforeach; ?>
                 
-                <!-- Dernier -->
                 <li class="<?= $themeClasses['pageItem'] ?> <?= $pagination['current_page'] == $pagination['last_page'] ? 'disabled' : '' ?>">
-                    <a class="<?= $themeClasses['pageLink'] ?>" 
-                       href="<?= end($pagination['links'])['url'] ?? '#' ?>">
+                    <a class="<?= $themeClasses['pageLink'] ?>" href="<?= end($pagination['links'])['url'] ?? '#' ?>">
                         &raquo;
                     </a>
                 </li>
@@ -224,9 +216,8 @@
         </nav>
     </div>
     <?php endif; ?>
-   
+
     <script>
-        // Gestion de la sélection multiple
         document.addEventListener('DOMContentLoaded', function () {
             <?php if ($enableRowSelection): ?>
                 const selectAll = document.getElementById('selectAll');
@@ -256,15 +247,15 @@
                     function updateBulkActionsBar() {
                         const selected = [...checkboxes].filter(cb => cb.checked).length;
                         if (selected > 0) {
-                            bulkActionsBar?.classList.remove('d-none');
+                            bulkActionsBar.classList.remove('d-none');
                             selectedCount.textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
                         } else {
-                            bulkActionsBar?.classList.add('d-none');
+                            bulkActionsBar.classList.add('d-none');
                         }
                     }
 
                     // Annulation de la sélection
-                    clearSelection?.addEventListener('click', function () {
+                    clearSelection.addEventListener('click', function () {
                         checkboxes.forEach(checkbox => {
                             checkbox.checked = false;
                         });
@@ -285,22 +276,30 @@
                             }
 
                             const actionUrl = button.dataset.action;
-                            // Exemple avec une confirmation avant suppression
-                            if (button.textContent.includes('Supprimer')) {
-                                if (confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
-                                    // Implémentez ici la logique de suppression
-                                    console.log('Suppression des IDs:', selectedIds);
-                                    // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
-                                }
-                            } else {
-                                // Autres actions
-                                console.log('Action:', actionUrl, 'IDs:', selectedIds);
-                                // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
+                            if (button.textContent.includes('Supprimer') && !confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
+                                return;
                             }
+                            // Implémentez ici la logique d'action
+                            console.log('Action:', actionUrl, 'IDs:', selectedIds);
                         });
                     });
                 }
             <?php endif; ?>
+
+            function toggleFilters() {
+                const container = document.getElementById('filtersContainer');
+                if (container) {
+                    container.classList.toggle('d-none');
+                    localStorage.setItem('filtersVisible', container.classList.contains('d-none') ? 'false' : 'true');
+                }
+            }
+
+            // Restaurer l'état des filtres
+            const filtersVisible = localStorage.getItem('filtersVisible');
+            const container = document.getElementById('filtersContainer');
+            if (container && filtersVisible === 'true') {
+                container.classList.remove('d-none');
+            }
         });
     </script>
 </div>

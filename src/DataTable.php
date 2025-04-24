@@ -465,5 +465,4 @@ class DataTable
             'theme' => $this->themeMode
         ];
     }
-   
 }

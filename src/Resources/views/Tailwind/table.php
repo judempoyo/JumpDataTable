@@ -348,7 +348,13 @@
                 }
             <?php endif; ?>
 
-            function toggleFilters() {
+           
+        });
+
+
+    </script>
+    <script>
+         function toggleFilters() {
                 const container = document.getElementById('filtersContainer');
                 if (container) {
                     container.classList.toggle('hidden');
@@ -362,7 +368,5 @@
             if (container && filtersVisible === 'true') {
                 container.classList.remove('hidden');
             }
-        });
-
     </script>
 </div>

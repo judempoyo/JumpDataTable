@@ -294,7 +294,11 @@
             }
         <?php endif; ?>
 
-        function toggleFilters() {
+       
+    });
+</script>
+<script>
+     function toggleFilters() {
             const container = document.getElementById('filtersContainer');
             if (container) {
                 container.classList.toggle('d-none');
@@ -318,6 +322,5 @@
                 container.classList.add('d-none');
             }
         }
-    });
 </script>
 </div>

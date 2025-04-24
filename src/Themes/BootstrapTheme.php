@@ -166,22 +166,24 @@ class BootstrapTheme implements ThemeInterface
         return 'animate__animated animate__' . $animation;
     }
 
+  
     public static function getBulkActionsContainerClasses(bool $darkMode): string
-    {
-        return 'p-3 mb-3 rounded d-flex justify-content-between align-items-center ' 
-            . ($darkMode ? 'bg-secondary text-white' : 'bg-light');
-    }
+{
+    return 'p-3 mb-3 rounded d-flex justify-content-between align-items-center ' 
+         . ($darkMode ? 'bg-dark text-white' : 'bg-light');
+}
 
-    public static function getBulkActionButtonClasses(bool $darkMode): string
-    {
-        return 'btn btn-sm ' . ($darkMode ? 'btn-outline-light me-2' : 'btn-outline-secondary me-2');
-    }
+public static function getBulkActionButtonClasses(bool $darkMode): string
+{
+    return 'btn btn-sm d-flex align-items-center gap-1 ' 
+         . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
+}
 
-    public static function getClearSelectionButtonClasses(bool $darkMode): string
-    {
-        return 'btn btn-sm ' . ($darkMode ? 'btn-outline-danger' : 'btn-outline-danger');
-    }
-
+public static function getClearSelectionButtonClasses(bool $darkMode): string
+{
+    return 'btn btn-sm d-flex align-items-center gap-1 ' 
+         . ($darkMode ? 'btn-outline-danger' : 'btn-outline-danger');
+}
     public static function getCssLinks(): array
     {
         return [

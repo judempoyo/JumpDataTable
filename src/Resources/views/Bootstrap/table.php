@@ -1,26 +1,28 @@
 <div class="<?= $themeClasses['container'] ?> <?= $themeClasses['animation'] ?>">
     <!-- Bulk Actions Bar -->
     <?php if ($enableRowSelection && !empty($bulkActions)): ?>
-        <div id="bulkActionsBar" class="<?= $themeClasses['bulkActionsContainer'] ?> d-none">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-check2-circle me-2 <?= $darkMode ? 'text-info' : 'text-primary' ?>"></i>
-                <span id="selectedCount" class="<?= $darkMode ? 'text-white' : '' ?>">0 éléments sélectionnés</span>
-            </div>
-            <div>
-                <?php foreach ($bulkActions as $action): ?>
-                    <button type="button" 
-                            class="<?= $themeClasses['bulkActionButton'] ?>"
-                            data-action="<?= htmlspecialchars($action['url']) ?>" 
-                            title="<?= htmlspecialchars($action['label']) ?>">
-                        <?= $action['icon'] ?? '' ?>
-                        <?= htmlspecialchars($action['label']) ?>
-                    </button>
-                <?php endforeach; ?>
-                <button type="button" id="clearSelection" class="<?= $themeClasses['clearSelectionButton'] ?>">
-                    <i class="bi bi-x-lg"></i> Annuler
-                </button>
-            </div>
-        </div>
+        <div id="bulkActionsBar" class="p-3 mb-3 bg-light rounded d-flex justify-content-between align-items-center d-none <?= $darkMode ? 'bg-dark text-white' : '' ?>">
+    <div class="d-flex align-items-center">
+        <i class="bi bi-check-circle-fill me-2 text-primary fs-5 <?= $darkMode ? 'text-info' : '' ?>"></i>
+        <span id="selectedCount" class="fw-medium">0 éléments sélectionnés</span>
+    </div>
+    <div class="d-flex gap-2">
+        <?php foreach ($bulkActions as $action): ?>
+            <button type="button" 
+                    class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 <?= $darkMode ? 'btn-outline-light' : '' ?>"
+                    data-action="<?= htmlspecialchars($action['url']) ?>"
+                    title="<?= htmlspecialchars($action['label']) ?>">
+                <?= $action['icon'] ?? '' ?>
+                <span><?= htmlspecialchars($action['label']) ?></span>
+            </button>
+        <?php endforeach; ?>
+        
+        <button type="button" id="clearSelection" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
+            <i class="bi bi-x-lg"></i>
+            <span>Annuler</span>
+        </button>
+    </div>
+</div>
     <?php endif; ?>
 
     <!-- Header Section -->

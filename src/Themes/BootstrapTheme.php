@@ -37,6 +37,8 @@ class BootstrapTheme implements ThemeInterface
         ];
     }
 
+    
+
     public static function getContainerClasses(bool $darkMode): string
     {
         return 'container-fluid p-4 mt-4 rounded shadow ' . ($darkMode ? 'bg-dark text-white' : 'bg-white');
@@ -108,10 +110,9 @@ class BootstrapTheme implements ThemeInterface
     }
 
     public static function getTableHeaderCellClasses(bool $darkMode): string
-    {
-        return 'align-middle';
-    }
-
+{
+    return 'align-middle ' . ($darkMode ? 'text-white' : '');
+}
     public static function getTableBodyClasses(bool $darkMode): string
     {
         return '';

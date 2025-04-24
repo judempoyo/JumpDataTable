@@ -218,88 +218,106 @@
     <?php endif; ?>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            <?php if ($enableRowSelection): ?>
-                const selectAll = document.getElementById('selectAll');
-                const checkboxes = document.querySelectorAll('.row-checkbox');
-                const bulkActionsBar = document.getElementById('bulkActionsBar');
-                const selectedCount = document.getElementById('selectedCount');
-                const clearSelection = document.getElementById('clearSelection');
+    // Gestion de la sélection multiple
+    document.addEventListener('DOMContentLoaded', function () {
+        <?php if ($enableRowSelection): ?>
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            const selectedCount = document.getElementById('selectedCount');
+            const clearSelection = document.getElementById('clearSelection');
 
-                if (selectAll && checkboxes.length > 0) {
-                    // Sélection/désélection globale
-                    selectAll.addEventListener('change', function () {
-                        checkboxes.forEach(checkbox => {
-                            checkbox.checked = selectAll.checked;
-                        });
-                        updateBulkActionsBar();
-                    });
-
-                    // Mise à jour de la case "Tout sélectionner"
+            if (selectAll && checkboxes.length > 0) {
+                // Sélection/désélection globale
+                selectAll.addEventListener('change', function () {
                     checkboxes.forEach(checkbox => {
-                        checkbox.addEventListener('change', function () {
-                            selectAll.checked = [...checkboxes].every(cb => cb.checked);
-                            updateBulkActionsBar();
-                        });
+                        checkbox.checked = selectAll.checked;
                     });
+                    updateBulkActionsBar();
+                });
 
-                    // Mise à jour de la barre d'actions groupées
-                    function updateBulkActionsBar() {
-                        const selected = [...checkboxes].filter(cb => cb.checked).length;
-                        if (selected > 0) {
-                            bulkActionsBar.classList.remove('d-none');
-                            selectedCount.textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
-                        } else {
-                            bulkActionsBar.classList.add('d-none');
-                        }
-                    }
-
-                    // Annulation de la sélection
-                    clearSelection.addEventListener('click', function () {
-                        checkboxes.forEach(checkbox => {
-                            checkbox.checked = false;
-                        });
-                        selectAll.checked = false;
+                // Mise à jour de la case "Tout sélectionner"
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        selectAll.checked = [...checkboxes].every(cb => cb.checked);
                         updateBulkActionsBar();
                     });
+                });
 
-                    // Gestion des actions groupées
-                    document.querySelectorAll('.bulk-action-btn').forEach(button => {
-                        button.addEventListener('click', function () {
-                            const selectedIds = [...checkboxes]
-                                .filter(cb => cb.checked)
-                                .map(cb => cb.closest('tr').dataset.id);
+                // Mise à jour de la barre d'actions groupées
+                function updateBulkActionsBar() {
+                    const selected = [...checkboxes].filter(cb => cb.checked).length;
+                    if (selected > 0) {
+                        bulkActionsBar?.classList.remove('d-none');
+                        selectedCount.textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
+                    } else {
+                        bulkActionsBar?.classList.add('d-none');
+                    }
+                }
 
-                            if (selectedIds.length === 0) {
-                                alert('Veuillez sélectionner au moins un élément');
-                                return;
-                            }
-
-                            const actionUrl = button.dataset.action;
-                            if (button.textContent.includes('Supprimer') && !confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
-                                return;
-                            }
-                            // Implémentez ici la logique d'action
-                            console.log('Action:', actionUrl, 'IDs:', selectedIds);
-                        });
+                // Annulation de la sélection
+                clearSelection?.addEventListener('click', function () {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
                     });
-                }
-            <?php endif; ?>
+                    selectAll.checked = false;
+                    updateBulkActionsBar();
+                });
 
-            function toggleFilters() {
-                const container = document.getElementById('filtersContainer');
-                if (container) {
-                    container.classList.toggle('d-none');
-                    localStorage.setItem('filtersVisible', container.classList.contains('d-none') ? 'false' : 'true');
-                }
+                // Gestion des actions groupées
+                document.querySelectorAll('.bulk-action-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const selectedIds = [...checkboxes]
+                            .filter(cb => cb.checked)
+                            .map(cb => cb.closest('tr').dataset.id);
+
+                        if (selectedIds.length === 0) {
+                            alert('Veuillez sélectionner au moins un élément');
+                            return;
+                        }
+
+                        const actionUrl = button.dataset.action;
+                        // Exemple avec une confirmation avant suppression
+                        if (button.textContent.includes('Supprimer')) {
+                            if (confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
+                                // Implémentez ici la logique de suppression
+                                console.log('Suppression des IDs:', selectedIds);
+                                // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
+                            }
+                        } else {
+                            // Autres actions
+                            console.log('Action:', actionUrl, 'IDs:', selectedIds);
+                            // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
+                        }
+                    });
+                });
             }
+        <?php endif; ?>
 
-            // Restaurer l'état des filtres
-            const filtersVisible = localStorage.getItem('filtersVisible');
+        function toggleFilters() {
             const container = document.getElementById('filtersContainer');
-            if (container && filtersVisible === 'true') {
-                container.classList.remove('d-none');
+            if (container) {
+                container.classList.toggle('d-none');
+                localStorage.setItem('filtersVisible', container.classList.contains('d-none') ? 'false' : 'true');
             }
-        });
-    </script>
+        }
+
+        // Restaurer l'état des filtres au chargement
+        const filtersVisible = localStorage.getItem('filtersVisible');
+        const container = document.getElementById('filtersContainer');
+        
+        if (container) {
+            // Si hidden est présent dans les classes PHP, on le conserve
+            const isInitiallyHidden = container.classList.contains('d-none') || 
+                                     container.classList.contains('hidden');
+            
+            if (filtersVisible === 'true' && isInitiallyHidden) {
+                container.classList.remove('d-none');
+                container.classList.remove('hidden');
+            } else if (filtersVisible === 'false' && !isInitiallyHidden) {
+                container.classList.add('d-none');
+            }
+        }
+    });
+</script>
 </div>

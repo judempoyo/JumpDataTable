@@ -2,30 +2,37 @@
     <!-- Bulk Actions Bar -->
     <?php if ($enableRowSelection && !empty($bulkActions)): ?>
         <div id="bulkActionsBar"
-            class="hidden flex items-center justify-between p-4 mb-4 rounded-lg border <?= $darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200' ?> shadow-sm transition-all duration-200">
+            class="hidden flex items-center justify-between p-4 mb-4 rounded-lg border <?= $darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200' ?> shadow-sm transition-all duration-200"
+            aria-live="polite" aria-atomic="true">
             <div class="flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 <?= $darkMode ? 'text-teal-400' : 'text-teal-500' ?>"
-                    viewBox="0 0 20 20" fill="currentColor">
+                    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                         clip-rule="evenodd" />
                 </svg>
-                <span id="selectedCount" class="text-sm font-medium <?= $darkMode ? 'text-gray-200' : 'text-gray-700' ?>">0
-                    éléments sélectionnés</span>
+                <span id="selectedCount" class="text-sm font-medium <?= $darkMode ? 'text-gray-200' : 'text-gray-700' ?>">
+                    <span class="sr-only">Nombre d'éléments sélectionnés : </span>
+                    <span aria-live="polite">0 éléments sélectionnés</span>
+                </span>
             </div>
-            <div class="flex gap-2">
-                <?php foreach ($bulkActions as $action): ?>
-                    <button type="button"
-                        class="bulk-action-btn flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors <?= $darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200' ?>"
-                        data-action="<?= htmlspecialchars($action['url']) ?>" title="<?= htmlspecialchars($action['label']) ?>">
-                        <?= $action['icon'] ?? '' ?>
-                        <span><?= htmlspecialchars($action['label']) ?></span>
-                    </button>
-                <?php endforeach; ?>
+            <div class="flex flex-wrap gap-2">
+                <?php if (!empty($bulkActions) && is_array($bulkActions)): ?>
+                    <?php foreach ($bulkActions as $action): ?>
+                        <button type="button"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors <?= $darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200' ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                            data-action="<?= htmlspecialchars($action->url ?? '') ?>"
+                            aria-label="<?= htmlspecialchars($action->label ?? '') ?>">
+                            <?= $action->icon ?? '' ?>
+                            <span><?= htmlspecialchars($action->label ?? '') ?></span>
+                        </button>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 <button type="button" id="clearSelection"
-                    class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md <?= $darkMode ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100' ?>">
+                    class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md <?= $darkMode ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100' ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-gray-500' : 'focus:ring-gray-300' ?>"
+                    aria-label="Annuler la sélection">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
+                        stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <span>Annuler</span>
@@ -50,9 +57,11 @@
 
         <div class="flex flex-wrap items-center gap-3 <?= $themeClasses['animation'] ?>">
             <?php if (!empty($filters)): ?>
-                <button type="button" onclick="toggleFilters()" class="<?= $themeClasses['filterButton'] ?>">
+                <button type="button" onclick="toggleFilters()"
+                    class="<?= $themeClasses['filterButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    aria-expanded="false" aria-controls="filtersContainer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['filterIcon'] ?>" viewBox="0 0 20 20"
-                        fill="currentColor">
+                        fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd"
                             d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
                             clip-rule="evenodd" />
@@ -62,9 +71,11 @@
             <?php endif; ?>
 
             <?php if ($showExport): ?>
-                <a href="<?= $publicUrl . $modelName ?>/export" class="<?= $themeClasses['exportButton'] ?>">
+                <a href="<?= $publicUrl . $modelName ?>/export"
+                    class="<?= $themeClasses['exportButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    aria-label="Exporter les données">
                     <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['exportIcon'] ?>" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                     </svg>
@@ -72,9 +83,11 @@
                 </a>
             <?php endif; ?>
 
-            <a href="<?= $createUrl ?>" class="<?= $themeClasses['addButton'] ?>">
+            <a href="<?= $createUrl ?>"
+                class="<?= $themeClasses['addButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                aria-label="Ajouter un nouvel élément">
                 <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['addIcon'] ?>" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
                 Ajouter
@@ -87,29 +100,37 @@
         <div class="mb-6 <?= $themeClasses['animation'] ?>">
             <form method="GET" action="" id="filterForm">
                 <div id="filtersContainer"
-                    class="<?= empty($_GET['search']) ? 'hidden' : '' ?> <?= $themeClasses['filtersContainer'] ?>">
+                    class="<?= empty($_GET['search']) ? 'hidden' : '' ?> <?= $themeClasses['filtersContainer'] ?>"
+                    aria-hidden="<?= empty($_GET['search']) ? 'true' : 'false' ?>">
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
                         <?php foreach ($filters as $filter): ?>
                             <div>
-                                <label class="<?= $themeClasses['filterLabel'] ?>">
+                                <label for="filter-<?= htmlspecialchars($filter['name'] ?? 'search') ?>"
+                                    class="<?= $themeClasses['filterLabel'] ?>">
                                     <?= htmlspecialchars($filter['label'] ?? 'Filtrer') ?>
                                 </label>
                                 <input type="<?= htmlspecialchars($filter['type'] ?? 'text') ?>"
+                                    id="filter-<?= htmlspecialchars($filter['name'] ?? 'search') ?>"
                                     name="<?= htmlspecialchars($filter['name'] ?? 'search') ?>"
                                     placeholder="<?= htmlspecialchars($filter['placeholder'] ?? 'Rechercher...') ?>"
                                     value="<?= htmlspecialchars($_GET[$filter['name'] ?? 'search'] ?? '') ?>"
-                                    class="<?= $themeClasses['filterInput'] ?>" />
+                                    class="<?= $themeClasses['filterInput'] ?> focus:ring-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                                    aria-label="<?= htmlspecialchars($filter['label'] ?? 'Filtre') ?>">
                             </div>
                         <?php endforeach; ?>
                     </div>
 
                     <div class="flex flex-wrap items-center justify-end gap-3 mt-6">
                         <?php if (!empty($_GET)): ?>
-                            <a href="<?= $publicUrl . $modelName ?>" class="<?= $themeClasses['resetButton'] ?>">
+                            <a href="<?= $publicUrl . $modelName ?>"
+                                class="<?= $themeClasses['resetButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-gray-500' : 'focus:ring-gray-300' ?>"
+                                aria-label="Réinitialiser les filtres">
                                 Réinitialiser
                             </a>
                         <?php endif; ?>
-                        <button type="submit" class="<?= $themeClasses['applyButton'] ?>">
+                        <button type="submit"
+                            class="<?= $themeClasses['applyButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                            aria-label="Appliquer les filtres">
                             Appliquer les filtres
                         </button>
                     </div>
@@ -123,98 +144,109 @@
 
     <!-- Table Section -->
     <div class="overflow-hidden rounded-xl shadow-xl <?= $themeClasses['animation'] ?>">
-        <table class="<?= $themeClasses['table'] ?>">
-            <thead class="<?= $themeClasses['tableHeader'] ?>">
-                <tr>
-                    <?php if ($enableRowSelection): ?>
-                        <th scope="col" class="w-12 px-4 py-3 text-center">
-                            <input type="checkbox" id="selectAll"
-                                class="h-4 w-4 rounded border-2 <?= $darkMode ? 'border-gray-500 bg-gray-700 text-teal-400 focus:ring-teal-400' : 'border-gray-300 bg-white text-teal-500 focus:ring-teal-500' ?> transition-colors">
-                        </th>
-                    <?php endif; ?>
-                    <?php foreach ($columns as $column): ?>
-                        <th scope="col" class="<?= $themeClasses['tableHeaderCell'] ?>">
-                            <div class="flex items-center group">
-                                <span><?= htmlspecialchars($column['label']) ?></span>
-                                <?php if (isset($column['sortable']) && $column['sortable']): ?>
-                                    <a href="?sort=<?= $column['key'] ?>&direction=<?= $sort === $column['key'] && $direction === 'asc' ? 'desc' : 'asc' ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?>"
-                                        class="ml-2 transition-opacity duration-200 opacity-0 group-hover:opacity-100">
-                                        <?php if ($sort === $column['key']): ?>
-                                            <span class="<?= $darkMode ? 'text-teal-400' : 'text-teal-500' ?>">
-                                                <?= $direction === 'asc' ? '↑' : '↓' ?>
-                                            </span>
-                                        <?php else: ?>
-                                            <span
-                                                class="<?= $darkMode ? 'text-gray-400 hover:text-teal-400' : 'text-gray-400 hover:text-teal-500' ?>">↕</span>
-                                        <?php endif; ?>
-                                    </a>
-                                <?php endif; ?>
-                            </div>
-                        </th>
-                    <?php endforeach; ?>
-
-                    <?php if (!empty($actions)): ?>
-                        <th scope="col" class="<?= $themeClasses['tableHeaderCell'] ?> text-right">
-                            Actions
-                        </th>
-                    <?php endif; ?>
-                </tr>
-            </thead>
-
-            <tbody class="<?= $themeClasses['tableBody'] ?>">
-                <?php if (!empty($data) && count($data) > 0): ?>
-                    <?php foreach ($data as $item): ?>
-                        <tr class="<?= $themeClasses['tableRow'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
-                            <?php if ($enableRowSelection): ?>
-                                <td class="px-4 py-3 whitespace-nowrap text-center">
-                                    <input type="checkbox"
-                                        class="row-checkbox h-4 w-4 rounded border-2 <?= $darkMode ? 'border-gray-500 bg-gray-700 text-teal-400 focus:ring-teal-400' : 'border-gray-300 bg-white text-teal-500 focus:ring-teal-500' ?> transition-colors">
-                                </td>
-                            <?php endif; ?>
-                            <?php foreach ($columns as $column): ?>
-                                <td class="<?= $themeClasses['tableCell'] ?>">
-                                    <div class="text-sm">
-                                        <?php if (isset($column['render']) && is_callable($column['render'])): ?>
-                                            <?= $column['render']($item) ?>
-                                        <?php else: ?>
-                                            <?= htmlspecialchars($item[$column['key']] ?? '') ?>
-                                        <?php endif; ?>
-                                    </div>
-                                </td>
-                            <?php endforeach; ?>
-
-                            <?php if (!empty($actions)): ?>
-                                <td class="<?= $themeClasses['tableCell'] ?> text-right">
-                                    <div class="flex justify-end space-x-3">
-                                        <?php foreach ($actions as $action): ?>
-                                            <a href="<?= $action['url']($item) ?>" class="<?= $themeClasses['actionButton'] ?>"
-                                                title="<?= htmlspecialchars($action['label']) ?>">
-                                                <?= $action['icon'] ?? '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>' ?>
-                                            </a>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </td>
-                            <?php endif; ?>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
+        <div class="overflow-x-auto">
+            <table class="<?= $themeClasses['table'] ?>" aria-label="<?= htmlspecialchars($title) ?>">
+                <thead class="<?= $themeClasses['tableHeader'] ?>">
                     <tr>
-                        <td colspan="<?= count($columns) + (!empty($actions) ? 1 : 0) + ($enableRowSelection ? 1 : 0) ?>"
-                            class="px-6 py-16 text-center">
-                            <div class="<?= $themeClasses['emptyState'] ?>">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 opacity-40" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <p class="text-lg font-medium">Aucun résultat trouvé</p>
-                                <p class="text-sm mt-1">Essayez de modifier vos critères de recherche</p>
-                            </div>
-                        </td>
+                        <?php if ($enableRowSelection): ?>
+                            <th scope="col" class="w-12 px-4 py-3 text-center">
+                                <label for="selectAll" class="sr-only">Sélectionner tous les éléments</label>
+                                <input type="checkbox" id="selectAll"
+                                    class="h-4 w-4 rounded border-2 <?= $darkMode ? 'border-gray-500 bg-gray-700 text-teal-400 focus:ring-teal-400' : 'border-gray-300 bg-white text-teal-500 focus:ring-teal-500' ?> transition-colors">
+                            </th>
+                        <?php endif; ?>
+                        <?php foreach ($columns as $column): ?>
+                            <th scope="col" class="<?= $themeClasses['tableHeaderCell'] ?>">
+                                <div class="flex items-center group">
+                                    <span><?= htmlspecialchars($column['label']) ?></span>
+                                    <?php if (isset($column['sortable']) && $column['sortable']): ?>
+                                        <a href="?sort=<?= $column['key'] ?>&direction=<?= $sort === $column['key'] && $direction === 'asc' ? 'desc' : 'asc' ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?>"
+                                            class="ml-2 transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none"
+                                            aria-label="Trier par <?= htmlspecialchars($column['label']) ?>">
+                                            <?php if ($sort === $column['key']): ?>
+                                                <span class="<?= $darkMode ? 'text-teal-400' : 'text-teal-500' ?>">
+                                                    <?= $direction === 'asc' ? '↑' : '↓' ?>
+                                                </span>
+                                            <?php else: ?>
+                                                <span
+                                                    class="<?= $darkMode ? 'text-gray-400 hover:text-teal-400' : 'text-gray-400 hover:text-teal-500' ?>">↕</span>
+                                            <?php endif; ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            </th>
+                        <?php endforeach; ?>
+
+                        <?php if (!empty($actions)): ?>
+                            <th scope="col" class="<?= $themeClasses['tableHeaderCell'] ?> text-right">
+                                <span class="sr-only">Actions</span>
+                            </th>
+                        <?php endif; ?>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody class="<?= $themeClasses['tableBody'] ?>">
+                    <?php if (!empty($data) && count($data) > 0): ?>
+                        <?php foreach ($data as $item): ?>
+                            <tr class="<?= $themeClasses['tableRow'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
+                                <?php if ($enableRowSelection): ?>
+                                    <td class="px-4 py-3 whitespace-nowrap text-center">
+                                        <label for="row-<?= htmlspecialchars($item['id'] ?? '') ?>" class="sr-only">Sélectionner cet
+                                            élément</label>
+                                        <input type="checkbox" id="row-<?= htmlspecialchars($item['id'] ?? '') ?>"
+                                            class="row-checkbox h-4 w-4 rounded border-2 <?= $darkMode ? 'border-gray-500 bg-gray-700 text-teal-400 focus:ring-teal-400' : 'border-gray-300 bg-white text-teal-500 focus:ring-teal-500' ?> transition-colors">
+                                    </td>
+                                <?php endif; ?>
+                                <?php foreach ($columns as $column): ?>
+                                    <td class="<?= $themeClasses['tableCell'] ?>">
+                                        <div class="text-sm">
+                                            <?php if (isset($column['render']) && is_callable($column['render'])): ?>
+                                                <?= $column['render']($item) ?>
+                                            <?php else: ?>
+                                                <?= htmlspecialchars($item[$column['key']] ?? '') ?>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                <?php endforeach; ?>
+
+                                <?php if (!empty($actions)): ?>
+                                    <td class="<?= $themeClasses['tableCell'] ?> text-right">
+                                        <div class="flex justify-end space-x-3">
+                                            <?php foreach ($actions as $action): ?>
+                                                <a href="<?= $action['url']($item) ?>"
+                                                    class="<?= $themeClasses['actionButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                                                    aria-label="<?= htmlspecialchars($action['label']) ?>">
+                                                    <?= $action['icon'] ?? '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>' ?>
+                                                </a>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="<?= count($columns) + (!empty($actions) ? 1 : 0) + ($enableRowSelection ? 1 : 0) ?>"
+                                class="px-6 py-16 text-center">
+                                <div class="<?= $themeClasses['emptyState'] ?>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 opacity-40" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p class="text-lg font-medium">
+                                        <?= $emptyStateMessage ?? 'Aucun résultat trouvé' ?>
+                                    </p>
+                                    <?php if (empty($emptyStateMessage)): ?>
+                                        <p class="text-sm mt-1">Essayez de modifier vos critères de recherche</p>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Pagination -->
@@ -229,16 +261,18 @@
                 sur <span class="font-medium"><?= $pagination['total'] ?></span> résultats
             </div>
 
-            <div class="<?= $themeClasses['pagination'] ?>">
+            <nav aria-label="Pagination" class="<?= $themeClasses['pagination'] ?>">
                 <!-- Premier -->
                 <a href="<?= $pagination['links'][0]['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?>">
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    aria-label="Première page" <?= $pagination['current_page'] == 1 ? 'aria-disabled="true"' : '' ?>>
                     &laquo;
                 </a>
 
                 <!-- Précédent -->
                 <a href="<?= $pagination['links'][1]['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?>">
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    aria-label="Page précédente" <?= $pagination['current_page'] == 1 ? 'aria-disabled="true"' : '' ?>>
                     &lsaquo;
                 </a>
 
@@ -250,7 +284,8 @@
                 foreach ($pagination['links'] as $link):
                     if (is_numeric($link['label'])): ?>
                         <a href="<?= $link['url'] ?>"
-                            class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-teal-500 border-teal-500' : $themeClasses['pageLink'] ?>">
+                            class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-teal-500 border-teal-500' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                            aria-label="Page <?= $link['label'] ?>" <?= $link['active'] ? 'aria-current="page"' : '' ?>>
                             <?= $link['label'] ?>
                         </a>
                     <?php endif;
@@ -258,16 +293,18 @@
 
                 <!-- Suivant -->
                 <a href="<?= $pagination['links'][count($pagination['links']) - 2]['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink']:'' ?>">
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    aria-label="Page suivante" <?= $pagination['current_page'] == $pagination['last_page'] ? 'aria-disabled="true"' : '' ?>>
                     &rsaquo;
                 </a>
 
                 <!-- Dernier -->
                 <a href="<?= end($pagination['links'])['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink']:'' ?>">
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    aria-label="Dernière page" <?= $pagination['current_page'] == $pagination['last_page'] ? 'aria-disabled="true"' : '' ?>>
                     &raquo;
                 </a>
-            </div>
+            </nav>
         </div>
     <?php endif; ?>
 
@@ -284,8 +321,10 @@
                 if (selectAll && checkboxes.length > 0) {
                     // Sélection/désélection globale
                     selectAll.addEventListener('change', function () {
+                        const isChecked = selectAll.checked;
                         checkboxes.forEach(checkbox => {
-                            checkbox.checked = selectAll.checked;
+                            checkbox.checked = isChecked;
+                            checkbox.dispatchEvent(new Event('change'));
                         });
                         updateBulkActionsBar();
                     });
@@ -303,9 +342,11 @@
                         const selected = [...checkboxes].filter(cb => cb.checked).length;
                         if (selected > 0) {
                             bulkActionsBar?.classList.remove('hidden');
-                            selectedCount.textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
+                            bulkActionsBar?.setAttribute('aria-hidden', 'false');
+                            selectedCount.querySelector('span:last-child').textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
                         } else {
                             bulkActionsBar?.classList.add('hidden');
+                            bulkActionsBar?.setAttribute('aria-hidden', 'true');
                         }
                     }
 
@@ -313,6 +354,7 @@
                     clearSelection?.addEventListener('click', function () {
                         checkboxes.forEach(checkbox => {
                             checkbox.checked = false;
+                            checkbox.dispatchEvent(new Event('change'));
                         });
                         selectAll.checked = false;
                         updateBulkActionsBar();
@@ -348,25 +390,36 @@
                 }
             <?php endif; ?>
 
-           
+
         });
-
-
     </script>
     <script>
-         function toggleFilters() {
-                const container = document.getElementById('filtersContainer');
-                if (container) {
-                    container.classList.toggle('hidden');
-                    localStorage.setItem('filtersVisible', container.classList.contains('hidden') ? 'false' : 'true');
-                }
-            }
-
-            const filtersVisible = localStorage.getItem('filtersVisible');
+        function toggleFilters() {
             const container = document.getElementById('filtersContainer');
+            if (container) {
+                const isHidden = container.classList.toggle('hidden');
+                container.setAttribute('aria-hidden', isHidden ? 'true' : 'false');
 
-            if (container && filtersVisible === 'true') {
-                container.classList.remove('hidden');
+                const filterButton = document.querySelector('[aria-controls="filtersContainer"]');
+                if (filterButton) {
+                    filterButton.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
+                }
+
+                localStorage.setItem('filtersVisible', isHidden ? 'false' : 'true');
             }
+        }
+
+        // Restaurer l'état des filtres
+        const filtersVisible = localStorage.getItem('filtersVisible');
+        const container = document.getElementById('filtersContainer');
+        const filterButton = document.querySelector('[aria-controls="filtersContainer"]');
+
+        if (container && filtersVisible === 'true') {
+            container.classList.remove('hidden');
+            container.setAttribute('aria-hidden', 'false');
+            if (filterButton) {
+                filterButton.setAttribute('aria-expanded', 'true');
+            }
+        }
     </script>
 </div>

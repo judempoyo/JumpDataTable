@@ -1,4 +1,3 @@
-<?php 
 
 <script>
     // Gestion améliorée des bulk actions

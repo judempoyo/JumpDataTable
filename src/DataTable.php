@@ -4,30 +4,39 @@ namespace Jump\JumpDataTable;
 
 class DataTable
 {
-    protected string $title = 'Liste des éléments';
-    protected string $createUrl = '#';
-    protected array $columns = [];
-    protected ?iterable $data = null;
-    protected array $actions = [];
-    protected array $filters = [];
-    protected string $modelName = 'default';
-    protected bool $showExport = true;
-    protected string $sort = '';
-    protected string $direction = 'asc';
-    protected string $publicUrl = '/';
-    protected array $pagination = [];
-
-    protected string $theme = 'tailwind';
-    protected array $config = [];
-    protected array $themes = [
+    private string $title = 'Liste des éléments';
+    private string $createUrl = '#';
+    /** @var DataColumn[] */
+    private array $columns = [];
+    private ?iterable $data = null;
+    /** @var DataAction[] */
+    private array $actions = [];
+    private array $filters = [];
+    private string $modelName = 'default';
+    private bool $showExport = true;
+    private string $sort = '';
+    private string $direction = 'asc';
+    private string $publicUrl = '/';
+    private array $pagination = [];
+    private string $theme = 'tailwind';
+    private array $config = [];
+    private array $themes = [
         'tailwind' => Themes\TailwindTheme::class,
         'bootstrap' => Themes\BootstrapTheme::class,
     ];
-    protected DataTableRenderer $renderer;
-    
-    protected bool $enableRowSelection = false;
-    protected array $bulkActions = [];
-    protected string $themeMode = 'light';
+    private DataTableRenderer $renderer;
+    private bool $enableRowSelection = false;
+    private array $bulkActions = [];
+    private string $themeMode = 'light';
+
+    public function __construct()
+    {
+        $this->config = $this->getDefaultConfig();
+        $this->renderer = new DataTableRenderer($this->theme);
+    }
+
+    // Column management
+   
     public function enableRowSelection(bool $enable = true): self
     {
         $this->enableRowSelection = $enable;
@@ -39,11 +48,7 @@ class DataTable
         $this->bulkActions = $actions;
         return $this;
     }
-    public function __construct()
-    {
-        $this->config = $this->getDefaultConfig();
-        $this->renderer = new DataTableRenderer($this->theme);
-    }
+ 
 
      /**
      * Set the theme for the DataTable.
@@ -391,24 +396,50 @@ class DataTable
      * @param array $column The column configuration.
      * @return self
      */
-    public function addColumn(array $column): self
+    public function addColumn(DataColumn $column): self
     {
         $this->columns[] = $column;
         return $this;
     }
 
+    public function setColumns(array $columns): self
+    {
+        $this->columns = [];
+        foreach ($columns as $column) {
+            if ($column instanceof DataColumn) {
+                $this->columns[] = $column;
+            } else {
+                // Backward compatibility with array columns
+                $this->columns[] = (new DataColumn($column['key'], $column['label']))->toArray();
+            }
+        }
+        return $this;
+    }
     /**
      * Add an action to the DataTable.
      *
      * @param array $action The action configuration.
      * @return self
      */
-    public function addAction(array $action): self
+    public function addAction(DataAction $action): self
     {
         $this->actions[] = $action;
         return $this;
     }
 
+    public function setActions(array $actions): self
+    {
+        $this->actions = [];
+        foreach ($actions as $action) {
+            if ($action instanceof DataAction) {
+                $this->actions[] = $action;
+            } else {
+                // Backward compatibility with array actions
+                $this->actions[] = DataAction::fromArray($action);
+            }
+        }
+        return $this;
+    }
     /**
      * Add a filter to the DataTable.
      *
@@ -441,18 +472,24 @@ class DataTable
      *
      * @return array The DataTable configuration as an array.
      */
+    
+
     public function toArray(): array
     {
         if (empty($this->columns)) {
             throw new \RuntimeException("Aucune colonne définie pour le DataTable");
         }
 
+        // Convert objects to arrays for rendering
+        $columns = array_map(fn($col) => $col instanceof DataColumn ? $col->toArray() : $col, $this->columns);
+        $actions = array_map(fn($act) => $act instanceof DataAction ? $act->toArray() : $act, $this->actions);
+
         return [
             'title' => $this->title,
             'createUrl' => $this->createUrl,
-            'columns' => $this->columns,
+            'columns' => $columns,
             'data' => $this->data,
-            'actions' => $this->actions,
+            'actions' => $actions,
             'filters' => $this->filters,
             'modelName' => $this->modelName,
             'showExport' => $this->showExport,

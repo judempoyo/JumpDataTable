@@ -5,62 +5,48 @@ namespace Jump\JumpDataTable;
 class Filter
 {
     private array $filters = [];
+    private array $options = [];
 
-    /**
-     * Add a filter for a specific column.
-     *
-     * @param string $column The column to filter.
-     * @param mixed $value The value to filter by.
-     * @return self
-     */
-    public function addFilter(string $column, $value): self
+    public function addFilter(string $column, $value, array $options = []): self
     {
         $this->filters[$column] = $value;
+        $this->options[$column] = $options;
         return $this;
     }
 
-    /**
-     * Get all applied filters.
-     *
-     * @return array
-     */
     public function getFilters(): array
     {
         return $this->filters;
     }
 
-    /**
-     * Clear all filters.
-     *
-     * @return self
-     */
+    public function getOptions(string $column): array
+    {
+        return $this->options[$column] ?? [];
+    }
+
     public function clearFilters(): self
     {
         $this->filters = [];
+        $this->options = [];
         return $this;
     }
 
-    /**
-     * Apply filters to the given data.
-     *
-     * @param array $data The data to filter.
-     * @return array The filtered data.
-     */
     public function applyFilters(array $data): array
     {
         foreach ($this->filters as $column => $value) {
             $data = array_filter($data, function ($row) use ($column, $value) {
-                return isset($row[$column]) && $row[$column] == $value;
+                return isset($row[$column]) && $this->matchesFilter($row[$column], $value);
             });
         }
-        return array_values($data); // Reindex the array after filtering
+        return array_values($data);
     }
 
-    /**
-     * Check if any filters are applied.
-     *
-     * @return bool
-     */
+    private function matchesFilter($actualValue, $filterValue): bool
+    {
+        // Implement custom filter logic here
+        return $actualValue == $filterValue;
+    }
+
     public function hasFilters(): bool
     {
         return !empty($this->filters);

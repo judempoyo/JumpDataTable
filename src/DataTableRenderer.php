@@ -23,6 +23,7 @@ class DataTableRenderer
         }
     }
 
+    
     /**
      * Render the DataTable with the given parameters.
      *
@@ -33,6 +34,15 @@ class DataTableRenderer
     {
         $darkMode = ($params['theme'] ?? 'light') === 'dark';
         $themeClasses = $this->generateThemeClasses($darkMode);
+
+        // Handle object columns and actions
+        $params['columns'] = array_map(function($col) {
+            return $col instanceof DataColumn ? $col->toArray() : $col;
+        }, $params['columns'] ?? []);
+
+        $params['actions'] = array_map(function($act) {
+            return $act instanceof DataAction ? $act->toArray() : $act;
+        }, $params['actions'] ?? []);
 
         $params['themeClasses'] = $themeClasses;
         $viewPath = $this->getViewPath();

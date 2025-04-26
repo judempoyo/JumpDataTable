@@ -12,12 +12,13 @@
                     <?php foreach ($bulkActions as $action): ?>
                         <button type="button"
                             class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 <?= $darkMode ? 'btn-outline-light' : '' ?>"
-                            data-action="<?= htmlspecialchars($action->url) ?>"
-                            aria-label="<?= htmlspecialchars($action->label) ?>">
-                            <?= $action->icon ?? '' ?>
-                            <span><?= htmlspecialchars($action->label) ?></span>
+                            data-action="<?= htmlspecialchars($action->url ?? '') ?>"
+                            aria-label="<?= htmlspecialchars($action['label'] ?? '') ?>">
+                            <?= $action['icon'] ?? '' ?>
+                            <span><?= htmlspecialchars($action['label'] ?? '') ?></span>
                         </button>
                     <?php endforeach; ?>
+                    
                 <?php endif; ?>
 
                 <button type="button" id="clearSelection"
@@ -258,12 +259,10 @@
                     function updateBulkActionsBar() {
                         const selected = [...checkboxes].filter(cb => cb.checked).length;
                         if (selected > 0) {
-                            bulkActionsBar?.classList.remove('hidden');
-                            bulkActionsBar?.setAttribute('aria-hidden', 'false');
-                            selectedCount.querySelector('span:last-child').textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
+                            bulkActionsBar?.classList.remove('d-none');
+                            selectedCount.textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
                         } else {
-                            bulkActionsBar?.classList.add('hidden');
-                            bulkActionsBar?.setAttribute('aria-hidden', 'true');
+                            bulkActionsBar?.classList.add('d-none');
                         }
                     }
 

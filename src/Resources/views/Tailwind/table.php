@@ -19,12 +19,13 @@
             <div class="flex flex-wrap gap-2">
                 <?php if (!empty($bulkActions) && is_array($bulkActions)): ?>
                     <?php foreach ($bulkActions as $action): ?>
+                        
                         <button type="button"
                             class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors <?= $darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200' ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
                             data-action="<?= htmlspecialchars($action->url ?? '') ?>"
-                            aria-label="<?= htmlspecialchars($action->label ?? '') ?>">
-                            <?= $action->icon ?? '' ?>
-                            <span><?= htmlspecialchars($action->label ?? '') ?></span>
+                            aria-label="<?= htmlspecialchars($action['label'] ?? '') ?>">
+                            <?= $action['icon'] ?? '' ?>
+                            <span><?= htmlspecialchars($action['label'] ?? '') ?></span>
                         </button>
                     <?php endforeach; ?>
                 <?php endif; ?>

@@ -208,7 +208,7 @@ class DataTable
         int $perPage = 10,
         int $currentPage = 1,
         string $path = '/',
-        array $queryParams = null
+        ?array $queryParams = null
     ): self {
         $this->pagination = new Pagination(
             $totalItems,
@@ -252,6 +252,7 @@ class DataTable
             'pagination' => $this->pagination->toArray(),
             'enableRowSelection' => $this->enableRowSelection,
             'bulkActions' => array_map(fn($a) => $a->toArray(), $this->bulkActions),
+            'darkMode' => $this->themeMode === 'dark',
             'theme' => $this->themeMode,
             'emptyStateMessage' => $this->emptyStateMessage,
             'config' => $this->config

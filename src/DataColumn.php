@@ -23,6 +23,29 @@ class DataColumn
         $this->label = $label;
     }
 
+    public static function fromArray(array $config): self
+{
+    $column = new self(
+        $config['key'] ?? '',
+        $config['label'] ?? ''
+    );
+
+    $column->format = $config['format'] ?? null;
+    $column->dateFormat = $config['dateFormat'] ?? null;
+    $column->statuses = $config['statuses'] ?? [];
+    $column->sortable = $config['sortable'] ?? false;
+    $column->searchable = $config['searchable'] ?? false;
+    $column->visible = $config['visible'] ?? true;
+    $column->width = $config['width'] ?? null;
+    $column->icons = $config['icons'] ?? [];
+    $column->classes = isset($config['class']) ? explode(' ', $config['class']) : [];
+
+    if (isset($config['render']) && is_callable($config['render'])) {
+        $column->renderer = \Closure::fromCallable($config['render']);
+    }
+
+    return $column;
+}
     public function getKey(): string 
     {
         return $this->key;

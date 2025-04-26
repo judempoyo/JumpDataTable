@@ -18,7 +18,7 @@ class DataTable
     private string $sort = '';
     private string $direction = 'asc';
     private string $publicUrl = '/';
-    private array $pagination = [];
+    private Pagination $pagination;
     private string $theme = 'tailwind';
     private array $config = [];
     private array $themes = [
@@ -36,6 +36,7 @@ class DataTable
     {
         $this->renderer = $renderer ?? new DataTableRenderer($this->theme);
         $this->config = $this->getDefaultConfig();
+        $this->pagination = new Pagination(); // Initialisation avec une pagination vide
     }
 
     public static function make(): self
@@ -133,7 +134,7 @@ class DataTable
     {
         $this->filters = [];
         foreach ($filters as $filter) {
-            $this->addFilter($filter instanceof Filter ? $filter : new Filter($filter));
+            $this->addFilter($filter instanceof Filter ? $filter : new Filter($filter['name'] ?? '', $filter['label'] ?? '', $filter));
         }
         return $this;
     }
@@ -195,34 +196,33 @@ class DataTable
         return $this;
     }
 
-    // Pagination
-    public function paginate(array $config): self
+    // Pagination methods
+    public function setPagination(Pagination $pagination): self
     {
-        $required = ['total', 'per_page', 'current_page', 'last_page', 'path'];
-        foreach ($required as $key) {
-            if (!isset($config[$key])) {
-                throw new \InvalidArgumentException("Pagination config must contain '$key'");
-            }
-        }
-
-        $this->pagination = array_merge([
-            'total' => 0,
-            'per_page' => 10,
-            'current_page' => 1,
-            'last_page' => 1,
-            'path' => '/',
-            'links' => []
-        ], $config);
-
-        if (empty($this->pagination['links'])) {
-            $this->pagination['links'] = $this->generatePaginationLinks(
-                $this->pagination['current_page'],
-                $this->pagination['last_page'],
-                $this->pagination['path']
-            );
-        }
-
+        $this->pagination = $pagination;
         return $this;
+    }
+
+    public function paginate(
+        int $totalItems,
+        int $perPage = 10,
+        int $currentPage = 1,
+        string $path = '/',
+        array $queryParams = null
+    ): self {
+        $this->pagination = new Pagination(
+            $totalItems,
+            $perPage,
+            $currentPage,
+            $path,
+            $queryParams ?? $_GET
+        );
+        return $this;
+    }
+
+    public function getPagination(): Pagination
+    {
+        return $this->pagination;
     }
 
     // Rendering
@@ -249,7 +249,7 @@ class DataTable
             'sort' => $this->sort,
             'direction' => $this->direction,
             'publicUrl' => $this->publicUrl,
-            'pagination' => $this->pagination,
+            'pagination' => $this->pagination->toArray(),
             'enableRowSelection' => $this->enableRowSelection,
             'bulkActions' => array_map(fn($a) => $a->toArray(), $this->bulkActions),
             'theme' => $this->themeMode,
@@ -258,7 +258,6 @@ class DataTable
         ];
     }
 
-    // Helper methods
     protected function getDefaultConfig(): array
     {
         $themeClass = $this->themes[$this->theme];
@@ -280,47 +279,5 @@ class DataTable
         }
         
         return $config;
-    }
-
-    protected function generatePaginationLinks(int $currentPage, int $lastPage, string $baseUrl): array
-    {
-        $links = [];
-        $queryParams = $_GET;
-        unset($queryParams['page']);
-
-        // Previous link
-        if ($currentPage > 1) {
-            $queryParams['page'] = $currentPage - 1;
-            $links[] = [
-                'url' => $baseUrl . '?' . http_build_query($queryParams),
-                'label' => '&lsaquo;',
-                'active' => false
-            ];
-        }
-
-        // Page links
-        $start = max(1, $currentPage - 2);
-        $end = min($lastPage, $currentPage + 2);
-
-        for ($i = $start; $i <= $end; $i++) {
-            $queryParams['page'] = $i;
-            $links[] = [
-                'url' => $baseUrl . '?' . http_build_query($queryParams),
-                'label' => $i,
-                'active' => $i == $currentPage
-            ];
-        }
-
-        // Next link
-        if ($currentPage < $lastPage) {
-            $queryParams['page'] = $currentPage + 1;
-            $links[] = [
-                'url' => $baseUrl . '?' . http_build_query($queryParams),
-                'label' => '&rsaquo;',
-                'active' => false
-            ];
-        }
-
-        return $links;
     }
 }

@@ -6,53 +6,59 @@ class DataAction
 {
     private string $type;
     private string $label;
-    private $urlGenerator;
+    private \Closure $urlGenerator;
     private ?string $icon = null;
     private array $options = [];
     private array $classes = [];
+    private bool $isEnabled = true;
 
     public function __construct(string $type, string $label, callable $urlGenerator)
     {
         $this->type = $type;
         $this->label = $label;
-        if (!is_callable($urlGenerator)) {
-            throw new \InvalidArgumentException('The $urlGenerator must be a callable.');
-        }
-        $this->urlGenerator = $urlGenerator;
+        $this->urlGenerator = \Closure::fromCallable($urlGenerator);
     }
 
-    public static function fromArray(array $actionConfig): self
+    public static function fromArray(array $config): self
     {
         $action = new self(
-            $actionConfig['type'] ?? 'custom',
-            $actionConfig['label'] ?? '',
-            $actionConfig['url'] ?? fn() => '#'
+            $config['type'] ?? 'custom',
+            $config['label'] ?? '',
+            $config['url'] ?? fn() => '#'
         );
 
-        if (isset($actionConfig['icon'])) {
-            $action->setIcon($actionConfig['icon']);
-        }
-
-        if (isset($actionConfig['options'])) {
-            $action->setOptions($actionConfig['options']);
-        }
-
-        if (isset($actionConfig['class'])) {
-            $action->addClass($actionConfig['class']);
-        }
+        $action->icon = $config['icon'] ?? null;
+        $action->options = $config['options'] ?? [];
+        $action->classes = isset($config['class']) ? explode(' ', $config['class']) : [];
+        $action->isEnabled = $config['enabled'] ?? true;
 
         return $action;
     }
 
-    // Getters
-    public function getType(): string { return $this->type; }
-    public function getLabel(): string { return $this->label; }
+    public function getType(): string 
+    {
+        return $this->type;
+    }
 
-    // Configuration methods
+    public function getLabel(): string 
+    {
+        return $this->label;
+    }
+
+    public function getIcon(): ?string 
+    {
+        return $this->icon;
+    }
+
     public function setIcon(?string $icon): self
     {
         $this->icon = $icon;
         return $this;
+    }
+
+    public function getOptions(): array 
+    {
+        return $this->options;
     }
 
     public function setOptions(array $options): self
@@ -61,9 +67,27 @@ class DataAction
         return $this;
     }
 
+    public function getClasses(): array 
+    {
+        return $this->classes;
+    }
+
     public function addClass(string $class): self
     {
-        $this->classes[] = $class;
+        if (!in_array($class, $this->classes)) {
+            $this->classes[] = $class;
+        }
+        return $this;
+    }
+
+    public function isEnabled(): bool 
+    {
+        return $this->isEnabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->isEnabled = $enabled;
         return $this;
     }
 
@@ -72,7 +96,6 @@ class DataAction
         return ($this->urlGenerator)($item);
     }
 
-    // Factory methods for common actions
     public static function view(string $label, callable $urlGenerator, ?string $icon = null): self
     {
         return (new self('view', $label, $urlGenerator))
@@ -91,7 +114,6 @@ class DataAction
             ->setIcon($icon ?? self::defaultDeleteIcon());
     }
 
-    // Convert to array for backward compatibility
     public function toArray(): array
     {
         return [
@@ -101,6 +123,7 @@ class DataAction
             'icon' => $this->icon,
             'options' => $this->options,
             'class' => implode(' ', $this->classes),
+            'enabled' => $this->isEnabled,
         ];
     }
 

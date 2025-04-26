@@ -9,11 +9,13 @@ class DataColumn
     private ?string $format = null;
     private ?string $dateFormat = null;
     private array $statuses = [];
-    private $renderer = null;
+    private ?\Closure $renderer = null;
     private bool $sortable = false;
     private bool $searchable = false;
     private array $icons = [];
     private array $classes = [];
+    private bool $visible = true;
+    private ?string $width = null;
 
     public function __construct(string $key, string $label)
     {
@@ -21,13 +23,36 @@ class DataColumn
         $this->label = $label;
     }
 
-    // Getters
-    public function getKey(): string { return $this->key; }
-    public function getLabel(): string { return $this->label; }
-    public function getFormat(): ?string { return $this->format; }
-    public function isSortable(): bool { return $this->sortable; }
+    public function getKey(): string 
+    {
+        return $this->key;
+    }
 
-    // Configuration methods
+    public function getLabel(): string 
+    {
+        return $this->label;
+    }
+
+    public function getFormat(): ?string 
+    {
+        return $this->format;
+    }
+
+    public function isSortable(): bool 
+    {
+        return $this->sortable;
+    }
+
+    public function isSearchable(): bool 
+    {
+        return $this->searchable;
+    }
+
+    public function isVisible(): bool 
+    {
+        return $this->visible;
+    }
+
     public function sortable(bool $sortable = true): self
     {
         $this->sortable = $sortable;
@@ -37,6 +62,18 @@ class DataColumn
     public function searchable(bool $searchable = true): self
     {
         $this->searchable = $searchable;
+        return $this;
+    }
+
+    public function visible(bool $visible): self
+    {
+        $this->visible = $visible;
+        return $this;
+    }
+
+    public function width(?string $width): self
+    {
+        $this->width = $width;
         return $this;
     }
 
@@ -66,17 +103,26 @@ class DataColumn
 
     public function withRenderer(callable $renderer): self
     {
-        $this->renderer = $renderer;
+        $this->renderer = \Closure::fromCallable($renderer);
         return $this;
     }
 
     public function addClass(string $class): self
     {
-        $this->classes[] = $class;
+        if (!in_array($class, $this->classes)) {
+            $this->classes[] = $class;
+        }
         return $this;
     }
 
-    // Convert to array for backward compatibility
+    public function renderValue(array $item): string
+    {
+        if ($this->renderer) {
+            return ($this->renderer)($item);
+        }
+        return $item[$this->key] ?? '';
+    }
+
     public function toArray(): array
     {
         $config = [
@@ -84,17 +130,19 @@ class DataColumn
             'label' => $this->label,
             'sortable' => $this->sortable,
             'searchable' => $this->searchable,
+            'visible' => $this->visible,
+            'width' => $this->width,
         ];
 
         if ($this->format) {
             $config['format'] = $this->format;
-            if ($this->format === 'date') {
-                $config['dateFormat'] = $this->dateFormat;
-            } elseif ($this->format === 'boolean') {
-                $config['icons'] = $this->icons;
-            } elseif ($this->format === 'status') {
-                $config['statuses'] = $this->statuses;
-            }
+            
+            match ($this->format) {
+                'date' => $config['dateFormat'] = $this->dateFormat,
+                'boolean' => $config['icons'] = $this->icons,
+                'status' => $config['statuses'] = $this->statuses,
+                default => null
+            };
         }
 
         if ($this->renderer) {

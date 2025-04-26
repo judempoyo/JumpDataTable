@@ -258,13 +258,13 @@
 
                 <!-- Suivant -->
                 <a href="<?= $pagination['links'][count($pagination['links']) - 2]['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink'] : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' ?>">
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink']:'' ?>">
                     &rsaquo;
                 </a>
 
                 <!-- Dernier -->
                 <a href="<?= end($pagination['links'])['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink'] : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' ?>">
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink']:'' ?>">
                     &raquo;
                 </a>
             </div>

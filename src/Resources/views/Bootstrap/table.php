@@ -11,8 +11,8 @@
                 <?php if (!empty($bulkActions) && is_array($bulkActions)): ?>
                     <?php foreach ($bulkActions as $action): ?>
                         <button type="button"
-                            class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 <?= $darkMode ? 'btn-outline-light' : '' ?>"
-                            data-action="<?= htmlspecialchars($action->url ?? '') ?>"
+                            class="bulk-action-btn btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 <?= $darkMode ? 'btn-outline-light' : '' ?>"
+                            
                             aria-label="<?= htmlspecialchars($action['label'] ?? '') ?>">
                             <?= $action['icon'] ?? '' ?>
                             <span><?= htmlspecialchars($action['label'] ?? '') ?></span>

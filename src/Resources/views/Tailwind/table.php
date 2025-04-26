@@ -4,15 +4,14 @@
         <div id="bulkActionsBar"
             class="hidden flex items-center justify-between p-4 mb-4 rounded-lg border <?= $darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200' ?> shadow-sm transition-all duration-200">
             <div class="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 <?= $darkMode ? 'text-teal-400' : 'text-teal-500' ?>" viewBox="0 0 20 20"
-                    fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 <?= $darkMode ? 'text-teal-400' : 'text-teal-500' ?>"
+                    viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                         clip-rule="evenodd" />
                 </svg>
-                <span id="selectedCount"
-                    class="text-sm font-medium <?= $darkMode ? 'text-gray-200' : 'text-gray-700' ?>">0 éléments sélectionnés</span>
+                <span id="selectedCount" class="text-sm font-medium <?= $darkMode ? 'text-gray-200' : 'text-gray-700' ?>">0
+                    éléments sélectionnés</span>
             </div>
             <div class="flex gap-2">
                 <?php foreach ($bulkActions as $action): ?>
@@ -36,7 +35,8 @@
     <?php endif; ?>
 
     <!-- Header Section -->
-    <div class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'] ?>">
+    <div
+        class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'] ?>">
         <div class="flex items-center gap-4">
             <h1 class="<?= $themeClasses['title'] ?>">
                 <?= htmlspecialchars($title) ?>
@@ -51,7 +51,8 @@
         <div class="flex flex-wrap items-center gap-3 <?= $themeClasses['animation'] ?>">
             <?php if (!empty($filters)): ?>
                 <button type="button" onclick="toggleFilters()" class="<?= $themeClasses['filterButton'] ?>">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['filterIcon'] ?>" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['filterIcon'] ?>" viewBox="0 0 20 20"
+                        fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
                             clip-rule="evenodd" />
@@ -62,8 +63,8 @@
 
             <?php if ($showExport): ?>
                 <a href="<?= $publicUrl . $modelName ?>/export" class="<?= $themeClasses['exportButton'] ?>">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['exportIcon'] ?>" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['exportIcon'] ?>" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                     </svg>
@@ -72,8 +73,8 @@
             <?php endif; ?>
 
             <a href="<?= $createUrl ?>" class="<?= $themeClasses['addButton'] ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['addIcon'] ?>" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['addIcon'] ?>" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
                 Ajouter
@@ -186,8 +187,7 @@
                                 <td class="<?= $themeClasses['tableCell'] ?> text-right">
                                     <div class="flex justify-end space-x-3">
                                         <?php foreach ($actions as $action): ?>
-                                            <a href="<?= $action['url']($item) ?>"
-                                                class="<?= $themeClasses['actionButton'] ?>"
+                                            <a href="<?= $action['url']($item) ?>" class="<?= $themeClasses['actionButton'] ?>"
                                                 title="<?= htmlspecialchars($action['label']) ?>">
                                                 <?= $action['icon'] ?? '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>' ?>
                                             </a>
@@ -218,54 +218,57 @@
     </div>
 
     <!-- Pagination -->
-    <?php if(!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
-    <div class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animation'] ?>">
-        <div class="text-sm <?= $darkMode ? 'text-gray-300' : 'text-gray-700' ?>">
-            Affichage de <span class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span> 
-            à <span class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span> 
-            sur <span class="font-medium"><?= $pagination['total'] ?></span> résultats
+    <?php if (!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
+        <div
+            class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animation'] ?>">
+            <div class="text-sm <?= $darkMode ? 'text-gray-300' : 'text-gray-700' ?>">
+                Affichage de <span
+                    class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span>
+                à <span
+                    class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span>
+                sur <span class="font-medium"><?= $pagination['total'] ?></span> résultats
+            </div>
+
+            <div class="<?= $themeClasses['pagination'] ?>">
+                <!-- Premier -->
+                <a href="<?= $pagination['links'][0]['url'] ?? '#' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?>">
+                    &laquo;
+                </a>
+
+                <!-- Précédent -->
+                <a href="<?= $pagination['links'][1]['url'] ?? '#' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?>">
+                    &lsaquo;
+                </a>
+
+                <!-- Pages -->
+                <?php
+                $startPage = max(1, $pagination['current_page'] - 2);
+                $endPage = min($pagination['last_page'], $pagination['current_page'] + 2);
+
+                foreach ($pagination['links'] as $link):
+                    if (is_numeric($link['label'])): ?>
+                        <a href="<?= $link['url'] ?>"
+                            class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-teal-500 border-teal-500' : $themeClasses['pageLink'] ?>">
+                            <?= $link['label'] ?>
+                        </a>
+                    <?php endif;
+                endforeach; ?>
+
+                <!-- Suivant -->
+                <a href="<?= $pagination['links'][count($pagination['links']) - 2]['url'] ?? '#' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink'] : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' ?>">
+                    &rsaquo;
+                </a>
+
+                <!-- Dernier -->
+                <a href="<?= end($pagination['links'])['url'] ?? '#' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink'] : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' ?>">
+                    &raquo;
+                </a>
+            </div>
         </div>
-        
-        <div class="<?= $themeClasses['pagination'] ?>">
-            <!-- Premier -->
-            <a href="<?= $pagination['links'][0]['url'] ?? '#' ?>" 
-               class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?>">
-                &laquo;
-            </a>
-            
-            <!-- Précédent -->
-            <a href="<?= $pagination['links'][1]['url'] ?? '#' ?>" 
-               class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?>">
-                &lsaquo;
-            </a>
-            
-            <!-- Pages -->
-            <?php 
-            $startPage = max(1, $pagination['current_page'] - 2);
-            $endPage = min($pagination['last_page'], $pagination['current_page'] + 2);
-            
-            foreach ($pagination['links'] as $link): 
-                if (is_numeric($link['label'])): ?>
-                    <a href="<?= $link['url'] ?>" 
-                       class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-teal-500 border-teal-500' : $themeClasses['pageLink'] ?>">
-                        <?= $link['label'] ?>
-                    </a>
-                <?php endif;
-            endforeach; ?>
-            
-            <!-- Suivant -->
-            <a href="<?= $pagination['links'][count($pagination['links']) - 2]['url'] ?? '#' ?>" 
-               class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink'] : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' ?>">
-                &rsaquo;
-            </a>
-            
-            <!-- Dernier -->
-            <a href="<?= end($pagination['links'])['url'] ?? '#' ?>" 
-               class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? $themeClasses['pageLink'] : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' ?>">
-                &raquo;
-            </a>
-        </div>
-    </div>
     <?php endif; ?>
 
     <script>
@@ -345,7 +348,13 @@
                 }
             <?php endif; ?>
 
-            function toggleFilters() {
+           
+        });
+
+
+    </script>
+    <script>
+         function toggleFilters() {
                 const container = document.getElementById('filtersContainer');
                 if (container) {
                     container.classList.toggle('hidden');
@@ -359,6 +368,5 @@
             if (container && filtersVisible === 'true') {
                 container.classList.remove('hidden');
             }
-        });
     </script>
 </div>

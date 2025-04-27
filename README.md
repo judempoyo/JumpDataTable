@@ -173,4 +173,4 @@ Created with ❤️ by Jude Mpoyo
 
 ## 📜 License
 
-MIT - See `LICENSE.md`
+MIT - See  [LICENSE.md](LICENSE.md)

@@ -4,65 +4,141 @@ namespace Jump\JumpDataTable;
 
 class Filter
 {
-    private array $filters = [];
+    private string $name;
+    private string $label;
+    private string $type = 'text';
+    private array $options = [];
+    private $value = null;
+    private array $attributes = [];
+    private ?\Closure $applyCallback = null;
 
-    /**
-     * Add a filter for a specific column.
-     *
-     * @param string $column The column to filter.
-     * @param mixed $value The value to filter by.
-     * @return self
-     */
-    public function addFilter(string $column, $value): self
+    public function __construct(string $name, string $label, array $config = [])
     {
-        $this->filters[$column] = $value;
-        return $this;
-    }
-
-    /**
-     * Get all applied filters.
-     *
-     * @return array
-     */
-    public function getFilters(): array
-    {
-        return $this->filters;
-    }
-
-    /**
-     * Clear all filters.
-     *
-     * @return self
-     */
-    public function clearFilters(): self
-    {
-        $this->filters = [];
-        return $this;
-    }
-
-    /**
-     * Apply filters to the given data.
-     *
-     * @param array $data The data to filter.
-     * @return array The filtered data.
-     */
-    public function applyFilters(array $data): array
-    {
-        foreach ($this->filters as $column => $value) {
-            $data = array_filter($data, function ($row) use ($column, $value) {
-                return isset($row[$column]) && $row[$column] == $value;
-            });
+        $this->name = $name;
+        $this->label = $label;
+        
+        if (isset($config['type'])) {
+            $this->type = $config['type'];
         }
-        return array_values($data); // Reindex the array after filtering
+        
+        if (isset($config['options'])) {
+            $this->options = $config['options'];
+        }
+        
+        if (isset($config['value'])) {
+            $this->value = $config['value'];
+        }
+        
+        if (isset($config['attributes'])) {
+            $this->attributes = $config['attributes'];
+        }
+        
+        if (isset($config['apply'])) {
+            $this->applyCallback = \Closure::fromCallable($config['apply']);
+        }
     }
 
-    /**
-     * Check if any filters are applied.
-     *
-     * @return bool
-     */
-    public function hasFilters(): bool
+    public function getName(): string
     {
-        return !empty($this->filters);
+        return $this->name;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setValue($value): self
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    public function addAttribute(string $name, $value): self
+    {
+        $this->attributes[$name] = $value;
+        return $this;
+    }
+
+    public function apply(array $data): array
+    {
+        if ($this->applyCallback) {
+            return ($this->applyCallback)($data, $this->value);
+        }
+
+        if (empty($this->value)) {
+            return $data;
+        }
+
+        return array_filter($data, function($item) {
+            return isset($item[$this->name]) && $this->matches($item[$this->name], $this->value);
+        });
+    }
+
+    protected function matches($itemValue, $filterValue): bool
+    {
+        switch ($this->type) {
+            case 'text':
+                return stripos($itemValue, $filterValue) !== false;
+            case 'select':
+            case 'checkbox':
+                return $itemValue == $filterValue;
+            case 'date':
+                return $itemValue == date('Y-m-d', strtotime($filterValue));
+            default:
+                return $itemValue == $filterValue;
+        }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'label' => $this->label,
+            'type' => $this->type,
+            'options' => $this->options,
+            'value' => $this->value,
+            'attributes' => $this->attributes
+        ];
+    }
+
+    public static function text(string $name, string $label): self
+    {
+        return new self($name, $label, ['type' => 'text']);
+    }
+
+    public static function select(string $name, string $label, array $options): self
+    {
+        return new self($name, $label, ['type' => 'select', 'options' => $options]);
+    }
+
+    public static function date(string $name, string $label): self
+    {
+        return new self($name, $label, ['type' => 'date']);
+    }
+
+    public static function custom(string $name, string $label, callable $applyCallback): self
+    {
+        return new self($name, $label, ['apply' => $applyCallback]);
     }
 }

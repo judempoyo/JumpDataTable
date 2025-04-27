@@ -35,7 +35,7 @@ class DataTableRendererTest extends TestCase
             ->setColumns([['key' => 'name', 'label' => 'Name']]);
             
         $output = $renderer->render($table->toArray());
-        $this->assertStringContainsString('dark', $output);
+        $this->assertStringContainsString('bg-gray-800', $output);
     }
 
     public function testInvalidThemeHandling()

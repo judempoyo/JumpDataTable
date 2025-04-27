@@ -18,7 +18,9 @@ class DataTableTest extends TestCase
         $this->table = DataTable::make()
             ->title('Test Table')
             ->modelName('product')
-            ->showExport(true);
+            ->showExport(true)->setColumns([ 
+                ['key' => 'id', 'label' => 'ID']
+            ]);
     }
 
     public function testBasicConfiguration()

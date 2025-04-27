@@ -1,5 +1,7 @@
 # JumpDataTable
 
+[![Latest Version](https://img.shields.io/packagist/v/judempoyo/package.svg?style=flat-square)](https://packagist.org/packages/jump/jump-datatable)
+[![License](https://img.shields.io/packagist/l/judempoyo/package.svg?style=flat-square)](LICENSE.md)
 ---
 
 ## English

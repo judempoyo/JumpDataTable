@@ -72,7 +72,7 @@
             <?php endif; ?>
 
             <?php if ($showExport): ?>
-                <a href="<?= $publicUrl . $modelName ?>/export"
+                <a href="<?= $publicUrl ."/". $modelName ?>/export"
                     class="<?= $themeClasses['exportButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
                     aria-label="Exporter les données">
                     <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['exportIcon'] ?>" fill="none"
@@ -123,7 +123,7 @@
 
                     <div class="flex flex-wrap items-center justify-end gap-3 mt-6">
                         <?php if (!empty($_GET)): ?>
-                            <a href="<?= $publicUrl . $modelName ?>"
+                            <a href="<?= $publicUrl ."/". $modelName ?>"
                                 class="<?= $themeClasses['resetButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-gray-500' : 'focus:ring-gray-300' ?>"
                                 aria-label="Réinitialiser les filtres">
                                 Réinitialiser
@@ -395,7 +395,7 @@
         });
     </script>
     <script>
-        (function() {
+        
             function toggleFilters() {
             const container = document.getElementById('filtersContainer');
             if (container) {
@@ -422,6 +422,6 @@
             if (filterButton) {
                 filterButton.setAttribute('aria-expanded', 'true');
             }
-        }})();
+        }
     </script>
 </div>

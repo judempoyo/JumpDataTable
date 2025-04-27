@@ -53,7 +53,7 @@
             <?php endif; ?>
 
             <?php if ($showExport): ?>
-                <a href="<?= $publicUrl . $modelName ?>/export" class="<?= $themeClasses['exportButton'] ?>">
+                <a href="<?= $publicUrl ."/". $modelName ?>/export" class="<?= $themeClasses['exportButton'] ?>">
                     <i class="<?= $themeClasses['exportIcon'] ?>"></i> Exporter
                 </a>
             <?php endif; ?>
@@ -87,7 +87,7 @@
 
                     <div class="d-flex flex-wrap justify-content-end gap-2 mt-3">
                         <?php if (!empty($_GET)): ?>
-                            <a href="<?= $publicUrl . $modelName ?>" class="<?= $themeClasses['resetButton'] ?>">
+                            <a href="<?= $publicUrl ."/". $modelName ?>" class="<?= $themeClasses['resetButton'] ?>">
                                 Réinitialiser
                             </a>
                         <?php endif; ?>
@@ -309,7 +309,7 @@
         });
     </script>
    <script>
-    (function() {
+  
         function toggleFilters() {
             const container = document.getElementById('filtersContainer');
             if (container) {
@@ -336,6 +336,6 @@
 
         // Expose toggleFilters to global scope if needed
         window.toggleFilters = toggleFilters;
-    })();
+  
 </script>
 </div>

@@ -70,7 +70,19 @@ echo $table->render();
 
 ### Documentation complète
 
-Consultez la documentation complète pour des instructions détaillées sur l'installation, la configuration et la personnalisation.
+Consultez la documentation complète pour des instructions détaillées :
+
+1. [Installation détaillée](docs/installation.md)  
+   Instructions détaillées pour installer et configurer JumpDataTable dans votre projet.
+
+2. [Configuration avancée](docs/configuration.md)  
+   Découvrez toutes les options de configuration disponibles pour personnaliser vos tableaux.
+
+3. [Exemples pratiques](docs/examples.md)  
+   Des exemples concrets pour intégrer JumpDataTable dans différents scénarios.
+
+4. [Personnalisation avancée](docs/advanced.md)  
+   Apprenez à créer des thèmes personnalisés, des hooks, et à optimiser vos tableaux.
 
 ### Contribuer
 
@@ -125,7 +137,19 @@ echo $table->render();
 
 ### Full Documentation
 
-Check the full documentation for detailed instructions on installation, configuration, and customization.
+Check the full documentation for detailed instructions:
+
+1. [Detailed Installation](docs/installation.md)  
+   Step-by-step instructions to install and configure JumpDataTable in your project.
+
+2. [Advanced Configuration](docs/configuration.md)  
+   Explore all configuration options to customize your tables.
+
+3. [Practical Examples](docs/examples.md)  
+   Real-world examples to integrate JumpDataTable in various scenarios.
+
+4. [Advanced Customization](docs/advanced.md)  
+   Learn how to create custom themes, hooks, and optimize your tables.
 
 ### Contributing
 

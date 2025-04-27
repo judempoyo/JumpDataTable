@@ -86,7 +86,7 @@ Consultez la documentation complète pour des instructions détaillées :
 
 ### Contribuer
 
-Les contributions sont les bienvenues ! Consultez le fichier `CONTRIBUTING.md` pour les instructions.
+Les contributions sont les bienvenues ! Consultez le fichier [CONTRIBUTING.md](CONTRIBUTING.md) pour les instructions.
 
 ### À venir
 
@@ -153,7 +153,7 @@ Check the full documentation for detailed instructions:
 
 ### Contributing
 
-Contributions are welcome! See the `CONTRIBUTING.md` file for guidelines.
+Contributions are welcome! See the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines.
 
 ### Coming Soon
 
@@ -173,4 +173,4 @@ Created with ❤️ by Jude Mpoyo
 
 ## 📜 License
 
-MIT - See `LICENSE.md`
+MIT - See  [LICENSE.md](LICENSE.md)

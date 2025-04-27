@@ -138,6 +138,11 @@ class DataColumn
         return $this;
     }
 
+    public function getClasses(): array
+    {
+        return $this->classes;
+    }
+
     public function renderValue(array $item): string
     {
         if ($this->renderer) {

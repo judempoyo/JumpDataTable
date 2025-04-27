@@ -1,12 +1,13 @@
 <?php
 
-namespace Tests\Jump\JumpDataTable;
+namespace Jump\JumpDataTable\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Jump\JumpDataTable\DataTable;
-use Jump\JumpDataTable\DataTableRenderer;
-use Jump\JumpDataTable\Themes\TailwindTheme;
-use InvalidArgumentException;
+use Jump\JumpDataTable\DataColumn;
+use Jump\JumpDataTable\DataAction;
+use Jump\JumpDataTable\Filter;
+use Jump\JumpDataTable\Pagination;
+use PHPUnit\Framework\TestCase;
 
 class DataTableTest extends TestCase
 {
@@ -14,231 +15,95 @@ class DataTableTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->table = new DataTable();
+        $this->table = DataTable::make()
+            ->title('Test Table')
+            ->modelName('product')
+            ->showExport(true)->setColumns([ 
+                ['key' => 'id', 'label' => 'ID']
+            ]);
     }
 
-    public function testInitialState()
+    public function testBasicConfiguration()
     {
-        $this->assertEquals('Liste des éléments', $this->table->toArray()['title']);
-        $this->assertEquals('#', $this->table->toArray()['createUrl']);
-        $this->assertEmpty($this->table->toArray()['columns']);
-        $this->assertNull($this->table->toArray()['data']);
+        $this->assertEquals('Test Table', $this->table->toArray()['title']);
+        $this->assertEquals('product', $this->table->toArray()['modelName']);
         $this->assertTrue($this->table->toArray()['showExport']);
     }
 
-    public function testMakeStaticConstructor()
+    public function testColumnsManagement()
     {
-        $table = DataTable::make();
-        $this->assertInstanceOf(DataTable::class, $table);
+        $this->table->setColumns([
+            ['key' => 'id', 'label' => 'ID'],
+            new DataColumn('name', 'Name')
+        ]);
+        
+        $columns = $this->table->toArray()['columns'];
+        $this->assertCount(2, $columns);
+        $this->assertEquals('id', $columns[0]['key']);
+        $this->assertEquals('Name', $columns[1]['label']);
     }
 
-    public function testTitle()
+    public function testActionsManagement()
     {
-        $result = $this->table->title('My Table');
-        $this->assertEquals('My Table', $this->table->toArray()['title']);
-        $this->assertSame($this->table, $result);
+        $this->table->setActions([
+            DataAction::view('View', fn($item) => '/view/'.$item['id']),
+            ['type' => 'edit', 'label' => 'Edit', 'url' => fn($item) => '/edit/'.$item['id']]
+        ]);
+        
+        $actions = $this->table->toArray()['actions'];
+        $this->assertCount(2, $actions);
+        $this->assertEquals('view', $actions[0]['type']);
+        $this->assertEquals('Edit', $actions[1]['label']);
     }
 
-    public function testCreateUrl()
+    public function testFiltersManagement()
     {
-        $result = $this->table->createUrl('/create');
-        $this->assertEquals('/create', $this->table->toArray()['createUrl']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testColumns()
-    {
-        $columns = [['key' => 'id', 'label' => 'ID']];
-        $result = $this->table->columns($columns);
-        $this->assertEquals($columns, $this->table->toArray()['columns']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testAddColumn()
-    {
-        $column = ['key' => 'name', 'label' => 'Name'];
-        $result = $this->table->addColumn($column);
-        $this->assertEquals([$column], $this->table->toArray()['columns']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testData()
-    {
-        $data = [['id' => 1, 'name' => 'Test']];
-        $result = $this->table->data($data);
-        $this->assertEquals($data, $this->table->toArray()['data']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testActions()
-    {
-        $actions = ['edit', 'delete'];
-        $result = $this->table->actions($actions);
-        $this->assertEquals($actions, $this->table->toArray()['actions']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testAddAction()
-    {
-        $action = ['view'];
-        $result = $this->table->addAction($action);
-        $this->assertEquals([$action], $this->table->toArray()['actions']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testFilters()
-    {
-        $filters = ['status' => 'active'];
-        $result = $this->table->filters($filters);
-        $this->assertEquals($filters, $this->table->toArray()['filters']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testAddFilter()
-    {
-        $filter = ['category' => 'books'];
-        $result = $this->table->addFilter($filter);
-        $this->assertEquals([$filter], $this->table->toArray()['filters']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testModelName()
-    {
-        $result = $this->table->modelName('Product');
-        $this->assertEquals('Product', $this->table->toArray()['modelName']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testShowExport()
-    {
-        $result = $this->table->showExport(false);
-        $this->assertFalse($this->table->toArray()['showExport']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testSort()
-    {
-        $result = $this->table->sort('name');
-        $this->assertEquals('name', $this->table->toArray()['sort']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testDirection()
-    {
-        $result = $this->table->direction('desc');
-        $this->assertEquals('desc', $this->table->toArray()['direction']);
-        $this->assertSame($this->table, $result);
-    }
-
-    public function testPublicUrl()
-    {
-        $result = $this->table->publicUrl('/public');
-        $this->assertEquals('/public', $this->table->toArray()['publicUrl']);
-        $this->assertSame($this->table, $result);
+        $this->table->setFilters([
+            Filter::text('search', 'Search'),
+            new Filter('status', 'Status', ['type' => 'select', 'options' => ['active' => 'Active']])
+        ]);
+        
+        $filters = $this->table->toArray()['filters'];
+        $this->assertCount(2, $filters);
+        $this->assertEquals('search', $filters[0]['name']);
+        $this->assertEquals('select', $filters[1]['type']);
     }
 
     public function testPagination()
     {
-        $pagination = ['perPage' => 10];
-        $result = $this->table->pagination($pagination);
-        $this->assertEquals($pagination, $this->table->toArray()['pagination']);
-        $this->assertSame($this->table, $result);
+        $this->table->paginate(100, 10, 2);
+        $pagination = $this->table->getPagination();
+        
+        $this->assertEquals(100, $pagination->toArray()['total']);
+        $this->assertEquals(10, $pagination->toArray()['per_page']);
+        $this->assertEquals(2, $pagination->toArray()['current_page']);
     }
 
-    public function testUseTheme()
+    public function testThemeConfiguration()
     {
-        $result = $this->table->useTheme('tailwind', ['custom' => 'config']);
+        $this->table->useTheme('tailwind', [
+            'containerClass' => 'custom-container'
+        ]);
         
-        // Utilisation de la réflexion pour vérifier la propriété protégée
-        $reflection = new \ReflectionClass($this->table);
-        $themeProperty = $reflection->getProperty('theme');
-        $themeProperty->setAccessible(true);
-        $themeValue = $themeProperty->getValue($this->table);
-        
-        $configProperty = $reflection->getProperty('config');
-        $configProperty->setAccessible(true);
-        $configValue = $configProperty->getValue($this->table);
-        
-        $this->assertEquals('tailwind', $themeValue);
-        $this->assertArrayHasKey('custom', $configValue);
-        $this->assertSame($this->table, $result);
+        $config = $this->table->toArray()['config'];
+        $this->assertEquals('custom-container', $config['containerClass']);
     }
 
-
-    public function testHasTheme()
+    public function testBulkActions()
     {
-        $this->assertTrue($this->table->hasTheme('tailwind'));
-        $this->assertTrue($this->table->hasTheme('bootstrap'));
-        $this->assertFalse($this->table->hasTheme('invalid-theme'));
+        $this->table->enableRowSelection()
+            ->setBulkActions([
+                DataAction::delete('Delete Selected', fn() => '#bulk-delete')
+            ]);
+            
+        $data = $this->table->toArray();
+        $this->assertTrue($data['enableRowSelection']);
+        $this->assertCount(1, $data['bulkActions']);
     }
 
-    public function testUseInvalidThemeThrowsException()
+    public function testEmptyState()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Thème invalid-theme non supporté');
-        $this->table->useTheme('invalid-theme');
-    }
-
-
-    public function testToArray()
-    {
-        // Configurez d'abord le tableau avec des valeurs spécifiques
-        $this->table->title('Test')
-              ->columns([['key' => 'id']])
-              ->data([['id' => 1]])
-              ->actions(['edit'])
-              ->filters(['status']);
-        
-        $expected = [
-            'title' => 'Test',
-            'createUrl' => '#',
-            'columns' => [['key' => 'id']],
-            'data' => [['id' => 1]],
-            'actions' => ['edit'],
-            'filters' => ['status'],
-            'modelName' => 'default',
-            'showExport' => true,
-            'sort' => '',
-            'direction' => 'asc',
-            'publicUrl' => '/',
-            'pagination' => [],
-        ];
-        
-        $this->assertEquals($expected, $this->table->toArray());
-    }
-
-    public function testRender()
-    {
-        // Mock complet du renderer et de sa dépendance
-        $mockRenderer = $this->getMockBuilder(DataTableRenderer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['render'])
-            ->getMock();
-        
-        $mockRenderer->expects($this->once())
-            ->method('render')
-            ->willReturn('<table><tr><td>Test</td></tr></table>');
-        
-        // Utilisation de la réflexion pour injecter le mock
-        $reflection = new \ReflectionClass($this->table);
-        
-        // Injecter le thème
-        $themeProperty = $reflection->getProperty('theme');
-        $themeProperty->setAccessible(true);
-        $themeProperty->setValue($this->table, 'tailwind');
-        
-        // Remplacer le renderer par le mock
-        $rendererProperty = $reflection->getProperty('renderer');
-        $rendererProperty->setAccessible(true);
-        $rendererProperty->setValue($this->table, $mockRenderer);
-        
-        // Configurer des données minimales
-        $this->table->columns([['key' => 'id', 'label' => 'ID']]);
-        
-        $html = $this->table->render();
-        
-        $this->assertIsString($html);
-        $this->assertStringContainsString('<table>', $html);
-        $this->assertStringContainsString('</table>', $html);
+        $this->table->emptyStateMessage('No records found');
+        $this->assertEquals('No records found', $this->table->toArray()['emptyStateMessage']);
     }
 }

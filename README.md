@@ -1,157 +1,152 @@
 # JumpDataTable
 
-[![Latest Version](https://img.shields.io/packagist/v/judempoyo/package.svg?style=flat-square)](https://packagist.org/packages/jump/jump-datatable)
-[![License](https://img.shields.io/packagist/l/judempoyo/package.svg?style=flat-square)](LICENSE.md)
----
+[![Latest Version](https://img.shields.io/packagist/v/jump/jump-datatable.svg?style=flat-square)](https://packagist.org/packages/jump/jump-datatable)
+[![License](https://img.shields.io/packagist/l/jump/jump-datatable.svg?style=flat-square)](LICENSE.md)
 
-## English
+Un package PHP moderne pour générer des tableaux de données interactifs avec filtres, tris, pagination et actions personnalisables.
 
-# JumpDataTable
-
-JumpDataTable is a clean and powerful PHP package for generating interactive data tables with theming support (Tailwind & Bootstrap), advanced filters, bulk and row actions, sorting, custom rendering, and more.
+A modern PHP package to generate interactive data tables with filters, sorting, pagination, and customizable actions.
 
 ---
 
-### 📦 Installation
+## 🌐 Table of Contents / Table des matières
 
-Install the package via Composer:
+- [JumpDataTable](#jumpdatatable)
+  - [🌐 Table of Contents / Table des matières](#-table-of-contents--table-des-matières)
+  - [🇫🇷 Français](#-français)
+    - [Fonctionnalités clés](#fonctionnalités-clés)
+    - [Installation](#installation)
+    - [Utilisation rapide](#utilisation-rapide)
+    - [Documentation complète](#documentation-complète)
+    - [Contribuer](#contribuer)
+    - [À venir](#à-venir)
+  - [🇬🇧 English](#-english)
+    - [Key Features](#key-features)
+    - [Installation](#installation-1)
+    - [Quick Usage](#quick-usage)
+    - [Full Documentation](#full-documentation)
+    - [Contributing](#contributing)
+    - [Coming Soon](#coming-soon)
+  - [🤝 Contributeurs / Contributors](#-contributeurs--contributors)
+  - [📜 License](#-license)
+
+---
+
+## 🇫🇷 Français
+
+### Fonctionnalités clés
+
+- 🎨 Multi-thèmes (Tailwind, Bootstrap)
+- 🔍 Filtrage intégré
+- ↕️ Tri des colonnes
+- 📊 Pagination automatique
+- 🛠 Actions personnalisables
+- 🌙 Mode sombre
+- 📤 Export des données
+- ⚡ Actions groupées
+
+### Installation
 
 ```bash
-composer require jump/jumpdatatable
+composer require jump/jump-datatable
 ```
 
----
-
-### 🚀 Key Features
-
-- 🎨 **Multi-theme support**: Tailwind & Bootstrap
-- 🔎 **Advanced filters**: text, dropdowns, date ranges
-- 🔁 **Row actions**: view, edit, delete with confirmation
-- 🧩 **Custom cell rendering**
-- ✅ **Row selection** & bulk actions (export, delete, etc.)
-- 📤 **Built-in export** (CSV, Excel, etc.)
-- 🌓 **Light / Dark mode support**
-
----
-
-### 📄 Full Usage Example
+### Utilisation rapide
 
 ```php
 use Jump\JumpDataTable\DataTable;
 
 $table = DataTable::make()
-    ->title('Users')
-    ->columns($columns)
-    ->data($data)
-    ->actions($actions)
-    ->filters($filters)
-    ->bulkActions($bulkActions)
-    ->enableRowSelection(true)
-    ->createUrl('/users/create')
-    ->publicUrl('/users')
-    ->modelName('users')
-    ->showExport(true)
-    ->setThemeMode('dark')
-    ->useTheme('tailwind');
+        ->title('Liste des utilisateurs')
+        ->data($users)
+        ->setColumns([
+                ['key' => 'id', 'label' => 'ID', 'sortable' => true],
+                ['key' => 'name', 'label' => 'Nom'],
+                ['key' => 'email', 'label' => 'Email']
+        ]);
 
 echo $table->render();
 ```
 
----
+### Documentation complète
 
-### 📜 License
+Consultez la documentation complète pour des instructions détaillées sur l'installation, la configuration et la personnalisation.
 
-This project is licensed under the MIT License.
+### Contribuer
 
----
+Les contributions sont les bienvenues ! Consultez le fichier `CONTRIBUTING.md` pour les instructions.
 
-### 🤝 Contributors
-
-Made with ❤️ by [Jude Mpoyo](mailto:mpoyojude@gmail.com)
-
----
-
-### ✨ Coming Soon
-
-- AJAX Pagination
-- Livewire / Vue.js support
-- Laravel Facade Extension
-- Blade Directive Integration
-
----
-
-## Français
-
----
-
-# JumpDataTable 
-
-JumpDataTable est un package PHP élégant et puissant pour générer des tables de données interactives avec support de thèmes (Tailwind & Bootstrap), filtres avancés, actions individuelles et groupées, tri, rendus personnalisés, et plus encore.
-
----
-
-### 📦 Installation
-
-Installez le package via Composer :
-
-```bash
-composer require jump/jumpdatatable
-```
-
----
-
-### 🚀 Fonctionnalités clés
-
-- 🎨 **Support de plusieurs thèmes** : Tailwind & Bootstrap
-- 🔎 **Filtres avancés** : texte, listes déroulantes, plages de dates
-- 🔁 **Actions par ligne** : voir, modifier, supprimer avec confirmation
-- 🧩 **Rendu personnalisé pour chaque cellule**
-- ✅ **Sélection de lignes** & actions groupées (export, suppression, etc.)
-- 📤 **Export intégré** (CSV, Excel, etc.)
-- 🌓 **Support du mode clair / sombre**
-
----
-
-### 📄 Exemple complet d'utilisation
-
-```php
-use Jump\JumpDataTable\DataTable;
-
-$table = DataTable::make()
-    ->title('Utilisateurs')
-    ->columns($columns)
-    ->data($data)
-    ->actions($actions)
-    ->filters($filters)
-    ->bulkActions($bulkActions)
-    ->enableRowSelection(true)
-    ->createUrl('/users/create')
-    ->publicUrl('/users')
-    ->modelName('users')
-    ->showExport(true)
-    ->setThemeMode('dark')
-    ->useTheme('tailwind');
-
-echo $table->render();
-```
-
----
-
-### 📜 Licence
-
-Ce projet est sous licence MIT.
-
----
-
-### 🤝 Contributeurs
-
-Créé avec ❤️ par [Jude Mpoyo](mailto:mpoyojude@gmail.com)
-
----
-
-### ✨ À venir
+### À venir
 
 - Pagination AJAX
 - Support Livewire / Vue.js
 - Extension Laravel Facade
 - Intégration des directives Blade
+
+---
+
+## 🇬🇧 English
+
+### Key Features
+
+- 🎨 Multi-themes (Tailwind, Bootstrap)
+- 🔍 Built-in filtering
+- ↕️ Column sorting
+- 📊 Automatic pagination
+- 🛠 Customizable actions
+- 🌙 Dark mode
+- 📤 Data export
+- ⚡ Bulk actions
+
+### Installation
+
+```bash
+composer require jump/jump-datatable
+```
+
+### Quick Usage
+
+```php
+use Jump\JumpDataTable\DataTable;
+
+$table = DataTable::make()
+        ->title('User List')
+        ->data($users)
+        ->setColumns([
+                ['key' => 'id', 'label' => 'ID', 'sortable' => true],
+                ['key' => 'name', 'label' => 'Name'],
+                ['key' => 'email', 'label' => 'Email'],
+                ['key' => 'created_at', 'label' => 'Created At', 'sortable' => true],
+                ['key' => 'updated_at', 'label' => 'Updated At', 'sortable' => true]
+        ]);
+
+echo $table->render();
+```
+
+### Full Documentation
+
+Check the full documentation for detailed instructions on installation, configuration, and customization.
+
+### Contributing
+
+Contributions are welcome! See the `CONTRIBUTING.md` file for guidelines.
+
+### Coming Soon
+
+- AJAX Pagination
+- Livewire / Vue.js support
+- Laravel Facade extension
+- Blade directives integration
+
+---
+
+## 🤝 Contributeurs / Contributors
+
+Créé avec ❤️ par Jude Mpoyo  
+Created with ❤️ by Jude Mpoyo
+
+---
+
+## 📜 License
+
+MIT - See `LICENSE.md`

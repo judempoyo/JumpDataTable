@@ -84,8 +84,14 @@ class DataTableRenderer
         ];
     }
 
-    protected function getViewPath(): string
+    /**
+   * Get the view path.
+   *
+   * @return string
+   */
+    public function getViewPath(): string
     {
         return $this->viewsPath . '/' . ucfirst($this->theme) . '/table.php';
     }
+   
 }

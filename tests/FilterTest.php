@@ -1,90 +1,87 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace Jump\JumpDataTable\Tests;
+
 use Jump\JumpDataTable\Filter;
+use PHPUnit\Framework\TestCase;
 
 class FilterTest extends TestCase
 {
-    public function testCanAddAndRetrieveFilters()
+    public function testBasicFilterCreation()
     {
-        $filter = new Filter();
-        $filter->addFilter('status', 'active');
-        $this->assertEquals(['status' => 'active'], $filter->getFilters());
+        $filter = new Filter('name', 'Name');
+        
+        $this->assertEquals('name', $filter->getName());
+        $this->assertEquals('Name', $filter->getLabel());
+        $this->assertEquals('text', $filter->getType());
+        $this->assertNull($filter->getValue());
     }
 
-    public function testApplyFilters()
+    public function testFilterTypes()
     {
-        $filter = new Filter();
-        $filter->addFilter('status', 'active');
+        $textFilter = Filter::text('search', 'Search');
+        $selectFilter = Filter::select('status', 'Status', ['active' => 'Active']);
+        $dateFilter = Filter::date('created_at', 'Created At');
+        
+        $this->assertEquals('text', $textFilter->getType());
+        $this->assertEquals('select', $selectFilter->getType());
+        $this->assertEquals('date', $dateFilter->getType());
+        $this->assertEquals(['active' => 'Active'], $selectFilter->getOptions());
+    }
 
+    public function testCustomFilter()
+    {
+        $filter = Filter::custom('price', 'Price', function($data, $value) {
+            return array_filter($data, fn($item) => $item['price'] >= $value);
+        });
+        
+        $filter->setValue(100);
+        
         $data = [
-            ['id' => 1, 'status' => 'active'],
-            ['id' => 2, 'status' => 'inactive'],
+            ['id' => 1, 'price' => 50],
+            ['id' => 2, 'price' => 150],
+            ['id' => 3, 'price' => 200]
         ];
-
-        $filteredData = $filter->applyFilters($data);
-        $this->assertCount(1, $filteredData);
-        $this->assertEquals('active', $filteredData[0]['status']);
+        
+        $filtered = $filter->apply($data);
+        $this->assertCount(2, $filtered);
+        $this->assertEquals(2, $filtered[1]['id']);
     }
 
-    public function testClearFilters()
+    public function testValueSetting()
     {
-        $filter = new Filter();
-        $filter->addFilter('status', 'active');
-        $filter->clearFilters();
-        $this->assertEmpty($filter->getFilters());
+        $filter = new Filter('active', 'Active', ['type' => 'select', 'options' => ['1' => 'Yes']]);
+        $filter->setValue('1');
+        
+        $this->assertEquals('1', $filter->getValue());
     }
 
-    public function testHasFiltersReturnsTrueWhenFiltersAreApplied()
+    public function testAttributes()
     {
-        $filter = new Filter();
-        $filter->addFilter('status', 'active');
-        $this->assertTrue($filter->hasFilters());
+        $filter = new Filter('email', 'Email', [
+            'attributes' => ['placeholder' => 'Enter email']
+        ]);
+        
+        $filter->addAttribute('data-test', 'value');
+        
+        $attrs = $filter->getAttributes();
+        $this->assertEquals('Enter email', $attrs['placeholder']);
+        $this->assertEquals('value', $attrs['data-test']);
     }
 
-    public function testHasFiltersReturnsFalseWhenNoFiltersAreApplied()
+    public function testToArrayConversion()
     {
-        $filter = new Filter();
-        $this->assertFalse($filter->hasFilters());
-    }
-
-    public function testApplyFiltersWithEmptyData()
-    {
-        $filter = new Filter();
-        $filter->addFilter('status', 'active');
-        $data = [];
-        $filteredData = $filter->applyFilters($data);
-        $this->assertEmpty($filteredData);
-    }
-
-    public function testApplyFiltersWithNoMatchingFilters()
-    {
-        $filter = new Filter();
-        $filter->addFilter('status', 'active');
-
-        $data = [
-            ['id' => 1, 'status' => 'inactive'],
-            ['id' => 2, 'status' => 'inactive'],
-        ];
-
-        $filteredData = $filter->applyFilters($data);
-        $this->assertEmpty($filteredData);
-    }
-
-    public function testApplyFiltersWithPartialMatchingFilters()
-    {
-        $filter = new Filter();
-        $filter->addFilter('status', 'active');
-
-        $data = [
-            ['id' => 1, 'status' => 'active'],
-            ['id' => 2, 'status' => 'inactive'],
-            ['id' => 3, 'status' => 'active'],
-        ];
-
-        $filteredData = $filter->applyFilters($data);
-        $this->assertCount(2, $filteredData);
-        $this->assertEquals('active', $filteredData[0]['status']);
-        $this->assertEquals('active', $filteredData[1]['status']);
+        $filter = new Filter('category', 'Category', [
+            'type' => 'select',
+            'options' => ['1' => 'Books'],
+            'value' => '1'
+        ]);
+        
+        $array = $filter->toArray();
+        
+        $this->assertEquals('category', $array['name']);
+        $this->assertEquals('select', $array['type']);
+        $this->assertEquals(['1' => 'Books'], $array['options']);
+        $this->assertEquals('1', $array['value']);
     }
 }

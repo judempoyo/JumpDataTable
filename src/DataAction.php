@@ -3,22 +3,40 @@
 namespace Jump\JumpDataTable;
 
 /**
- * [Description DataAction]
+ * Represents an action that can be performed on a data table item
+ * 
+ * Actions are typically rendered as buttons in the table and can be things like
+ * "view", "edit", "delete" or custom actions.
  */
 class DataAction
 {
+    /** @var string The type of action (e.g., 'view', 'edit', 'delete', 'custom') */
     private string $type;
+    
+    /** @var string The label to display for the action */
     private string $label;
+    
+    /** @var \Closure A closure that generates the URL for the action */
     private \Closure $urlGenerator;
+    
+    /** @var string|null An optional icon to display with the action */
     private ?string $icon = null;
+    
+    /** @var array Additional options for the action */
     private array $options = [];
+    
+    /** @var array CSS classes to apply to the action */
     private array $classes = [];
+    
+    /** @var bool Whether the action is enabled */
     private bool $isEnabled = true;
 
     /**
-     * @param string $type
-     * @param string $label
-     * @param callable $urlGenerator
+     * Constructor
+     * 
+     * @param string $type The action type
+     * @param string $label The action label
+     * @param callable $urlGenerator A callable that generates the URL for the action
      */
     public function __construct(string $type, string $label, callable $urlGenerator)
     {
@@ -28,8 +46,9 @@ class DataAction
     }
 
     /**
-     * @param array $config
+     * Creates a DataAction from an array configuration
      * 
+     * @param array $config The action configuration array
      * @return self
      */
     public static function fromArray(array $config): self
@@ -49,6 +68,8 @@ class DataAction
     }
 
     /**
+     * Gets the action type
+     * 
      * @return string
      */
     public function getType(): string 
@@ -57,6 +78,8 @@ class DataAction
     }
 
     /**
+     * Gets the action label
+     * 
      * @return string
      */
     public function getLabel(): string 
@@ -65,6 +88,8 @@ class DataAction
     }
 
     /**
+     * Gets the action icon
+     * 
      * @return string|null
      */
     public function getIcon(): ?string 
@@ -73,8 +98,9 @@ class DataAction
     }
 
     /**
-     * @param string|null $icon
+     * Sets the action icon
      * 
+     * @param string|null $icon The icon to set
      * @return self
      */
     public function setIcon(?string $icon): self
@@ -84,6 +110,8 @@ class DataAction
     }
 
     /**
+     * Gets the action options
+     * 
      * @return array
      */
     public function getOptions(): array 
@@ -92,8 +120,9 @@ class DataAction
     }
 
     /**
-     * @param array $options
+     * Sets the action options
      * 
+     * @param array $options The options to set
      * @return self
      */
     public function setOptions(array $options): self
@@ -103,6 +132,8 @@ class DataAction
     }
 
     /**
+     * Gets the CSS classes for the action
+     * 
      * @return array
      */
     public function getClasses(): array 
@@ -110,6 +141,12 @@ class DataAction
         return $this->classes;
     }
 
+    /**
+     * Adds a CSS class to the action
+     * 
+     * @param string $class The class to add
+     * @return self
+     */
     public function addClass(string $class): self
     {
         if (!in_array($class, $this->classes)) {
@@ -119,6 +156,8 @@ class DataAction
     }
 
     /**
+     * Checks if the action is enabled
+     * 
      * @return bool
      */
     public function isEnabled(): bool 
@@ -127,8 +166,9 @@ class DataAction
     }
 
     /**
-     * @param bool $enabled
+     * Sets whether the action is enabled
      * 
+     * @param bool $enabled Whether to enable the action
      * @return self
      */
     public function setEnabled(bool $enabled): self
@@ -138,8 +178,9 @@ class DataAction
     }
 
     /**
-     * @param array $item
+     * Generates the URL for the action
      * 
+     * @param array $item The data item the action applies to
      * @return string
      */
     public function getUrl(array $item): string
@@ -148,10 +189,11 @@ class DataAction
     }
 
     /**
-     * @param string $label
-     * @param callable $urlGenerator
-     * @param string|null $icon
+     * Creates a view action
      * 
+     * @param string $label The action label
+     * @param callable $urlGenerator A callable that generates the URL
+     * @param string|null $icon An optional icon
      * @return self
      */
     public static function view(string $label, callable $urlGenerator, ?string $icon = null): self
@@ -161,10 +203,11 @@ class DataAction
     }
 
     /**
-     * @param string $label
-     * @param callable $urlGenerator
-     * @param string|null $icon
+     * Creates an edit action
      * 
+     * @param string $label The action label
+     * @param callable $urlGenerator A callable that generates the URL
+     * @param string|null $icon An optional icon
      * @return self
      */
     public static function edit(string $label, callable $urlGenerator, ?string $icon = null): self
@@ -174,10 +217,11 @@ class DataAction
     }
 
     /**
-     * @param string $label
-     * @param callable $urlGenerator
-     * @param string|null $icon
+     * Creates a delete action
      * 
+     * @param string $label The action label
+     * @param callable $urlGenerator A callable that generates the URL
+     * @param string|null $icon An optional icon
      * @return self
      */
     public static function delete(string $label, callable $urlGenerator, ?string $icon = null): self
@@ -187,6 +231,8 @@ class DataAction
     }
 
     /**
+     * Converts the action to an array
+     * 
      * @return array
      */
     public function toArray(): array
@@ -203,6 +249,8 @@ class DataAction
     }
 
     /**
+     * Gets the default view icon SVG
+     * 
      * @return string
      */
     private static function defaultViewIcon(): string
@@ -211,6 +259,8 @@ class DataAction
     }
 
     /**
+     * Gets the default edit icon SVG
+     * 
      * @return string
      */
     private static function defaultEditIcon(): string
@@ -219,6 +269,8 @@ class DataAction
     }
 
     /**
+     * Gets the default delete icon SVG
+     * 
      * @return string
      */
     private static function defaultDeleteIcon(): string

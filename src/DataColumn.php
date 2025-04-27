@@ -2,104 +2,206 @@
 
 namespace Jump\JumpDataTable;
 
+/**
+ * Represents a column in a data table
+ * 
+ * Columns define how data is displayed and can be formatted in various ways
+ * (dates, booleans, statuses, etc.) and can be made sortable or searchable.
+ */
 class DataColumn
 {
+    /** @var string The key in the data array this column represents */
     private string $key;
+    
+    /** @var string The label to display for the column */
     private string $label;
+    
+    /** @var string|null The format type (date, boolean, status, etc.) */
     private ?string $format = null;
+    
+    /** @var string|null The date format string if this is a date column */
     private ?string $dateFormat = null;
+    
+    /** @var array Status configurations if this is a status column */
     private array $statuses = [];
+    
+    /** @var \Closure|null A custom renderer function for the column */
     private ?\Closure $renderer = null;
+    
+    /** @var bool Whether the column is sortable */
     private bool $sortable = false;
+    
+    /** @var bool Whether the column is searchable */
     private bool $searchable = false;
+    
+    /** @var array Icons for boolean values */
     private array $icons = [];
+    
+    /** @var array CSS classes for the column */
     private array $classes = [];
+    
+    /** @var bool Whether the column is visible */
     private bool $visible = true;
+    
+    /** @var string|null The width of the column */
     private ?string $width = null;
 
+    /**
+     * Constructor
+     * 
+     * @param string $key The data key
+     * @param string $label The column label
+     */
     public function __construct(string $key, string $label)
     {
         $this->key = $key;
         $this->label = $label;
     }
 
+    /**
+     * Creates a DataColumn from an array configuration
+     * 
+     * @param array $config The column configuration
+     * @return self
+     */
     public static function fromArray(array $config): self
-{
-    $column = new self(
-        $config['key'] ?? '',
-        $config['label'] ?? ''
-    );
+    {
+        $column = new self(
+            $config['key'] ?? '',
+            $config['label'] ?? ''
+        );
 
-    $column->format = $config['format'] ?? null;
-    $column->dateFormat = $config['dateFormat'] ?? null;
-    $column->statuses = $config['statuses'] ?? [];
-    $column->sortable = $config['sortable'] ?? false;
-    $column->searchable = $config['searchable'] ?? false;
-    $column->visible = $config['visible'] ?? true;
-    $column->width = $config['width'] ?? null;
-    $column->icons = $config['icons'] ?? [];
-    $column->classes = isset($config['class']) ? explode(' ', $config['class']) : [];
+        $column->format = $config['format'] ?? null;
+        $column->dateFormat = $config['dateFormat'] ?? null;
+        $column->statuses = $config['statuses'] ?? [];
+        $column->sortable = $config['sortable'] ?? false;
+        $column->searchable = $config['searchable'] ?? false;
+        $column->visible = $config['visible'] ?? true;
+        $column->width = $config['width'] ?? null;
+        $column->icons = $config['icons'] ?? [];
+        $column->classes = isset($config['class']) ? explode(' ', $config['class']) : [];
 
-    if (isset($config['render']) && is_callable($config['render'])) {
-        $column->renderer = \Closure::fromCallable($config['render']);
+        if (isset($config['render']) && is_callable($config['render'])) {
+            $column->renderer = \Closure::fromCallable($config['render']);
+        }
+
+        return $column;
     }
 
-    return $column;
-}
+    /**
+     * Gets the column key
+     * 
+     * @return string
+     */
     public function getKey(): string 
     {
         return $this->key;
     }
 
+    /**
+     * Gets the column label
+     * 
+     * @return string
+     */
     public function getLabel(): string 
     {
         return $this->label;
     }
 
+    /**
+     * Gets the column format
+     * 
+     * @return string|null
+     */
     public function getFormat(): ?string 
     {
         return $this->format;
     }
 
+    /**
+     * Checks if the column is sortable
+     * 
+     * @return bool
+     */
     public function isSortable(): bool 
     {
         return $this->sortable;
     }
 
+    /**
+     * Checks if the column is searchable
+     * 
+     * @return bool
+     */
     public function isSearchable(): bool 
     {
         return $this->searchable;
     }
 
+    /**
+     * Checks if the column is visible
+     * 
+     * @return bool
+     */
     public function isVisible(): bool 
     {
         return $this->visible;
     }
 
+    /**
+     * Sets whether the column is sortable
+     * 
+     * @param bool $sortable Whether the column should be sortable
+     * @return self
+     */
     public function sortable(bool $sortable = true): self
     {
         $this->sortable = $sortable;
         return $this;
     }
 
+    /**
+     * Sets whether the column is searchable
+     * 
+     * @param bool $searchable Whether the column should be searchable
+     * @return self
+     */
     public function searchable(bool $searchable = true): self
     {
         $this->searchable = $searchable;
         return $this;
     }
 
+    /**
+     * Sets whether the column is visible
+     * 
+     * @param bool $visible Whether the column should be visible
+     * @return self
+     */
     public function visible(bool $visible): self
     {
         $this->visible = $visible;
         return $this;
     }
 
+    /**
+     * Sets the column width
+     * 
+     * @param string|null $width The width (e.g., '100px', '20%')
+     * @return self
+     */
     public function width(?string $width): self
     {
         $this->width = $width;
         return $this;
     }
 
+    /**
+     * Formats the column as a date
+     * 
+     * @param string $format The date format string
+     * @return self
+     */
     public function asDate(string $format = 'd/m/Y H:i'): self
     {
         $this->format = 'date';
@@ -107,6 +209,12 @@ class DataColumn
         return $this;
     }
 
+    /**
+     * Formats the column as a boolean with icons
+     * 
+     * @param array $icons Custom icons for true/false values
+     * @return self
+     */
     public function asBoolean(array $icons = []): self
     {
         $this->format = 'boolean';
@@ -117,6 +225,12 @@ class DataColumn
         return $this;
     }
 
+    /**
+     * Formats the column as a status with custom status configurations
+     * 
+     * @param array $statuses The status configurations
+     * @return self
+     */
     public function withStatuses(array $statuses): self
     {
         $this->format = 'status';
@@ -124,12 +238,24 @@ class DataColumn
         return $this;
     }
 
+    /**
+     * Sets a custom renderer for the column
+     * 
+     * @param callable $renderer The renderer function
+     * @return self
+     */
     public function withRenderer(callable $renderer): self
     {
         $this->renderer = \Closure::fromCallable($renderer);
         return $this;
     }
 
+    /**
+     * Adds a CSS class to the column
+     * 
+     * @param string $class The class to add
+     * @return self
+     */
     public function addClass(string $class): self
     {
         if (!in_array($class, $this->classes)) {
@@ -138,11 +264,12 @@ class DataColumn
         return $this;
     }
 
-    public function getClasses(): array
-    {
-        return $this->classes;
-    }
-
+    /**
+     * Renders the value for a given item
+     * 
+     * @param array $item The data item
+     * @return string
+     */
     public function renderValue(array $item): string
     {
         if ($this->renderer) {
@@ -151,6 +278,11 @@ class DataColumn
         return $item[$this->key] ?? '';
     }
 
+    /**
+     * Converts the column to an array
+     * 
+     * @return array
+     */
     public function toArray(): array
     {
         $config = [

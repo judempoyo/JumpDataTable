@@ -5,8 +5,8 @@
             class="hidden flex items-center justify-between p-4 mb-4 rounded-lg border bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-200"
             aria-live="polite" aria-atomic="true">
             <div class="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 dark:text-teal-400"
-                    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 dark:text-teal-400" viewBox="0 0 20 20"
+                    fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                         clip-rule="evenodd" />
@@ -41,7 +41,8 @@
     <?php endif; ?>
 
     <!-- Header Section -->
-    <div class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'] ?>">
+    <div
+        class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'] ?>">
         <div class="flex items-center gap-4">
             <h1 class="<?= $themeClasses['title'] ?>">
                 <?= htmlspecialchars($title) ?>
@@ -69,7 +70,7 @@
             <?php endif; ?>
 
             <?php if ($showExport): ?>
-                <a href="<?= $publicUrl ."/". $modelName ?>/export"
+                <a href="<?= $publicUrl . "/" . $modelName ?>/export"
                     class="<?= $themeClasses['exportButton'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     aria-label="Exporter les données">
                     <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['exportIcon'] ?>" fill="none"
@@ -120,7 +121,7 @@
 
                     <div class="flex flex-wrap items-center justify-end gap-3 mt-6">
                         <?php if (!empty($_GET)): ?>
-                            <a href="<?= $publicUrl ."/". $modelName ?>"
+                            <a href="<?= $publicUrl . "/" . $modelName ?>"
                                 class="<?= $themeClasses['resetButton'] ?> focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                                 aria-label="Réinitialiser les filtres">
                                 Réinitialiser
@@ -148,9 +149,21 @@
                     <tr>
                         <?php if ($enableRowSelection): ?>
                             <th scope="col" class="w-12 px-4 py-3 text-center">
-                                <label for="selectAll" class="sr-only">Sélectionner tous les éléments</label>
-                                <input type="checkbox" id="selectAll"
-                                    class="h-4 w-4 rounded border-2 border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700 text-teal-500 dark:text-teal-400 focus:ring-teal-500 transition-colors">
+                            <label class="flex items-center cursor-pointer relative"
+                            for="selectAll">
+                                            <input type="checkbox" id="selectAll"
+                                                class="row-checkbox peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-teal-300 checked:bg-teal-800 checked:border-teal-800" />
+                                            <span
+                                                class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                                    fill="currentColor" stroke="currentColor" stroke-width="1">
+                                                    <path fill-rule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </span>
+                                        </label>
+                               
                             </th>
                         <?php endif; ?>
                         <?php foreach ($columns as $column): ?>
@@ -188,10 +201,24 @@
                             <tr class="<?= $themeClasses['tableRow'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
                                 <?php if ($enableRowSelection): ?>
                                     <td class="px-4 py-3 whitespace-nowrap text-center">
-                                        <label for="row-<?= htmlspecialchars($item['id'] ?? '') ?>" class="sr-only">Sélectionner cet élément</label>
-                                        <input type="checkbox" id="row-<?= htmlspecialchars($item['id'] ?? '') ?>"
-                                            class="row-checkbox h-4 w-4 rounded border-2 border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700 text-teal-500 dark:text-teal-400 focus:ring-teal-500 transition-colors">
+                                       
+                                        <label class="flex items-center cursor-pointer relative"
+                                            for="row-<?= htmlspecialchars($item['id'] ?? '') ?>">
+                                            <input type="checkbox" id="row-<?= htmlspecialchars($item['id'] ?? '') ?>"
+                                                class="row-checkbox peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-teal-300 checked:bg-teal-800 checked:border-teal-800" />
+                                            <span
+                                                class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                                    fill="currentColor" stroke="currentColor" stroke-width="1">
+                                                    <path fill-rule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </span>
+                                        </label>
                                     </td>
+
+
                                 <?php endif; ?>
                                 <?php foreach ($columns as $column): ?>
                                     <td class="<?= $themeClasses['tableCell'] ?>">
@@ -247,10 +274,13 @@
 
     <!-- Pagination -->
     <?php if (!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
-        <div class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animation'] ?>">
+        <div
+            class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animation'] ?>">
             <div class="text-sm text-gray-700 dark:text-gray-300">
-                Affichage de <span class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span>
-                à <span class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span>
+                Affichage de <span
+                    class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span>
+                à <span
+                    class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span>
                 sur <span class="font-medium"><?= $pagination['total'] ?></span> résultats
             </div>
 
@@ -296,119 +326,119 @@
             </nav>
         </div>
     <?php endif; ?>
-    </div>
-    <script>
-        // Gestion de la sélection multiple
-        document.addEventListener('DOMContentLoaded', function () {
-            <?php if ($enableRowSelection): ?>
-                const selectAll = document.getElementById('selectAll');
-                const checkboxes = document.querySelectorAll('.row-checkbox');
-                const bulkActionsBar = document.getElementById('bulkActionsBar');
-                const selectedCount = document.getElementById('selectedCount');
-                const clearSelection = document.getElementById('clearSelection');
+</div>
+<script>
+    // Gestion de la sélection multiple
+    document.addEventListener('DOMContentLoaded', function () {
+        <?php if ($enableRowSelection): ?>
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            const selectedCount = document.getElementById('selectedCount');
+            const clearSelection = document.getElementById('clearSelection');
 
-                if (selectAll && checkboxes.length > 0) {
-                    // Sélection/désélection globale
-                    selectAll.addEventListener('change', function () {
-                        const isChecked = selectAll.checked;
-                        checkboxes.forEach(checkbox => {
-                            checkbox.checked = isChecked;
-                            checkbox.dispatchEvent(new Event('change'));
-                        });
-                        updateBulkActionsBar();
-                    });
-
-                    // Mise à jour de la case "Tout sélectionner"
+            if (selectAll && checkboxes.length > 0) {
+                // Sélection/désélection globale
+                selectAll.addEventListener('change', function () {
+                    const isChecked = selectAll.checked;
                     checkboxes.forEach(checkbox => {
-                        checkbox.addEventListener('change', function () {
-                            selectAll.checked = [...checkboxes].every(cb => cb.checked);
-                            updateBulkActionsBar();
-                        });
+                        checkbox.checked = isChecked;
+                        checkbox.dispatchEvent(new Event('change'));
                     });
+                    updateBulkActionsBar();
+                });
 
-                    // Mise à jour de la barre d'actions groupées
-                    function updateBulkActionsBar() {
-                        const selected = [...checkboxes].filter(cb => cb.checked).length;
-                        if (selected > 0) {
-                            bulkActionsBar?.classList.remove('hidden');
-                            bulkActionsBar?.setAttribute('aria-hidden', 'false');
-                            selectedCount.querySelector('span:last-child').textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
-                        } else {
-                            bulkActionsBar?.classList.add('hidden');
-                            bulkActionsBar?.setAttribute('aria-hidden', 'true');
-                        }
-                    }
-
-                    // Annulation de la sélection
-                    clearSelection?.addEventListener('click', function () {
-                        checkboxes.forEach(checkbox => {
-                            checkbox.checked = false;
-                            checkbox.dispatchEvent(new Event('change'));
-                        });
-                        selectAll.checked = false;
+                // Mise à jour de la case "Tout sélectionner"
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        selectAll.checked = [...checkboxes].every(cb => cb.checked);
                         updateBulkActionsBar();
                     });
+                });
 
-                    // Gestion des actions groupées
-                    document.querySelectorAll('.bulk-action-btn').forEach(button => {
-                        button.addEventListener('click', function () {
-                            const selectedIds = [...checkboxes]
-                                .filter(cb => cb.checked)
-                                .map(cb => cb.closest('tr').dataset.id);
+                // Mise à jour de la barre d'actions groupées
+                function updateBulkActionsBar() {
+                    const selected = [...checkboxes].filter(cb => cb.checked).length;
+                    if (selected > 0) {
+                        bulkActionsBar?.classList.remove('hidden');
+                        bulkActionsBar?.setAttribute('aria-hidden', 'false');
+                        selectedCount.querySelector('span:last-child').textContent = `${selected} élément${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''}`;
+                    } else {
+                        bulkActionsBar?.classList.add('hidden');
+                        bulkActionsBar?.setAttribute('aria-hidden', 'true');
+                    }
+                }
 
-                            if (selectedIds.length === 0) {
-                                alert('Veuillez sélectionner au moins un élément');
-                                return;
-                            }
+                // Annulation de la sélection
+                clearSelection?.addEventListener('click', function () {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                        checkbox.dispatchEvent(new Event('change'));
+                    });
+                    selectAll.checked = false;
+                    updateBulkActionsBar();
+                });
 
-                            const actionUrl = button.dataset.action;
-                            // Exemple avec une confirmation avant suppression
-                            if (button.textContent.includes('Supprimer')) {
-                                if (confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
-                                    // Implémentez ici la logique de suppression
-                                    console.log('Suppression des IDs:', selectedIds);
-                                    // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
-                                }
-                            } else {
-                                // Autres actions
-                                console.log('Action:', actionUrl, 'IDs:', selectedIds);
+                // Gestion des actions groupées
+                document.querySelectorAll('.bulk-action-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const selectedIds = [...checkboxes]
+                            .filter(cb => cb.checked)
+                            .map(cb => cb.closest('tr').dataset.id);
+
+                        if (selectedIds.length === 0) {
+                            alert('Veuillez sélectionner au moins un élément');
+                            return;
+                        }
+
+                        const actionUrl = button.dataset.action;
+                        // Exemple avec une confirmation avant suppression
+                        if (button.textContent.includes('Supprimer')) {
+                            if (confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
+                                // Implémentez ici la logique de suppression
+                                console.log('Suppression des IDs:', selectedIds);
                                 // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
                             }
-                        });
+                        } else {
+                            // Autres actions
+                            console.log('Action:', actionUrl, 'IDs:', selectedIds);
+                            // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
+                        }
                     });
-                }
-            <?php endif; ?>
-
-
-        });
-    </script>
-    <script>
-        
-            function toggleFilters() {
-            const container = document.getElementById('filtersContainer');
-            if (container) {
-                const isHidden = container.classList.toggle('hidden');
-                container.setAttribute('aria-hidden', isHidden ? 'true' : 'false');
-
-                const filterButton = document.querySelector('[aria-controls="filtersContainer"]');
-                if (filterButton) {
-                    filterButton.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
-                }
-
-                localStorage.setItem('filtersVisible', isHidden ? 'false' : 'true');
+                });
             }
-        }
+        <?php endif; ?>
 
-        // Restaurer l'état des filtres
-        const filtersVisible = localStorage.getItem('filtersVisible');
+
+    });
+</script>
+<script>
+
+    function toggleFilters() {
         const container = document.getElementById('filtersContainer');
-        const filterButton = document.querySelector('[aria-controls="filtersContainer"]');
+        if (container) {
+            const isHidden = container.classList.toggle('hidden');
+            container.setAttribute('aria-hidden', isHidden ? 'true' : 'false');
 
-        if (container && filtersVisible === 'true') {
-            container.classList.remove('hidden');
-            container.setAttribute('aria-hidden', 'false');
+            const filterButton = document.querySelector('[aria-controls="filtersContainer"]');
             if (filterButton) {
-                filterButton.setAttribute('aria-expanded', 'true');
+                filterButton.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
             }
+
+            localStorage.setItem('filtersVisible', isHidden ? 'false' : 'true');
         }
-    </script>
+    }
+
+    // Restaurer l'état des filtres
+    const filtersVisible = localStorage.getItem('filtersVisible');
+    const container = document.getElementById('filtersContainer');
+    const filterButton = document.querySelector('[aria-controls="filtersContainer"]');
+
+    if (container && filtersVisible === 'true') {
+        container.classList.remove('hidden');
+        container.setAttribute('aria-hidden', 'false');
+        if (filterButton) {
+            filterButton.setAttribute('aria-expanded', 'true');
+        }
+    }
+</script>

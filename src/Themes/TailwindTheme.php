@@ -11,7 +11,7 @@ class TailwindTheme implements ThemeInterface
         'classic' => Presets\Tailwind\ClassicTheme::class,
         'dark' => Presets\Tailwind\DarkTheme::class,
     ];
-    
+
     protected static array $currentPreset = [];
     protected static array $customConfig = [];
 
@@ -42,7 +42,7 @@ class TailwindTheme implements ThemeInterface
             'animationClass' => 'animate__animated',
         ];
 
-  
+
     }
 
     public static function usePreset(string $presetName): void
@@ -50,7 +50,7 @@ class TailwindTheme implements ThemeInterface
         if (!isset(self::$presets[$presetName])) {
             throw new \InvalidArgumentException("Preset $presetName not found. Available: " . implode(', ', array_keys(self::$presets)));
         }
-        
+
         self::$currentPreset = call_user_func([self::$presets[$presetName], 'getConfig']);
     }
 
@@ -64,7 +64,7 @@ class TailwindTheme implements ThemeInterface
         if (isset(self::$customConfig[$key])) {
             return self::$customConfig[$key];
         }
-        
+
         if (isset(self::$currentPreset[$key])) {
             return self::$currentPreset[$key];
         }
@@ -72,7 +72,7 @@ class TailwindTheme implements ThemeInterface
             $defaultConfig = self::getDefaultConfig();
             return $defaultConfig[$key] ?? $default;
         }
-        
+
         return $default;
     }
 

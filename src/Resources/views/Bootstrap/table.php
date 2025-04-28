@@ -1,7 +1,7 @@
 <div class="<?= $themeClasses['container'] ?> <?= $themeClasses['animation'] ?>">
     <!-- Bulk Actions Bar -->
     <?php if ($enableRowSelection && !empty($bulkActions)): ?>
-        <div id="bulkActionsBar" class="<?= $themeClasses['bulkActionsContainer'] ?> d-none">
+        <div id="bulkActionsBar" class="<?= $themeClasses['bulkActionsContainer'] ?> d-none" >
             <div class="d-flex align-items-center">
                 <i class="bi bi-check-circle-fill me-2 text-primary fs-5"></i>
                 <span id="selectedCount" class="fw-medium">0 éléments sélectionnés</span>

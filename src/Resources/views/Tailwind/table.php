@@ -2,16 +2,16 @@
     <!-- Bulk Actions Bar -->
     <?php if ($enableRowSelection && !empty($bulkActions)): ?>
         <div id="bulkActionsBar"
-            class="hidden flex items-center justify-between p-4 mb-4 rounded-lg border <?= $darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200' ?> shadow-sm transition-all duration-200"
+            class="hidden flex items-center justify-between p-4 mb-4 rounded-lg border bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-200"
             aria-live="polite" aria-atomic="true">
             <div class="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 <?= $darkMode ? 'text-teal-400' : 'text-teal-500' ?>"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 dark:text-teal-400"
                     viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                         clip-rule="evenodd" />
                 </svg>
-                <span id="selectedCount" class="text-sm font-medium <?= $darkMode ? 'text-gray-200' : 'text-gray-700' ?>">
+                <span id="selectedCount" class="text-sm font-medium text-gray-700 dark:text-gray-200">
                     <span class="sr-only">Nombre d'éléments sélectionnés : </span>
                     <span aria-live="polite">0 éléments sélectionnés</span>
                 </span>
@@ -19,10 +19,8 @@
             <div class="flex flex-wrap gap-2">
                 <?php if (!empty($bulkActions) && is_array($bulkActions)): ?>
                     <?php foreach ($bulkActions as $action): ?>
-                        
                         <button type="button"
-                            class="bulk-action-btn inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors <?= $darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200' ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
-                         
+                            class="bulk-action-btn inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                             aria-label="<?= htmlspecialchars($action['label'] ?? '') ?>">
                             <?= $action['icon'] ?? '' ?>
                             <span><?= htmlspecialchars($action['label'] ?? '') ?></span>
@@ -30,7 +28,7 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
                 <button type="button" id="clearSelection"
-                    class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md <?= $darkMode ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100' ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-gray-500' : 'focus:ring-gray-300' ?>"
+                    class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     aria-label="Annuler la sélection">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" aria-hidden="true">
@@ -43,8 +41,7 @@
     <?php endif; ?>
 
     <!-- Header Section -->
-    <div
-        class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'] ?>">
+    <div class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'] ?>">
         <div class="flex items-center gap-4">
             <h1 class="<?= $themeClasses['title'] ?>">
                 <?= htmlspecialchars($title) ?>
@@ -59,7 +56,7 @@
         <div class="flex flex-wrap items-center gap-3 <?= $themeClasses['animation'] ?>">
             <?php if (!empty($filters)): ?>
                 <button type="button" onclick="toggleFilters()"
-                    class="<?= $themeClasses['filterButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    class="<?= $themeClasses['filterButton'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     aria-expanded="false" aria-controls="filtersContainer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['filterIcon'] ?>" viewBox="0 0 20 20"
                         fill="currentColor" aria-hidden="true">
@@ -73,7 +70,7 @@
 
             <?php if ($showExport): ?>
                 <a href="<?= $publicUrl ."/". $modelName ?>/export"
-                    class="<?= $themeClasses['exportButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    class="<?= $themeClasses['exportButton'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     aria-label="Exporter les données">
                     <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['exportIcon'] ?>" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -85,7 +82,7 @@
             <?php endif; ?>
 
             <a href="<?= $createUrl ?>"
-                class="<?= $themeClasses['addButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                class="<?= $themeClasses['addButton'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                 aria-label="Ajouter un nouvel élément">
                 <svg xmlns="http://www.w3.org/2000/svg" class="<?= $themeClasses['addIcon'] ?>" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -115,7 +112,7 @@
                                     name="<?= htmlspecialchars($filter['name'] ?? 'search') ?>"
                                     placeholder="<?= htmlspecialchars($filter['placeholder'] ?? 'Rechercher...') ?>"
                                     value="<?= htmlspecialchars($_GET[$filter['name'] ?? 'search'] ?? '') ?>"
-                                    class="<?= $themeClasses['filterInput'] ?> focus:ring-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                                    class="<?= $themeClasses['filterInput'] ?> focus:ring-2 focus:ring-teal-500"
                                     aria-label="<?= htmlspecialchars($filter['label'] ?? 'Filtre') ?>">
                             </div>
                         <?php endforeach; ?>
@@ -124,13 +121,13 @@
                     <div class="flex flex-wrap items-center justify-end gap-3 mt-6">
                         <?php if (!empty($_GET)): ?>
                             <a href="<?= $publicUrl ."/". $modelName ?>"
-                                class="<?= $themeClasses['resetButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-gray-500' : 'focus:ring-gray-300' ?>"
+                                class="<?= $themeClasses['resetButton'] ?> focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                                 aria-label="Réinitialiser les filtres">
                                 Réinitialiser
                             </a>
                         <?php endif; ?>
                         <button type="submit"
-                            class="<?= $themeClasses['applyButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                            class="<?= $themeClasses['applyButton'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                             aria-label="Appliquer les filtres">
                             Appliquer les filtres
                         </button>
@@ -153,7 +150,7 @@
                             <th scope="col" class="w-12 px-4 py-3 text-center">
                                 <label for="selectAll" class="sr-only">Sélectionner tous les éléments</label>
                                 <input type="checkbox" id="selectAll"
-                                    class="h-4 w-4 rounded border-2 <?= $darkMode ? 'border-gray-500 bg-gray-700 text-teal-400 focus:ring-teal-400' : 'border-gray-300 bg-white text-teal-500 focus:ring-teal-500' ?> transition-colors">
+                                    class="h-4 w-4 rounded border-2 border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700 text-teal-500 dark:text-teal-400 focus:ring-teal-500 transition-colors">
                             </th>
                         <?php endif; ?>
                         <?php foreach ($columns as $column): ?>
@@ -165,12 +162,11 @@
                                             class="ml-2 transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none"
                                             aria-label="Trier par <?= htmlspecialchars($column['label']) ?>">
                                             <?php if ($sort === $column['key']): ?>
-                                                <span class="<?= $darkMode ? 'text-teal-400' : 'text-teal-500' ?>">
+                                                <span class="text-teal-500 dark:text-teal-400">
                                                     <?= $direction === 'asc' ? '↑' : '↓' ?>
                                                 </span>
                                             <?php else: ?>
-                                                <span
-                                                    class="<?= $darkMode ? 'text-gray-400 hover:text-teal-400' : 'text-gray-400 hover:text-teal-500' ?>">↕</span>
+                                                <span class="text-gray-400 hover:text-teal-500 dark:hover:text-teal-400">↕</span>
                                             <?php endif; ?>
                                         </a>
                                     <?php endif; ?>
@@ -192,10 +188,9 @@
                             <tr class="<?= $themeClasses['tableRow'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
                                 <?php if ($enableRowSelection): ?>
                                     <td class="px-4 py-3 whitespace-nowrap text-center">
-                                        <label for="row-<?= htmlspecialchars($item['id'] ?? '') ?>" class="sr-only">Sélectionner cet
-                                            élément</label>
+                                        <label for="row-<?= htmlspecialchars($item['id'] ?? '') ?>" class="sr-only">Sélectionner cet élément</label>
                                         <input type="checkbox" id="row-<?= htmlspecialchars($item['id'] ?? '') ?>"
-                                            class="row-checkbox h-4 w-4 rounded border-2 <?= $darkMode ? 'border-gray-500 bg-gray-700 text-teal-400 focus:ring-teal-400' : 'border-gray-300 bg-white text-teal-500 focus:ring-teal-500' ?> transition-colors">
+                                            class="row-checkbox h-4 w-4 rounded border-2 border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700 text-teal-500 dark:text-teal-400 focus:ring-teal-500 transition-colors">
                                     </td>
                                 <?php endif; ?>
                                 <?php foreach ($columns as $column): ?>
@@ -215,7 +210,7 @@
                                         <div class="flex justify-end space-x-3">
                                             <?php foreach ($actions as $action): ?>
                                                 <a href="<?= $action['url']($item) ?>"
-                                                    class="<?= $themeClasses['actionButton'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                                                    class="<?= $themeClasses['actionButton'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                                                     aria-label="<?= htmlspecialchars($action['label']) ?>">
                                                     <?= $action['icon'] ?? '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>' ?>
                                                 </a>
@@ -252,63 +247,56 @@
 
     <!-- Pagination -->
     <?php if (!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
-        <div
-            class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animation'] ?>">
-            <div class="text-sm <?= $darkMode ? 'text-gray-300' : 'text-gray-700' ?>">
-                Affichage de <span
-                    class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span>
-                à <span
-                    class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span>
+        <div class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animation'] ?>">
+            <div class="text-sm text-gray-700 dark:text-gray-300">
+                Affichage de <span class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span>
+                à <span class="font-medium"><?= min($pagination['current_page'] * $pagination['per_page'], $pagination['total']) ?></span>
                 sur <span class="font-medium"><?= $pagination['total'] ?></span> résultats
             </div>
 
             <nav aria-label="Pagination" class="<?= $themeClasses['pagination'] ?>">
                 <!-- Premier -->
                 <a href="<?= $pagination['links'][0]['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     aria-label="Première page" <?= $pagination['current_page'] == 1 ? 'aria-disabled="true"' : '' ?>>
                     &laquo;
                 </a>
 
                 <!-- Précédent -->
                 <a href="<?= $pagination['links'][1]['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == 1 ? 'text-gray-400 bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     aria-label="Page précédente" <?= $pagination['current_page'] == 1 ? 'aria-disabled="true"' : '' ?>>
                     &lsaquo;
                 </a>
 
                 <!-- Pages -->
-                <?php
-                $startPage = max(1, $pagination['current_page'] - 2);
-                $endPage = min($pagination['last_page'], $pagination['current_page'] + 2);
-
-                foreach ($pagination['links'] as $link):
-                    if (is_numeric($link['label'])): ?>
+                <?php foreach ($pagination['links'] as $link): ?>
+                    <?php if (is_numeric($link['label'])): ?>
                         <a href="<?= $link['url'] ?>"
-                            class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-teal-500 border-teal-500' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                            class="px-3 py-1 text-sm border rounded-lg <?= $link['active'] ? 'text-white bg-teal-500 border-teal-500' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                             aria-label="Page <?= $link['label'] ?>" <?= $link['active'] ? 'aria-current="page"' : '' ?>>
                             <?= $link['label'] ?>
                         </a>
-                    <?php endif;
-                endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
 
                 <!-- Suivant -->
                 <a href="<?= $pagination['links'][count($pagination['links']) - 2]['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? 'text-gray-400 bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     aria-label="Page suivante" <?= $pagination['current_page'] == $pagination['last_page'] ? 'aria-disabled="true"' : '' ?>>
                     &rsaquo;
                 </a>
 
                 <!-- Dernier -->
                 <a href="<?= end($pagination['links'])['url'] ?? '#' ?>"
-                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300' ?>"
+                    class="px-3 py-1 text-sm border rounded-lg <?= $pagination['current_page'] == $pagination['last_page'] ? 'text-gray-400 bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 cursor-not-allowed' : $themeClasses['pageLink'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     aria-label="Dernière page" <?= $pagination['current_page'] == $pagination['last_page'] ? 'aria-disabled="true"' : '' ?>>
                     &raquo;
                 </a>
             </nav>
         </div>
     <?php endif; ?>
-
+    </div>
     <script>
         // Gestion de la sélection multiple
         document.addEventListener('DOMContentLoaded', function () {
@@ -424,4 +412,3 @@
             }
         }
     </script>
-</div>

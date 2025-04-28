@@ -17,31 +17,35 @@ class TailwindTheme implements ThemeInterface
 
     public static function getDefaultConfig(): array
     {
-        return [
-            'containerClass' => 'max-w-full p-6 mx-auto mt-8 bg-white rounded-lg shadow-xl animate__animated animate__fadeIn',
-            'titleClass' => 'text-2xl font-bold md:text-3xl animate__animated animate__fadeInLeft text-gray-900',
-            'countBadgeClass' => 'px-3 py-1 text-sm font-medium rounded-full text-teal-800 bg-teal-100',
-            'filterButtonClass' => 'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
-            'addButtonClass' => 'flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-all duration-300 bg-teal-500 hover:bg-teal-600',
-            'resetButtonClass' => 'px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
-            'applyButtonClass' => 'px-4 py-2 text-sm font-medium text-white rounded-lg bg-teal-500 hover:bg-teal-600',
-            'actionButtonClass' => 'p-1.5 rounded-full transition duration-200 text-gray-500 hover:bg-gray-100',
-            'filtersContainerClass' => 'p-4 mt-2 rounded-lg bg-gray-50',
-            'filterInputClass' => 'w-full px-3 py-2 text-sm border rounded-lg shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border-gray-300 bg-white text-gray-900 placeholder-gray-400',
-            'filterLabelClass' => 'block mb-1 text-sm font-medium text-gray-700',
-            'tableClass' => 'min-w-full divide-y divide-gray-200',
-            'tableHeaderClass' => 'bg-gray-50',
-            'tableHeaderCellClass' => 'px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-gray-500',
-            'tableBodyClass' => 'bg-white divide-y divide-gray-200',
-            'tableRowClass' => 'transition duration-150 hover:bg-gray-50',
-            'tableCellClass' => 'px-6 py-4 whitespace-nowrap text-sm text-gray-900',
-            'emptyStateClass' => 'flex flex-col items-center justify-center text-gray-500',
+        $config = [
+            'containerClass' => 'max-w-full p-6 mx-auto mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-xl animate__animated animate__fadeIn',
+            'titleClass' => 'text-2xl font-bold md:text-3xl animate__animated animate__fadeInLeft text-gray-900 dark:text-white',
+            'countBadgeClass' => 'px-3 py-1 text-sm font-medium rounded-full text-teal-800 dark:text-teal-200 bg-teal-100 dark:bg-teal-900',
+            'filterButtonClass' => 'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600',
+            'addButtonClass' => 'flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-all duration-300 bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700',
+            'resetButtonClass' => 'px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600',
+            'applyButtonClass' => 'px-4 py-2 text-sm font-medium text-white rounded-lg bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700',
+            'actionButtonClass' => 'p-1.5 rounded-full transition duration-200 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700',
+            'filtersContainerClass' => 'p-4 mt-2 rounded-lg bg-gray-50 dark:bg-gray-700',
+            'filterInputClass' => 'w-full px-3 py-2 text-sm border rounded-lg shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500',
+            'filterLabelClass' => 'block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300',
+            'tableClass' => 'min-w-full divide-y divide-gray-200 dark:divide-gray-700',
+            'tableHeaderClass' => 'bg-gray-50 dark:bg-gray-800',
+            'tableHeaderCellClass' => 'px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-gray-500 dark:text-gray-400',
+            'tableBodyClass' => 'bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700',
+            'tableRowClass' => 'transition duration-150 hover:bg-gray-50 dark:hover:bg-gray-700/50',
+            'tableCellClass' => 'px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100',
+            'emptyStateClass' => 'flex flex-col items-center justify-center text-gray-500 dark:text-gray-400',
             'paginationClass' => 'flex items-center space-x-1',
-            'pageItemClass' => 'bg-white border-gray-300',
-            'pageLinkClass' => 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50',
+            'pageItemClass' => 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600',
+            'pageLinkClass' => 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700',
             'animationClass' => 'animate__animated',
         ];
+
+        self::$customConfig = $config;
+        return $config;
     }
+
     public static function usePreset(string $presetName): void
     {
         if (!isset(self::$presets[$presetName])) {
@@ -56,7 +60,7 @@ class TailwindTheme implements ThemeInterface
         self::$customConfig = array_replace_recursive(self::$currentPreset, $overrides);
     }
 
-    protected static function getConfigValue(string $key, $default = null)
+    protected static function getConfigValue(string $key, $default = "")
     {
         if (isset(self::$customConfig[$key])) {
             return self::$customConfig[$key];
@@ -69,359 +73,147 @@ class TailwindTheme implements ThemeInterface
         return $default;
     }
 
-    public static function getContainerClasses(bool $darkMode): string
+    public static function getContainerClasses(): string
     {
-        $rounded = self::getConfigValue('rounded', 'lg');
-        $shadow = self::getConfigValue('shadow', 'xl');
-        $bgColor = $darkMode 
-            ? self::getConfigValue('dark_mode.background', 'gray-800') 
-            : 'white';
-        
-        return "max-w-full p-6 mx-auto mt-8 bg-$bgColor rounded-$rounded shadow-$shadow animate__animated animate__fadeIn";
+        return self::getConfigValue('containerClass');
     }
 
-    public static function getTitleClasses(bool $darkMode): string
+    public static function getTitleClasses(): string
     {
-        $textColor = $darkMode 
-            ? self::getConfigValue('dark_mode.text', 'white') 
-            : self::getConfigValue('colors.text', 'gray-900');
-        
-        return "text-2xl font-bold md:text-3xl animate__animated animate__fadeInLeft text-$textColor";
+        return self::getConfigValue('titleClass');
     }
 
-    public static function getCountBadgeClasses(bool $darkMode): string
+    public static function getCountBadgeClasses(): string
     {
-        $primary = self::getConfigValue('colors.primary', 'teal-500');
-        $textColor = $darkMode ? 'teal-200' : 'teal-800';
-        $bgColor = $darkMode ? 'teal-900' : 'teal-100';
-        
-        return "px-3 py-1 text-sm font-medium rounded-full text-$textColor bg-$bgColor";
+        return self::getConfigValue('countBadgeClass');
     }
 
-    public static function getFilterButtonClasses(bool $darkMode): string
+    public static function getFilterButtonClasses(): string
     {
-        $borderColor = $darkMode 
-            ? self::getConfigValue('dark_mode.border', 'gray-600') 
-            : 'gray-300';
-        $bgColor = $darkMode 
-            ? self::getConfigValue('dark_mode.card', 'gray-700') 
-            : 'white';
-        $textColor = $darkMode ? 'gray-300' : 'gray-700';
-        $hoverBg = $darkMode ? 'gray-600' : 'gray-50';
-        
-        return "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-$borderColor bg-$bgColor text-$textColor hover:bg-$hoverBg";
+        return self::getConfigValue('filterButtonClass');
     }
 
-    public static function getExportButtonClasses(bool $darkMode): string
+    public static function getExportButtonClasses(): string
     {
-        return self::getFilterButtonClasses($darkMode);
+        return self::getConfigValue('filterButtonClass');
     }
 
-    public static function getAddButtonClasses(bool $darkMode): string
+    public static function getAddButtonClasses(): string
     {
-        $primary = self::getConfigValue('colors.primary', 'teal-500');
-        $hover = self::getConfigValue('colors.primary_hover', 'teal-600');
-        
-        return "flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-all duration-300 bg-$primary hover:bg-$hover";
+        return self::getConfigValue('addButtonClass');
     }
 
-    public static function getResetButtonClasses(bool $darkMode): string
+    public static function getResetButtonClasses(): string
     {
-        $borderColor = $darkMode 
-            ? self::getConfigValue('dark_mode.border', 'gray-500') 
-            : 'gray-300';
-        $bgColor = $darkMode 
-            ? self::getConfigValue('dark_mode.card', 'gray-600') 
-            : 'white';
-        $textColor = $darkMode ? 'gray-300' : 'gray-700';
-        $hoverBg = $darkMode ? 'gray-500' : 'gray-50';
-        
-        return "px-4 py-2 text-sm font-medium rounded-lg border border-$borderColor bg-$bgColor text-$textColor hover:bg-$hoverBg";
+        return self::getConfigValue('resetButtonClass');
     }
 
-    public static function getApplyButtonClasses(bool $darkMode): string
+    public static function getApplyButtonClasses(): string
     {
-        $primary = self::getConfigValue('colors.primary', 'teal-500');
-        $hover = self::getConfigValue('colors.primary_hover', 'teal-600');
-        
-        return "px-4 py-2 text-sm font-medium text-white rounded-lg bg-$primary hover:bg-$hover";
+        return self::getConfigValue('applyButtonClass');
     }
 
-    public static function getActionButtonClasses(bool $darkMode): string
+    public static function getActionButtonClasses(): string
     {
-        $textColor = $darkMode ? 'gray-300' : 'gray-500';
-        $hoverBg = $darkMode ? 'gray-700' : 'gray-100';
-        
-        return "p-1.5 rounded-full transition duration-200 text-$textColor hover:bg-$hoverBg";
+        return self::getConfigValue('actionButtonClass');
     }
 
-    /**
-     * Get the CSS classes for the filters container.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the filters container.
-     */
-    public static function getFiltersContainerClasses(bool $darkMode): string
+    public static function getFiltersContainerClasses(): string
     {
-        $bgColor = $darkMode 
-            ? self::getConfigValue('dark_mode.card', 'gray-700') 
-            : 'gray-50';
-        
-        return "p-4 mt-2 rounded-lg bg-$bgColor";
+        return self::getConfigValue('filtersContainerClass');
     }
 
-    /**
-     * Get the CSS classes for the filter input field.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the filter input field.
-     */
-    public static function getFilterInputClasses(bool $darkMode): string
+    public static function getFilterInputClasses(): string
     {
-        $borderColor = $darkMode 
-            ? self::getConfigValue('dark_mode.border', 'gray-600') 
-            : 'gray-300';
-        $bgColor = $darkMode 
-            ? self::getConfigValue('dark_mode.background', 'gray-800') 
-            : 'white';
-        $textColor = $darkMode ? 'white' : 'gray-900';
-        $placeholderColor = $darkMode ? 'gray-400' : 'gray-400';
-        
-        return "w-full px-3 py-2 text-sm border rounded-lg shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border-$borderColor bg-$bgColor text-$textColor placeholder-$placeholderColor";
+        return self::getConfigValue('filterInputClass');
     }
 
-    /**
-     * Get the CSS classes for the filter label.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the filter label.
-     */
-    public static function getFilterLabelClasses(bool $darkMode): string
+    public static function getFilterLabelClasses(): string
     {
-        $textColor = $darkMode ? 'gray-300' : 'gray-700';
-        
-        return "block mb-1 text-sm font-medium text-$textColor";
+        return self::getConfigValue('filterLabelClass');
     }
 
-    /**
-     * Get the CSS classes for the table element.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the table element.
-     */
-    public static function getTableClasses(bool $darkMode): string
+    public static function getTableClasses(): string
     {
-        $divideColor = $darkMode 
-            ? self::getConfigValue('dark_mode.divide', 'gray-700') 
-            : 'gray-200';
-        
-        return "min-w-full divide-y divide-$divideColor";
+        return self::getConfigValue('tableClass');
     }
 
-    /**
-     * Get the CSS classes for the table header.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the table header.
-     */
-    public static function getTableHeaderClasses(bool $darkMode): string
+    public static function getTableHeaderClasses(): string
     {
-        $bgColor = $darkMode 
-            ? self::getConfigValue('dark_mode.header', 'gray-800') 
-            : 'gray-50';
-        
-        return "bg-$bgColor";
+        return self::getConfigValue('tableHeaderClass');
     }
 
-    /**
-     * Get the CSS classes for the table header cells.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the table header cells.
-     */
-    public static function getTableHeaderCellClasses(bool $darkMode): string
+    public static function getTableHeaderCellClasses(): string
     {
-        $textColor = $darkMode ? 'gray-300' : 'gray-500';
-        
-        return "px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-$textColor";
+        return self::getConfigValue('tableHeaderCellClass');
     }
 
-    /**
-     * Get the CSS classes for the table body.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the table body.
-     */
-    public static function getTableBodyClasses(bool $darkMode): string
+    public static function getTableBodyClasses(): string
     {
-        $bgColor = $darkMode 
-            ? self::getConfigValue('dark_mode.background', 'gray-800') 
-            : 'white';
-        $divideColor = $darkMode 
-            ? self::getConfigValue('dark_mode.divide', 'gray-700') 
-            : 'gray-200';
-        
-        return "bg-$bgColor divide-$divideColor";
+        return self::getConfigValue('tableBodyClass');
     }
 
-    /**
-     * Get the CSS classes for table rows.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for table rows.
-     */
-    public static function getTableRowClasses(bool $darkMode): string
+    public static function getTableRowClasses(): string
     {
-        $hoverBg = $darkMode 
-            ? self::getConfigValue('dark_mode.row_hover', 'gray-700/50') 
-            : 'gray-50';
-        
-        return "transition duration-150 hover:bg-$hoverBg";
+        return self::getConfigValue('tableRowClass');
     }
 
-    /**
-     * Get the CSS classes for table cells.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for table cells.
-     */
-    public static function getTableCellClasses(bool $darkMode): string
+    public static function getTableCellClasses(): string
     {
-        $textColor = $darkMode ? 'gray-100' : 'gray-900';
-        
-        return "px-6 py-4 whitespace-nowrap text-sm text-$textColor";
+        return self::getConfigValue('tableCellClass');
     }
 
-    /**
-     * Get the CSS classes for the empty state message.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the empty state message.
-     */
-    public static function getEmptyStateClasses(bool $darkMode): string
+    public static function getEmptyStateClasses(): string
     {
-        $textColor = $darkMode ? 'gray-400' : 'gray-500';
-        
-        return "flex flex-col items-center justify-center text-$textColor";
+        return self::getConfigValue('emptyStateClass');
     }
 
-    /**
-     * Get the CSS classes for the filter icon.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the filter icon.
-     */
-    public static function getFilterIconClasses(bool $darkMode): string
+    public static function getFilterIconClasses(): string
     {
-        $textColor = $darkMode ? 'gray-300' : 'gray-500';
-        $hoverColor = 'teal-500';
-        
-        return "w-5 h-5 text-$textColor group-hover:text-$hoverColor";
+        return "w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-teal-500";
     }
 
-    /**
-     * Get the CSS classes for the export icon.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the export icon.
-     */
-    public static function getExportIconClasses(bool $darkMode): string
+    public static function getExportIconClasses(): string
     {
-        return self::getFilterIconClasses($darkMode);
+        return self::getFilterIconClasses();
     }
 
-    /**
-     * Get the CSS classes for the add icon.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the add icon.
-     */
-    public static function getAddIconClasses(bool $darkMode): string
+    public static function getAddIconClasses(): string
     {
         return "w-5 h-5 text-white";
     }
 
-    /**
-     * Get the CSS classes for the pagination container.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @return string The CSS classes for the pagination container.
-     */
-    public static function getPaginationClasses(bool $darkMode): string
+    public static function getPaginationClasses(): string
     {
-        return "flex items-center space-x-1";
+        return self::getConfigValue('paginationClass');
     }
 
-    /**
-     * Get the CSS classes for a pagination item.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @param bool $active Whether the pagination item is active.
-     * @return string The CSS classes for a pagination item.
-     */
-    public static function getPageItemClasses(bool $darkMode, bool $active = false): string
-    {
-        if ($active) {
-            return '';
-        }
-        $bgColor = $darkMode ? 'gray-700' : 'white';
-        $borderColor = $darkMode ? 'gray-600' : 'gray-300';
-        
-        return "bg-$bgColor border-$borderColor";
-    }
-
-    /**
-     * Get the CSS classes for a pagination link.
-     *
-     * @param bool $darkMode Whether dark mode is enabled.
-     * @param bool $active Whether the pagination link is active.
-     * @return string The CSS classes for a pagination link.
-     */
-    public static function getPageLinkClasses(bool $darkMode, bool $active = false): string
+    public static function getPageItemClasses(bool $active = false): string
     {
         if ($active) {
             $primary = self::getConfigValue('colors.primary', 'teal-500');
-            $darkPrimary = self::getConfigValue('dark_mode.primary', 'teal-600');
-            return "text-white bg-$primary border-$primary " . ($darkMode ? "dark:bg-$darkPrimary dark:border-$darkPrimary" : '');
+            return "bg-$primary border-$primary";
         }
-        
-        $textColor = $darkMode ? 'gray-400' : 'gray-700';
-        $bgColor = $darkMode ? 'gray-700' : 'white';
-        $borderColor = $darkMode ? 'gray-600' : 'gray-300';
-        $hoverBg = $darkMode ? 'gray-600' : 'gray-50';
-        
-        return "text-$textColor bg-$bgColor border-$borderColor hover:bg-$hoverBg";
+        return self::getConfigValue('pageItemClass');
     }
 
-    /**
-     * Get the CSS animation classes.
-     *
-     * @param string $animation The animation name.
-     * @return string The CSS animation classes.
-     */
+    public static function getPageLinkClasses(bool $active = false): string
+    {
+        if ($active) {
+            $primary = self::getConfigValue('colors.primary', 'teal-500');
+            return "text-white bg-$primary border-$primary";
+        }
+        return self::getConfigValue('pageLinkClass');
+    }
+
     public static function getAnimationClasses(string $animation): string
     {
         return "animate__animated animate__$animation";
     }
 
-   /**
-             * Configuration for the Tailwind theme's CDN resources.
-             *
-             * This array contains the URLs or paths to the necessary resources
-             * for the Tailwind theme to function properly. These resources may
-             * include stylesheets, scripts, or other assets that are loaded
-             * from a Content Delivery Network (CDN).
-             *
-             * Example:
-             * 'cdn' => [
-             *     'css' => 'https://cdn.example.com/tailwind.min.css',
-             *     'js' => 'https://cdn.example.com/tailwind.min.js',
-             * ]
-             */
     public static function getCssLinks(): array
     {
         return [
-           
             'cdn' => [
                 'https://cdn.tailwindcss.com',
                 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'
@@ -430,11 +222,6 @@ class TailwindTheme implements ThemeInterface
         ];
     }
 
-    /**
-     * Get the JavaScript links for the theme.
-     *
-     * @return array The JavaScript links.
-     */
     public static function getJsLinks(): array
     {
         return [
@@ -443,11 +230,6 @@ class TailwindTheme implements ThemeInterface
         ];
     }
 
-    /**
-     * Get the available presets for the theme.
-     *
-     * @return array The available presets.
-     */
     public static function getAvailablePresets(): array
     {
         return array_keys(self::$presets);

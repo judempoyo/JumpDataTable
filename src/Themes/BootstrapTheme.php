@@ -71,6 +71,12 @@ class BootstrapTheme implements ThemeInterface
         if (isset(self::$currentPreset[$key])) {
             return self::$currentPreset[$key];
         }
+
+        if (empty(self::$currentPreset)) {
+            $defaultConfig = self::getDefaultConfig();
+            return $defaultConfig[$key] ?? $default;
+        }
+        
         
         return $default;
     }

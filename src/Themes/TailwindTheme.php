@@ -17,7 +17,7 @@ class TailwindTheme implements ThemeInterface
 
     public static function getDefaultConfig(): array
     {
-        $config = [
+        return [
             'containerClass' => 'max-w-full p-6 mx-auto mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-xl animate__animated animate__fadeIn',
             'titleClass' => 'text-2xl font-bold md:text-3xl animate__animated animate__fadeInLeft text-gray-900 dark:text-white',
             'countBadgeClass' => 'px-3 py-1 text-sm font-medium rounded-full text-teal-800 dark:text-teal-200 bg-teal-100 dark:bg-teal-900',
@@ -42,8 +42,7 @@ class TailwindTheme implements ThemeInterface
             'animationClass' => 'animate__animated',
         ];
 
-        self::$customConfig = $config;
-        return $config;
+  
     }
 
     public static function usePreset(string $presetName): void
@@ -68,6 +67,10 @@ class TailwindTheme implements ThemeInterface
         
         if (isset(self::$currentPreset[$key])) {
             return self::$currentPreset[$key];
+        }
+        if (empty(self::$currentPreset)) {
+            $defaultConfig = self::getDefaultConfig();
+            return $defaultConfig[$key] ?? $default;
         }
         
         return $default;

@@ -4,11 +4,17 @@ namespace Jump\JumpDataTable\Themes;
 
 class BootstrapTheme implements ThemeInterface
 {
+    protected static array $presets = [
+        'classic' => Presets\Bootstrap\ClassicTheme::class,
+    ];
+    
+    protected static array $currentPreset = [];
+    protected static array $customConfig = [];
     public static function getDefaultConfig(): array
     {
         return [
-            'containerClass' => 'container-fluid p-4 mt-4 bg-white rounded shadow',
-            'titleClass' => 'h3 mb-0',
+            'containerClass' => 'container-fluid p-4 mt-4 bg-body rounded shadow',
+            'titleClass' => 'h3 mb-0 text-body',
             'countBadgeClass' => 'badge bg-primary',
             'filterButtonClass' => 'btn btn-outline-secondary',
             'exportButtonClass' => 'btn btn-outline-success',
@@ -16,7 +22,7 @@ class BootstrapTheme implements ThemeInterface
             'resetButtonClass' => 'btn btn-outline-secondary',
             'applyButtonClass' => 'btn btn-primary',
             'actionButtonClass' => 'btn btn-sm btn-outline-secondary',
-            'filtersContainerClass' => 'p-3 mb-3 bg-light rounded',
+            'filtersContainerClass' => 'p-3 mb-3 bg-body-secondary rounded',
             'filterInputClass' => 'form-control',
             'filterLabelClass' => 'form-label mb-2',
             'tableClass' => 'table table-striped table-hover',
@@ -25,140 +31,179 @@ class BootstrapTheme implements ThemeInterface
             'tableBodyClass' => '',
             'tableRowClass' => '',
             'tableCellClass' => '',
-            'emptyStateClass' => 'text-center py-5 text-muted',
+            'emptyStateClass' => 'text-center py-5 text-body-secondary',
             'paginationClass' => 'pagination justify-content-center',
             'pageItemClass' => 'page-item',
             'pageLinkClass' => 'page-link',
             'animationClass' => 'animate__animated',
-            'bulkActionsContainer' => 'p-3 mb-3 bg-light rounded d-flex justify-content-between align-items-center',
-            'bulkActionButton' => 'btn btn-sm',
-            'clearSelectionButton' => 'btn btn-sm btn-outline-danger'
+            'bulkActionsContainer' => 'p-3 mb-3 bg-body-secondary rounded d-flex justify-content-between align-items-center',
+            'bulkActionButton' => 'btn btn-sm btn-outline-secondary',
+            'clearSelectionButton' => 'btn btn-sm btn-outline-danger',
+            'filterIcon' => 'bi bi-funnel',
+            'exportIcon' => 'bi bi-download',
+            'addIcon' => 'bi bi-plus-lg'
         ];
     }
 
-    public static function getContainerClasses(bool $darkMode): string
+    public static function usePreset(string $presetName): void
     {
-        return 'container-fluid p-4 mt-4 rounded shadow ' . ($darkMode ? 'bg-dark text-white' : 'bg-white');
+        if (!isset(self::$presets[$presetName])) {
+            throw new \InvalidArgumentException("Preset $presetName not found. Available: " . implode(', ', array_keys(self::$presets)));
+        }
+        
+        self::$currentPreset = call_user_func([self::$presets[$presetName], 'getConfig']);
     }
 
-    public static function getTitleClasses(bool $darkMode): string
+    public static function overridePreset(array $overrides): void
     {
-        return 'h3 mb-0 ' . ($darkMode ? 'text-white' : '');
+        self::$customConfig = array_replace_recursive(self::$currentPreset, $overrides);
+    }
+    public static function getAvailablePresets(): array
+    {
+        return array_keys(self::$presets);
+    }
+    protected static function getConfigValue(string $key, $default = "")
+    {
+        if (isset(self::$customConfig[$key])) {
+            return self::$customConfig[$key];
+        }
+        
+        if (isset(self::$currentPreset[$key])) {
+            return self::$currentPreset[$key];
+        }
+
+        if (empty(self::$currentPreset)) {
+            $defaultConfig = self::getDefaultConfig();
+            return $defaultConfig[$key] ?? $default;
+        }
+        
+        
+        return $default;
     }
 
-    public static function getCountBadgeClasses(bool $darkMode): string
+    public static function getContainerClasses(): string
     {
-        return 'badge ' . ($darkMode ? 'bg-info text-dark' : 'bg-primary');
+        return self::getConfigValue('containerClass');
     }
 
-    public static function getFilterButtonClasses(bool $darkMode): string
+    public static function getTitleClasses(): string
     {
-        return 'btn ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
+        return self::getConfigValue('titleClass');
     }
 
-    public static function getExportButtonClasses(bool $darkMode): string
+    public static function getCountBadgeClasses(): string
     {
-        return 'btn ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-success');
+        return self::getConfigValue('countBadgeClass');
     }
 
-    public static function getAddButtonClasses(bool $darkMode): string
+    public static function getFilterButtonClasses(): string
     {
-        return 'btn ' . ($darkMode ? 'btn-info' : 'btn-primary');
+        return self::getConfigValue('filterButtonClass');
     }
 
-    public static function getResetButtonClasses(bool $darkMode): string
+    public static function getExportButtonClasses(): string
     {
-        return 'btn ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
+        return self::getConfigValue('exportButtonClass');
     }
 
-    public static function getApplyButtonClasses(bool $darkMode): string
+    public static function getAddButtonClasses(): string
     {
-        return 'btn ' . ($darkMode ? 'btn-info' : 'btn-primary');
+        return self::getConfigValue('addButtonClass');
     }
 
-    public static function getActionButtonClasses(bool $darkMode): string
+    public static function getResetButtonClasses(): string
     {
-        return 'btn btn-sm ' . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
+        return self::getConfigValue('resetButtonClass');
     }
 
-    public static function getFiltersContainerClasses(bool $darkMode): string
+    public static function getApplyButtonClasses(): string
     {
-        return 'p-3 mb-3 rounded ' . ($darkMode ? 'bg-secondary' : 'bg-light');
+        return self::getConfigValue('applyButtonClass');
     }
 
-    public static function getFilterInputClasses(bool $darkMode): string
+    public static function getActionButtonClasses(): string
     {
-        return 'form-control ' . ($darkMode ? 'bg-dark text-white border-secondary' : '');
+        return self::getConfigValue('actionButtonClass');
     }
 
-    public static function getFilterLabelClasses(bool $darkMode): string
+    public static function getFiltersContainerClasses(): string
     {
-        return 'form-label mb-2 ' . ($darkMode ? 'text-white' : '');
+        return self::getConfigValue('filtersContainerClass');
     }
 
-    public static function getTableClasses(bool $darkMode): string
+    public static function getFilterInputClasses(): string
     {
-        return 'table table-striped table-hover ' . ($darkMode ? 'table-dark' : '');
+        return self::getConfigValue('filterInputClass');
     }
 
-    public static function getTableHeaderClasses(bool $darkMode): string
+    public static function getFilterLabelClasses(): string
     {
-        return $darkMode ? 'table-dark' : 'table-light';
+        return self::getConfigValue('filterLabelClass');
     }
 
-    public static function getTableHeaderCellClasses(bool $darkMode): string
+    public static function getTableClasses(): string
     {
-        return 'align-middle ' . ($darkMode ? 'text-white' : '');
+        return self::getConfigValue('tableClass');
     }
 
-    public static function getTableBodyClasses(bool $darkMode): string
+    public static function getTableHeaderClasses(): string
     {
-        return '';
+        return self::getConfigValue('tableHeaderClass');
     }
 
-    public static function getTableRowClasses(bool $darkMode): string
+    public static function getTableHeaderCellClasses(): string
     {
-        return '';
+        return self::getConfigValue('tableHeaderCellClass');
     }
 
-    public static function getTableCellClasses(bool $darkMode): string
+    public static function getTableBodyClasses(): string
     {
-        return '';
+        return self::getConfigValue('tableBodyClass');
     }
 
-    public static function getEmptyStateClasses(bool $darkMode): string
+    public static function getTableRowClasses(): string
     {
-        return 'text-center py-5 ' . ($darkMode ? 'text-white-50' : 'text-muted');
+        return self::getConfigValue('tableRowClass');
     }
 
-    public static function getFilterIconClasses(bool $darkMode): string
+    public static function getTableCellClasses(): string
     {
-        return 'bi bi-funnel';
+        return self::getConfigValue('tableCellClass');
     }
 
-    public static function getExportIconClasses(bool $darkMode): string
+    public static function getEmptyStateClasses(): string
     {
-        return 'bi bi-download';
+        return self::getConfigValue('emptyStateClass');
     }
 
-    public static function getAddIconClasses(bool $darkMode): string
+    public static function getFilterIconClasses(): string
     {
-        return 'bi bi-plus-lg';
+        return self::getConfigValue('filterIcon');
     }
 
-    public static function getPaginationClasses(bool $darkMode): string
+    public static function getExportIconClasses(): string
     {
-        return 'pagination justify-content-center';
+        return self::getConfigValue('exportIcon');
     }
 
-    public static function getPageItemClasses(bool $darkMode, bool $active = false): string
+    public static function getAddIconClasses(): string
     {
-        return 'page-item ' . ($active ? 'active' : '');
+        return self::getConfigValue('addIcon');
     }
 
-    public static function getPageLinkClasses(bool $darkMode, bool $active = false): string
+    public static function getPaginationClasses(): string
     {
-        return 'page-link ' . ($darkMode ? ($active ? '' : 'bg-dark text-white border-secondary') : '');
+        return self::getConfigValue('paginationClass');
+    }
+
+    public static function getPageItemClasses(bool $active = false): string
+    {
+        return self::getConfigValue('pageItemClass') . ($active ? ' active' : '');
+    }
+
+    public static function getPageLinkClasses(bool $active = false): string
+    {
+        return self::getConfigValue('pageLinkClass');
     }
 
     public static function getAnimationClasses(string $animation): string
@@ -166,24 +211,21 @@ class BootstrapTheme implements ThemeInterface
         return 'animate__animated animate__' . $animation;
     }
 
-  
-    public static function getBulkActionsContainerClasses(bool $darkMode): string
-{
-    return 'p-3 mb-3 rounded d-flex justify-content-between align-items-center ' 
-         . ($darkMode ? 'bg-dark text-white' : 'bg-light');
-}
+    public static function getBulkActionsContainerClasses(): string
+    {
+        return self::getConfigValue('bulkActionsContainer');
+    }
 
-public static function getBulkActionButtonClasses(bool $darkMode): string
-{
-    return 'btn btn-sm d-flex align-items-center gap-1 ' 
-         . ($darkMode ? 'btn-outline-light' : 'btn-outline-secondary');
-}
+    public static function getBulkActionButtonClasses(): string
+    {
+        return self::getConfigValue('bulkActionButton');
+    }
 
-public static function getClearSelectionButtonClasses(bool $darkMode): string
-{
-    return 'btn btn-sm d-flex align-items-center gap-1 ' 
-         . ($darkMode ? 'btn-outline-danger' : 'btn-outline-danger');
-}
+    public static function getClearSelectionButtonClasses(): string
+    {
+        return self::getConfigValue('clearSelectionButton');
+    }
+
     public static function getCssLinks(): array
     {
         return [

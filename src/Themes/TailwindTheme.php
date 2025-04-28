@@ -42,7 +42,7 @@ class TailwindTheme implements ThemeInterface
             'animationClass' => 'animate__animated',
         ];
 
-        //self::$customConfig = $config;
+        self::$customConfig = $config;
         return $config;
     }
 

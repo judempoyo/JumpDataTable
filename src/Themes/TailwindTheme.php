@@ -209,9 +209,34 @@ class TailwindTheme implements ThemeInterface
         return self::getConfigValue('pageLinkClass');
     }
 
-    public static function getAnimationClasses(string $animation): string
+    public static function getAnimationClasses(string $animation = "fadeIn"): string
     {
         return "animate__animated animate__$animation";
+    }
+
+    public static function getHeaderAnimation(): string
+    {
+        return 'animate__animated animate-fade-in duration-500 delay-100';
+    }
+
+    public static function getTableAnimation(): string
+    {
+        return 'animate__animated animate-slide-up duration-300 ease-out';
+    }
+
+    public static function getRowAnimation(): string
+    {
+        return 'animate__animated animate-fade-in duration-300 stagger-100';
+    }
+
+    public static function getPaginationAnimation(): string
+    {
+        return 'animate__animated animate-fade-in duration-400 delay-200';
+    }
+
+    public static function getFiltersAnimation(): string
+    {
+        return 'animate__animated animate-scale-in origin-top duration-300 ease-spring';
     }
 
     public static function getCssLinks(): array
@@ -232,6 +257,7 @@ class TailwindTheme implements ThemeInterface
             'local' => []
         ];
     }
+
 
     public static function getAvailablePresets(): array
     {

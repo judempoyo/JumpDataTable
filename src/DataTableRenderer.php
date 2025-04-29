@@ -47,7 +47,7 @@ class DataTableRenderer
     {
         $darkMode = ($params['theme'] ?? 'light') === 'dark';
         
-        $params['themeClasses'] = $this->generateThemeClasses($darkMode);
+        $params['themeClasses'] = $this->generateThemeClasses();
         $params['columns'] = $this->normalizeColumns($params['columns'] ?? []);
         $params['actions'] = $this->normalizeActions($params['actions'] ?? []);
 
@@ -101,35 +101,42 @@ class DataTableRenderer
      * @param bool $darkMode Whether dark mode is enabled
      * @return array Array of CSS classes for different table elements
      */
-    protected function generateThemeClasses(bool $darkMode): array
+    protected function generateThemeClasses(): array
     {
         return [
-            'container' => $this->themeClass::getContainerClasses($darkMode),
-            'title' => $this->themeClass::getTitleClasses($darkMode),
-            'countBadge' => $this->themeClass::getCountBadgeClasses($darkMode),
-            'filterButton' => $this->themeClass::getFilterButtonClasses($darkMode),
-            'exportButton' => $this->themeClass::getExportButtonClasses($darkMode),
-            'addButton' => $this->themeClass::getAddButtonClasses($darkMode),
-            'resetButton' => $this->themeClass::getResetButtonClasses($darkMode),
-            'applyButton' => $this->themeClass::getApplyButtonClasses($darkMode),
-            'actionButton' => $this->themeClass::getActionButtonClasses($darkMode),
-            'filtersContainer' => $this->themeClass::getFiltersContainerClasses($darkMode),
-            'filterInput' => $this->themeClass::getFilterInputClasses($darkMode),
-            'filterLabel' => $this->themeClass::getFilterLabelClasses($darkMode),
-            'table' => $this->themeClass::getTableClasses($darkMode),
-            'tableHeader' => $this->themeClass::getTableHeaderClasses($darkMode),
-            'tableHeaderCell' => $this->themeClass::getTableHeaderCellClasses($darkMode),
-            'tableBody' => $this->themeClass::getTableBodyClasses($darkMode),
-            'tableRow' => $this->themeClass::getTableRowClasses($darkMode),
-            'tableCell' => $this->themeClass::getTableCellClasses($darkMode),
-            'emptyState' => $this->themeClass::getEmptyStateClasses($darkMode),
-            'filterIcon' => $this->themeClass::getFilterIconClasses($darkMode),
-            'exportIcon' => $this->themeClass::getExportIconClasses($darkMode),
-            'addIcon' => $this->themeClass::getAddIconClasses($darkMode),
-            'pagination' => $this->themeClass::getPaginationClasses($darkMode),
-            'pageItem' => $this->themeClass::getPageItemClasses($darkMode),
-            'pageLink' => $this->themeClass::getPageLinkClasses($darkMode),
-            'animation' => $this->themeClass::getAnimationClasses('fadeIn')
+            'container' => $this->themeClass::getContainerClasses(),
+            'title' => $this->themeClass::getTitleClasses(),
+            'countBadge' => $this->themeClass::getCountBadgeClasses(),
+            'filterButton' => $this->themeClass::getFilterButtonClasses(),
+            'exportButton' => $this->themeClass::getExportButtonClasses(),
+            'addButton' => $this->themeClass::getAddButtonClasses(),
+            'resetButton' => $this->themeClass::getResetButtonClasses(),
+            'applyButton' => $this->themeClass::getApplyButtonClasses(),
+            'actionButton' => $this->themeClass::getActionButtonClasses(),
+            'filtersContainer' => $this->themeClass::getFiltersContainerClasses(),
+            'filterInput' => $this->themeClass::getFilterInputClasses(),
+            'filterLabel' => $this->themeClass::getFilterLabelClasses(),
+            'table' => $this->themeClass::getTableClasses(),
+            'tableHeader' => $this->themeClass::getTableHeaderClasses(),
+            'tableHeaderCell' => $this->themeClass::getTableHeaderCellClasses(),
+            'tableBody' => $this->themeClass::getTableBodyClasses(),
+            'tableRow' => $this->themeClass::getTableRowClasses(),
+            'tableCell' => $this->themeClass::getTableCellClasses(),
+            'emptyState' => $this->themeClass::getEmptyStateClasses(),
+            'filterIcon' => $this->themeClass::getFilterIconClasses(),
+            'exportIcon' => $this->themeClass::getExportIconClasses(),
+            'addIcon' => $this->themeClass::getAddIconClasses(),
+            'pagination' => $this->themeClass::getPaginationClasses(),
+            'pageItem' => $this->themeClass::getPageItemClasses(),
+            'pageLink' => $this->themeClass::getPageLinkClasses(),
+            'animations' => [
+                'header' => $this->themeClass::getHeaderAnimation(),
+                'table' => $this->themeClass::getTableAnimation(),
+                'rows' => $this->themeClass::getRowAnimation(),
+                'pagination' => $this->themeClass::getPaginationAnimation(),
+                'filters' => $this->themeClass::getFiltersAnimation()
+            ]
+            
         ];
     }
 

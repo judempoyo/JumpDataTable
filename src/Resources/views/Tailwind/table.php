@@ -42,7 +42,7 @@
 
     <!-- Header Section -->
     <div
-        class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'] ?>">
+        class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'].' '. $themeClasses['animations']['header'] ?>">
         <div class="flex items-center gap-4">
             <h1 class="<?= $themeClasses['title'] ?>">
                 <?= htmlspecialchars($title) ?>
@@ -195,7 +195,7 @@
                     </tr>
                 </thead>
 
-                <tbody class="<?= $themeClasses['tableBody'] ?>">
+                <tbody class="<?= $themeClasses['tableBody'] ?> ">
                     <?php if (!empty($data) && count($data) > 0): ?>
                         <?php foreach ($data as $item): ?>
                             <tr class="<?= $themeClasses['tableRow'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">

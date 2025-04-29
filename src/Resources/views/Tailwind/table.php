@@ -42,7 +42,7 @@
 
     <!-- Header Section -->
     <div
-        class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'].' '. $themeClasses['animations']['header'] ?>">
+        class="flex flex-col justify-between gap-6 mb-8 md:flex-row md:items-center <?= $themeClasses['filtersContainer'].' '. $themeClasses['animations'] ?>">
         <div class="flex items-center gap-4">
             <h1 class="<?= $themeClasses['title'] ?>">
                 <?= htmlspecialchars($title) ?>
@@ -54,7 +54,7 @@
             </h1>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3 <?= $themeClasses['animation'] ?>">
+        <div class="flex flex-wrap items-center gap-3 <?= $themeClasses['animations']['filters'] ?>">
             <?php if (!empty($filters)): ?>
                 <button type="button" onclick="toggleFilters()"
                     class="<?= $themeClasses['filterButton'] ?> focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
@@ -96,7 +96,7 @@
 
     <!-- Filters Section -->
     <?php if (!empty($filters)): ?>
-        <div class="mb-6 <?= $themeClasses['animation'] ?>">
+        <div class="mb-6 <?= $themeClasses['animations']['filters'] ?>">
             <form method="GET" action="" id="filterForm">
                 <div id="filtersContainer"
                     class="<?= empty($_GET['search']) ? 'hidden' : '' ?> <?= $themeClasses['filtersContainer'] ?>"
@@ -142,7 +142,7 @@
     <?php endif; ?>
 
     <!-- Table Section -->
-    <div class="overflow-hidden rounded-xl shadow-xl <?= $themeClasses['animation'] ?>">
+    <div class="overflow-hidden rounded-xl shadow-xl <?= $themeClasses['animations']['table'] ?>">
         <div class="overflow-x-auto">
             <table class="<?= $themeClasses['table'] ?>" aria-label="<?= htmlspecialchars($title) ?>">
                 <thead class="<?= $themeClasses['tableHeader'] ?>">
@@ -198,7 +198,7 @@
                 <tbody class="<?= $themeClasses['tableBody'] ?> ">
                     <?php if (!empty($data) && count($data) > 0): ?>
                         <?php foreach ($data as $item): ?>
-                            <tr class="<?= $themeClasses['tableRow'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
+                            <tr class="<?= $themeClasses['tableRow']. ' '. $themeClasses['animations']['rows'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
                                 <?php if ($enableRowSelection): ?>
                                     <td class="px-4 py-3 whitespace-nowrap text-center">
                                        
@@ -275,7 +275,7 @@
     <!-- Pagination -->
     <?php if (!empty($pagination) && $pagination['total'] > $pagination['per_page']): ?>
         <div
-            class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animation'] ?>">
+            class="flex flex-col items-center justify-between mt-6 space-y-4 sm:flex-row sm:space-y-0 <?= $themeClasses['animations']['pagination'] ?>">
             <div class="text-sm text-gray-700 dark:text-gray-300">
                 Affichage de <span
                     class="font-medium"><?= ($pagination['current_page'] - 1) * $pagination['per_page'] + 1 ?></span>

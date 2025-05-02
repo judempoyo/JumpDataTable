@@ -12,69 +12,69 @@ class DataTable
 {
     /** @var string The table title */
     private string $title = 'Liste des éléments';
-    
+
     /** @var string URL for the create action */
     private string $createUrl = '#';
-    
+
     /** @var DataColumn[] Array of columns in the table */
     private array $columns = [];
-    
+
     /** @var iterable|null The data to display in the table */
     private ?iterable $data = null;
-    
+
     /** @var DataAction[] Array of actions for each row */
     private array $actions = [];
-    
+
     /** @var Filter[] Array of filters for the table */
     private array $filters = [];
-    
+
     /** @var string The model name used for translations and identifiers */
     private string $modelName = 'default';
-    
+
     /** @var bool Whether to show export buttons */
     private bool $showExport = true;
-    
+
     /** @var string The column to sort by */
     private string $sort = '';
-    
+
     /** @var string The sort direction ('asc' or 'desc') */
     private string $direction = 'asc';
-    
+
     /** @var string The public URL base for links */
     private string $publicUrl = '/';
-    
+
     /** @var Pagination The pagination configuration */
     private Pagination $pagination;
-    
+
     /** @var string The theme to use ('tailwind' or 'bootstrap') */
     private string $theme = 'tailwind';
-    
+
     /** @var array Configuration options for the theme */
     private array $config = [];
-    
+
     /** @var array Map of available themes to their classes */
     private array $themes = [
         'tailwind' => Themes\TailwindTheme::class,
         'bootstrap' => Themes\BootstrapTheme::class,
     ];
-    
+
     /** @var DataTableRenderer The renderer instance */
     private DataTableRenderer $renderer;
-    
+
     /** @var bool Whether row selection is enabled */
     private bool $enableRowSelection = false;
-    
+
     /** @var DataAction[] Array of bulk actions */
     private array $bulkActions = [];
-    
+
     /** @var string The theme mode ('light' or 'dark') */
     private string $themeMode = 'light';
-    
+
     /** @var string|null Custom message to show when table is empty */
     private ?string $emptyStateMessage = null;
 
     /** @var Modal|null Le modal de confirmation */
-private ?Modal $confirmationModal = null;
+    private ?Modal $confirmationModal = null;
 
     /**
      * Constructor
@@ -333,7 +333,7 @@ private ?Modal $confirmationModal = null;
         if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             throw new \InvalidArgumentException("Sort direction must be 'asc' or 'desc'");
         }
-        
+
         $this->sort = $column;
         $this->direction = $direction;
         return $this;
@@ -358,7 +358,7 @@ private ?Modal $confirmationModal = null;
         $this->theme = $theme;
         $this->renderer = new DataTableRenderer($theme);
         $this->config = array_merge($this->getDefaultConfig(), $customConfig);
-        
+
         return $this;
     }
 
@@ -442,29 +442,30 @@ private ?Modal $confirmationModal = null;
     }
 
     /**
- * Sets the confirmation modal configuration
- * 
- * @param Modal|array $modal Modal instance or configuration array
- * @return self
- */
-public function setConfirmationModal($modal): self
-{
-    if (is_array($modal)) {
-        $this->confirmationModal = new Modal(
-            $modal['id'] ?? 'customModal',
-            $modal['title'] ?? 'Confirmer l\'action',
-            $modal['message'] ?? 'Êtes-vous sûr de vouloir effectuer cette action ?',
-            $modal['formAction'] ?? '#',
-            $modal['submitText'] ?? 'Confirmer',
-            $modal['cancelText'] ?? 'Annuler',
-            $modal['includePasswordField'] ?? false
-        );
-    } elseif ($modal instanceof Modal) {
-        $this->confirmationModal = $modal;
+     * Sets the confirmation modal configuration
+     * 
+     * @param Modal|array $modal Modal instance or configuration array
+     * @return self
+     */
+    // Dans la classe DataTable
+    public function setConfirmationModal($modal): self
+    {
+        if (is_array($modal)) {
+            $this->confirmationModal = new Modal(
+                $modal['id'] ?? 'customModal',
+                $modal['title'] ?? 'Confirmer l\'action',
+                $modal['message'] ?? 'Êtes-vous sûr de vouloir effectuer cette action ?',
+                $modal['formAction'] ?? '#',
+                $modal['submitText'] ?? 'Confirmer',
+                $modal['cancelText'] ?? 'Annuler',
+                $modal['includePasswordField'] ?? false
+            );
+        } elseif ($modal instanceof Modal) {
+            $this->confirmationModal = $modal;
+        }
+
+        return $this;
     }
-    
-    return $this;
-}
 
     /**
      * Converts the table configuration to an array
@@ -511,22 +512,38 @@ public function setConfirmationModal($modal): self
     {
         $themeClass = $this->themes[$this->theme];
         $config = $themeClass::getDefaultConfig();
-        
+
         $requiredKeys = [
-            'containerClass', 'titleClass', 'countBadgeClass', 'filterButtonClass',
-            'addButtonClass', 'resetButtonClass', 'applyButtonClass', 'actionButtonClass',
-            'filtersContainerClass', 'filterInputClass', 'filterLabelClass', 'tableClass',
-            'tableHeaderClass', 'tableHeaderCellClass', 'tableBodyClass', 'tableRowClass',
-            'tableCellClass', 'emptyStateClass', 'paginationClass', 'pageItemClass',
-            'pageLinkClass', 'animationClass'
+            'containerClass',
+            'titleClass',
+            'countBadgeClass',
+            'filterButtonClass',
+            'addButtonClass',
+            'resetButtonClass',
+            'applyButtonClass',
+            'actionButtonClass',
+            'filtersContainerClass',
+            'filterInputClass',
+            'filterLabelClass',
+            'tableClass',
+            'tableHeaderClass',
+            'tableHeaderCellClass',
+            'tableBodyClass',
+            'tableRowClass',
+            'tableCellClass',
+            'emptyStateClass',
+            'paginationClass',
+            'pageItemClass',
+            'pageLinkClass',
+            'animationClass'
         ];
-        
+
         foreach ($requiredKeys as $key) {
             if (!array_key_exists($key, $config)) {
                 throw new \RuntimeException("Missing required config key '$key' for theme {$this->theme}");
             }
         }
-        
+
         return $config;
     }
 }

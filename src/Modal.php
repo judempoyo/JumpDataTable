@@ -36,6 +36,21 @@ class Modal
         $this->cancelButtonClass = $cancelButtonClass;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'message' => $this->message,
+            'formAction' => $this->formAction,
+            'submitText' => $this->submitText,
+            'cancelText' => $this->cancelText,
+            'includePasswordField' => $this->includePasswordField,
+            'submitButtonClass' => $this->submitButtonClass,
+            'cancelButtonClass' => $this->cancelButtonClass
+        ];
+    }
+
     public function render(): string
     {
         ob_start();

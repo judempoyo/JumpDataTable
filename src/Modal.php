@@ -88,7 +88,7 @@ class Modal
 
     public function getScript(): string
     {
-        return <<<JS
+return <<<JS
         <script>
             function openModal(modalId) {
                 const modal = document.getElementById(modalId);
@@ -108,7 +108,7 @@ class Modal
                 }
             }
         </script>
-        JS;
+JS;
     }
 
     // Getters et Setters

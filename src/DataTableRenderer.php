@@ -43,7 +43,7 @@ class DataTableRenderer
      * @param array $params The DataTable configuration parameters
      * @return string The rendered HTML
      */
-    public function render(array $params): string
+    /* public function render(array $params): string
     {
         $darkMode = ($params['theme'] ?? 'light') === 'dark';
         
@@ -51,8 +51,31 @@ class DataTableRenderer
         $params['columns'] = $this->normalizeColumns($params['columns'] ?? []);
         $params['actions'] = $this->normalizeActions($params['actions'] ?? []);
 
+        
+
         return $this->renderView($this->getViewPath(), $params);
+    } */
+    public function render(array $params): string
+    {
+        $darkMode = ($params['theme'] ?? 'light') === 'dark';
+        
+        $params['themeClasses'] = $this->generateThemeClasses();
+        $params['columns'] = $this->normalizeColumns($params['columns'] ?? []);
+        $params['actions'] = $this->normalizeActions($params['actions'] ?? []);
+        
+        // Rendu du tableau
+        $tableHtml = $this->renderView($this->getViewPath(), $params);
+        
+        // Rendu du modal s'il existe
+        if (!empty($params['confirmationModal'])) {
+            $modal = new Modal(...$params['confirmationModal']);
+            $tableHtml .= $modal->render();
+            $tableHtml .= $modal->getScript();
+        }
+        
+        return $tableHtml;
     }
+    
 
     /**
      * Normalizes columns to ensure they are in array format

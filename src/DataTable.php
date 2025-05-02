@@ -73,6 +73,9 @@ class DataTable
     /** @var string|null Custom message to show when table is empty */
     private ?string $emptyStateMessage = null;
 
+    /** @var Modal|null Le modal de confirmation */
+private ?Modal $confirmationModal = null;
+
     /**
      * Constructor
      * 
@@ -439,6 +442,31 @@ class DataTable
     }
 
     /**
+ * Sets the confirmation modal configuration
+ * 
+ * @param Modal|array $modal Modal instance or configuration array
+ * @return self
+ */
+public function setConfirmationModal($modal): self
+{
+    if (is_array($modal)) {
+        $this->confirmationModal = new Modal(
+            $modal['id'] ?? 'customModal',
+            $modal['title'] ?? 'Confirmer l\'action',
+            $modal['message'] ?? 'Êtes-vous sûr de vouloir effectuer cette action ?',
+            $modal['formAction'] ?? '#',
+            $modal['submitText'] ?? 'Confirmer',
+            $modal['cancelText'] ?? 'Annuler',
+            $modal['includePasswordField'] ?? false
+        );
+    } elseif ($modal instanceof Modal) {
+        $this->confirmationModal = $modal;
+    }
+    
+    return $this;
+}
+
+    /**
      * Converts the table configuration to an array
      * 
      * @return array
@@ -468,7 +496,8 @@ class DataTable
             'darkMode' => $this->themeMode === 'dark',
             'theme' => $this->themeMode,
             'emptyStateMessage' => $this->emptyStateMessage,
-            'config' => $this->config
+            'config' => $this->config,
+            'confirmationModal' => $this->confirmationModal?->toArray()
         ];
     }
 

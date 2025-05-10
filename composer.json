@@ -15,8 +15,9 @@
         }
     ],
     "require": {
-         "php": "^8.0",
-        "ext-json": "*"
+        "php": "^8.0",
+        "ext-json": "*",
+        "symfony/console": "^7.2"
     },
     "extra": {
         "laravel": {
@@ -33,6 +34,7 @@
     "require-dev": {
         "phpunit/phpunit": "^12.1"
     },
+     "bin": ["bin/jump"],
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",

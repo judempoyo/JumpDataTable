@@ -148,23 +148,14 @@
                 <thead class="<?= $themeClasses['tableHeader'] ?>">
                     <tr>
                         <?php if ($enableRowSelection): ?>
+                            
                             <th scope="col" class="w-12 px-4 py-3 text-center">
-                            <label class="flex items-center cursor-pointer relative"
-                            for="selectAll">
-                                            <input type="checkbox" id="selectAll"
-                                                class="row-checkbox peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-teal-300 checked:bg-teal-800 checked:border-teal-800" />
-                                            <span
-                                                class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
-                                                    fill="currentColor" stroke="currentColor" stroke-width="1">
-                                                    <path fill-rule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                            </span>
-                                        </label>
-                               
-                            </th>
+            <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" 
+                       id="selectAll" 
+                       class="  form-checkbox h-4 w-4 text-teal-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-teal-500 focus:border-teal-500" />
+            </label>
+        </th>
                         <?php endif; ?>
                         <?php foreach ($columns as $column): ?>
                             <th scope="col" class="<?= $themeClasses['tableHeaderCell'] ?>">
@@ -200,24 +191,16 @@
                         <?php foreach ($data as $item): ?>
                             <tr class="<?= $themeClasses['tableRow']. ' '. $themeClasses['animations']['rows'] ?>" data-id="<?= htmlspecialchars($item['id'] ?? '') ?>">
                                 <?php if ($enableRowSelection): ?>
-                                    <td class="px-4 py-3 whitespace-nowrap text-center">
-                                       
-                                        <label class="flex items-center cursor-pointer relative"
-                                            for="row-<?= htmlspecialchars($item['id'] ?? '') ?>">
-                                            <input type="checkbox" id="row-<?= htmlspecialchars($item['id'] ?? '') ?>"
-                                                class="row-checkbox peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-teal-300 checked:bg-teal-800 checked:border-teal-800" />
-                                            <span
-                                                class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
-                                                    fill="currentColor" stroke="currentColor" stroke-width="1">
-                                                    <path fill-rule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                            </span>
-                                        </label>
-                                    </td>
+                                    
 
+                                    <td class="px-4 py-3 whitespace-nowrap text-center">
+   <label class="flex items-center cursor-pointer relative"
+                                            for="row-<?= htmlspecialchars($item['id'] ?? '') ?>">
+        <input type="checkbox" 
+               id="row-<?= htmlspecialchars($item['id'] ?? '') ?>" 
+               class="row-checkbox form-checkbox h-4 w-4 text-teal-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-teal-500 focus:border-teal-500" />
+    </label>
+</td>
 
                                 <?php endif; ?>
                                 <?php foreach ($columns as $column): ?>

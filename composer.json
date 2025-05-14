@@ -17,7 +17,8 @@
     "require": {
         "php": "^8.0",
         "ext-json": "*",
-        "symfony/console": "^7.2"
+        "symfony/console": "^7.2",
+        "symfony/filesystem": "^7.2"
     },
     "extra": {
         "laravel": {

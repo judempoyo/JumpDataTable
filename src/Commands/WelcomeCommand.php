@@ -36,7 +36,6 @@ class WelcomeCommand extends Command
             ""
         ]);
 
-        // Feature Cards
         $io->definitionList(
             '🔹 <jump>Core Features:</>',
             ['<jump>make:datatable</>' => 'Generate responsive datatables'],
@@ -45,7 +44,7 @@ class WelcomeCommand extends Command
             ['<jump>docs</>' => 'Interactive documentation browser']
         );
 
-        // Quick Start
+
         $io->section('🚀 Quick Start');
         $io->writeln("  <jump-secondary>1.</> Create a datatable:");
         $io->writeln("     <jump-code> jump make:datatable Products --model=Product </jump-code>\n");

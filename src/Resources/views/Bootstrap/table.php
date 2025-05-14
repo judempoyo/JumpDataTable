@@ -1,7 +1,7 @@
-<div class="<?= $themeClasses['container'] ?> <?= $themeClasses['animation'] ?>">
+<div class="<?= $themeClasses['container'] ?>">
     <!-- Bulk Actions Bar -->
     <?php if ($enableRowSelection && !empty($bulkActions)): ?>
-        <div id="bulkActionsBar" class="<?= $themeClasses['bulkActionsContainer'] ?> d-none" >
+        <div id="bulkActionsBar" class="d-none <?= $themeClasses['bulkActionsContainer'] ?>">
             <div class="d-flex align-items-center">
                 <i class="bi bi-check-circle-fill me-2 text-primary fs-5"></i>
                 <span id="selectedCount" class="fw-medium">0 éléments sélectionnés</span>
@@ -58,7 +58,7 @@
 
     <!-- Filters Section -->
     <?php if (!empty($filters)): ?>
-        <div class="mb-4 <?= $themeClasses['animation'] ?>">
+        <div class="mb-4 <?= $themeClasses['animations']['filters'] ?>">
             <form method="GET" action="" id="filterForm">
                 <div id="filtersContainer" class="<?= empty($_GET['search']) ? 'd-none' : '' ?> <?= $themeClasses['filtersContainer'] ?>">
                     <div class="row g-3">
@@ -95,7 +95,7 @@
     <?php endif; ?>
 
     <!-- Table Section -->
-    <div class="table-responsive rounded <?= $themeClasses['animation'] ?>">
+    <div class="table-responsive rounded">
         <table class="<?= $themeClasses['table'] ?>">
             <thead class="<?= $themeClasses['tableHeader'] ?>">
                 <tr>

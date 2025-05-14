@@ -7,54 +7,124 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+
 
 #[AsCommand(
     name: 'make:theme',
     description: 'Create a custom color theme'
 )]
+
 class MakeThemeCommand extends Command
 {
-    protected function configure(): void
+    protected static $defaultName = 'jump:datatable:create-theme';
+
+    protected function configure()
     {
-        $this->addArgument('name', InputArgument::REQUIRED, 'Theme name')
-             ->addOption('teal', null, null, 'Use teal as primary color');
+        $this
+            ->setDescription('Creates a new custom theme for JumpDataTable')
+            ->addArgument('theme-name', InputArgument::REQUIRED, 'The name of the theme')
+            ->addArgument('namespace', InputArgument::OPTIONAL, 'The namespace for the theme', 'App\\JumpDataTable\\Themes')
+            ->addArgument('target-dir', InputArgument::OPTIONAL, 'Where to create the theme', 'src/JumpDataTable/Themes');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        $themeName = $input->getArgument('name');
-        $isTeal = $input->getOption('teal');
+        $themeName = $input->getArgument('theme-name');
+        $namespace = trim($input->getArgument('namespace'), '\\');
+        $targetDir = $input->getArgument('target-dir');
 
-        // Generate files
-        $io->section("<jump>Creating theme:</> $themeName");
-        
-        if ($isTeal) {
-            $io->writeln("✓ Using <jump>teal color palette</> as base");
-            $this->generateTealTheme($themeName);
+        $filesystem = new Filesystem();
+        $themeClassName = ucfirst($themeName) . 'Theme';
+        $themeFile = $targetDir.'/'.$themeClassName.'.php';
+
+        if ($filesystem->exists($themeFile)) {
+            $output->writeln('<error>Theme already exists!</error>');
+            return Command::FAILURE;
         }
 
-        $io->listing([
-            "Created <jump-code>themes/$themeName.json</>",
-            "Generated <jump-code>resources/css/$themeName.css</>"
-        ]);
+        $template = $this->getThemeTemplate($namespace, $themeClassName);
 
-        $io->success("Theme '$themeName' ready!");
-        $io->writeln("  Use <jump-code>jump compile:theme $themeName</> to build assets");
+        $filesystem->mkdir($targetDir);
+        $filesystem->dumpFile($themeFile, $template);
+
+        $output->writeln([
+            '<info>Successfully created theme!</info>',
+            '',
+            '<comment>Next steps:</comment>',
+            sprintf('1. Register your theme: <info>DataTableRenderer::registerTheme(\'%s\', %s\\%s::class);</info>', 
+                strtolower($themeName), $namespace, $themeClassName),
+            '2. Use your theme: <info>new DataTableRenderer(\''.strtolower($themeName).'\')</info>',
+            ''
+        ]);
 
         return Command::SUCCESS;
     }
 
-    private function generateTealTheme(string $name): void
+    protected function getThemeTemplate(string $namespace, string $className): string
     {
-        // Template with teal as primary
-        $theme = [
-            'primary' => '#00BFA6',
-            'secondary' => '#00897B',
-            'text' => '#E0F2F1',
-            'background' => '#004D40'
+        return <<<EOT
+<?php
+
+namespace {$namespace};
+
+use Jump\JumpDataTable\Themes\ThemeInterface;
+
+class {$className} implements ThemeInterface
+{
+    protected static array \$presets = [
+        // Vous pouvez définir des préréglages spécifiques à ce thème ici
+    ];
+
+    protected static array \$currentPreset = [];
+    protected static array \$customConfig = [];
+
+    public static function getDefaultConfig(): array
+    {
+        return [
+            'containerClass' => '',
+            'titleClass' => '',
+            // Ajoutez toutes les classes nécessaires
         ];
-        
-        file_put_contents("themes/$name.json", json_encode($theme, JSON_PRETTY_PRINT));
+    }
+
+    public static function usePreset(string \$presetName): void
+    {
+        if (!isset(self::\$presets[\$presetName])) {
+            throw new \\InvalidArgumentException("Preset \$presetName not found.");
+        }
+
+        self::\$currentPreset = call_user_func([self::\$presets[\$presetName], 'getConfig']);
+    }
+
+    public static function overridePreset(array \$overrides): void
+    {
+        self::\$customConfig = array_replace_recursive(self::\$currentPreset, \$overrides);
+    }
+
+    protected static function getConfigValue(string \$key, \$default = "")
+    {
+        if (isset(self::\$customConfig[\$key])) {
+            return self::\$customConfig[\$key];
+        }
+
+        if (isset(self::\$currentPreset[\$key])) {
+            return self::\$currentPreset[\$key];
+        }
+
+        \$defaultConfig = self::getDefaultConfig();
+        return \$defaultConfig[\$key] ?? \$default;
+    }
+
+    // Implémentez toutes les méthodes nécessaires de ThemeInterface
+    // Voici un exemple pour une méthode :
+    public static function getContainerClasses(): string
+    {
+        return self::getConfigValue('containerClass', 'ma-classe-par-defaut');
+    }
+
+    // ... ajoutez toutes les autres méthodes requises par ThemeInterface
+}
+EOT;
     }
 }

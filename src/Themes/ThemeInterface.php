@@ -50,6 +50,5 @@ interface ThemeInterface
     public static function usePreset(string $presetName): void;
     public static function overridePreset(array $overrides): void;
     public static function getAvailablePresets(): array;
-    public static function getCssLinks(): array;
-    public static function getJsLinks(): array;
+
 }

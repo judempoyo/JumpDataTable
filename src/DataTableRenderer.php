@@ -2,6 +2,8 @@
 
 namespace Jump\JumpDataTable;
 
+use Jump\JumpDataTable\Themes\ThemeRegistry;
+
 /**
  * Handles rendering of the DataTable using the specified theme
  * 
@@ -29,7 +31,8 @@ class DataTableRenderer
     public function __construct(string $theme, ?string $viewsPath = null)
     {
         $this->theme = $theme;
-        $this->themeClass = "Jump\\JumpDataTable\\Themes\\" . ucfirst($theme) . "Theme";
+        $this->themeClass = ThemeRegistry::get($theme);
+        //$this->themeClass = "Jump\\JumpDataTable\\Themes\\" . ucfirst($theme) . "Theme";
         $this->viewsPath = $viewsPath ?? __DIR__ . '/Resources/views';
         
         if (!class_exists($this->themeClass)) {

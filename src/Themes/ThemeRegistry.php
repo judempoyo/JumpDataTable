@@ -7,6 +7,7 @@ class ThemeRegistry
     private static array $themes = [
         'tailwind' => "Jump\\JumpDataTable\\Themes\\TailwindTheme",
         'bootstrap' => "Jump\\JumpDataTable\\Themes\\BootstrapTheme"
+        
     ];
 
     public static function register(string $name, string $class, ?string $filePath = null): void

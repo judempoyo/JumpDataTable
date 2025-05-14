@@ -1,99 +1,19 @@
 <?php
-namespace Jump\JumpDataTable\Commands;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\InputOption;
-
-#[AsCommand(
-    name: 'make:datatable-theme',
-    description: 'Create a custom theme for JumpDataTable'
-)]
-class MakeThemeCommand extends Command
-{
-    protected function configure()
-    {
-        $this
-            ->addArgument('name', InputArgument::REQUIRED, 'Theme name')
-            ->addOption(
-                'dir', 
-                'd', 
-                InputOption::VALUE_REQUIRED, 
-                'Target directory',
-                'src/Themes'
-            )
-            ->addOption(
-                'namespace', 
-                null, 
-                InputOption::VALUE_REQUIRED, 
-                'PHP namespace',
-                'App\\Themes'
-            );
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
-        $filesystem = new Filesystem();
-
-        $name = $input->getArgument('name');
-        $targetDir = $input->getOption('dir');
-        $namespace = $input->getOption('namespace');
-
-        $className = ucfirst($name).'Theme';
-        $fullPath = "$targetDir/$className.php";
-
-        if ($filesystem->exists($fullPath)) {
-            $io->error("Theme $className already exists!");
-            return Command::FAILURE;
-        }
-
-        $filesystem->mkdir($targetDir);
-        $filesystem->dumpFile($fullPath, $this->generateTemplate($namespace, $className));
-
-        $io->success("Theme created successfully!");
-        $io->text([
-            "Next steps:",
-            "",
-            "1. Register your theme in your application bootstrap:",
-            sprintf("ThemeRegistry::register('%s', %s\\%s::class, __DIR__.'/../%s');", 
-                strtolower($name), 
-                $namespace, 
-                $className,
-                $fullPath
-            ),
-            "",
-            "2. Use it in your code:",
-            sprintf("new DataTableRenderer('%s')", strtolower($name))
-        ]);
-
-        return Command::SUCCESS;
-    }
-
-    private function generateTemplate(string $namespace, string $className): string
-    {
-        return <<<EOT
-<?php
-
-namespace {$namespace};
+namespace App\Themes;
 
 use Jump\JumpDataTable\Themes\ThemeInterface;
 
-class {$className} implements ThemeInterface
+class CustomTheme implements ThemeInterface
 {
-    protected static array \$presets = [];
-    protected static array \$currentPreset = [];
-    protected static array \$customConfig = [];
+    protected static array $presets = [];
+    protected static array $currentPreset = [];
+    protected static array $customConfig = [];
 
     public static function getDefaultConfig(): array
     {
         return [
-             'containerClass' => 'max-w-full p-6 mx-auto mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-xl animate__animated animate__fadeIn',
+             'containerClass' => 'bg-red-500 max-w-full p-6 mx-auto mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-xl animate__animated animate__fadeIn',
             'titleClass' => 'text-2xl font-bold md:text-3xl animate__animated animate__fadeInLeft text-gray-900 dark:text-white',
             'countBadgeClass' => 'px-3 py-1 text-sm font-medium rounded-full text-teal-800 dark:text-teal-200 bg-teal-100 dark:bg-teal-900',
             'filterButtonClass' => 'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600',
@@ -119,35 +39,35 @@ class {$className} implements ThemeInterface
     }
 
   
-    public static function usePreset(string \$presetName): void
+    public static function usePreset(string $presetName): void
     {
-        if (!isset(self::\$presets[\$presetName])) {
-            throw new \InvalidArgumentException("Preset \$presetName not found. Available: " . implode(', ', array_keys(self::\$presets)));
+        if (!isset(self::$presets[$presetName])) {
+            throw new \InvalidArgumentException("Preset $presetName not found. Available: " . implode(', ', array_keys(self::$presets)));
         }
 
-        self::\$currentPreset = call_user_func([self::\$presets[\$presetName], 'getConfig']);
+        self::$currentPreset = call_user_func([self::$presets[$presetName], 'getConfig']);
     }
 
-    public static function overridePreset(array \$overrides): void
+    public static function overridePreset(array $overrides): void
     {
-        self::\$customConfig = array_replace_recursive(self::\$currentPreset, \$overrides);
+        self::$customConfig = array_replace_recursive(self::$currentPreset, $overrides);
     }
 
-    protected static function getConfigValue(string \$key, \$default = "")
+    protected static function getConfigValue(string $key, $default = "")
     {
-        if (isset(self::\$customConfig[\$key])) {
-            return self::\$customConfig[\$key];
+        if (isset(self::$customConfig[$key])) {
+            return self::$customConfig[$key];
         }
 
-        if (isset(self::\$currentPreset[\$key])) {
-            return self::\$currentPreset[\$key];
+        if (isset(self::$currentPreset[$key])) {
+            return self::$currentPreset[$key];
         }
-        if (empty(self::\$currentPreset)) {
-            \$defaultConfig = self::getDefaultConfig();
-            return \$defaultConfig[\$key] ?? \$default;
+        if (empty(self::$currentPreset)) {
+            $defaultConfig = self::getDefaultConfig();
+            return $defaultConfig[$key] ?? $default;
         }
 
-        return \$default;
+        return $default;
     }
 
     public static function getContainerClasses(): string
@@ -265,27 +185,27 @@ class {$className} implements ThemeInterface
         return self::getConfigValue('paginationClass');
     }
 
-    public static function getPageItemClasses(bool \$active = false): string
+    public static function getPageItemClasses(bool $active = false): string
     {
-        if (\$active) {
-            \$primary = self::getConfigValue('colors.primary', 'teal-500');
-            return "bg-\$primary border-\$primary";
+        if ($active) {
+            $primary = self::getConfigValue('colors.primary', 'teal-500');
+            return "bg-$primary border-$primary";
         }
         return self::getConfigValue('pageItemClass');
     }
 
-    public static function getPageLinkClasses(bool \$active = false): string
+    public static function getPageLinkClasses(bool $active = false): string
     {
-        if (\$active) {
-            \$primary = self::getConfigValue('colors.primary', 'teal-500');
-            return "text-white bg-\$primary border-\$primary";
+        if ($active) {
+            $primary = self::getConfigValue('colors.primary', 'teal-500');
+            return "text-white bg-$primary border-$primary";
         }
         return self::getConfigValue('pageLinkClass');
     }
 
-    public static function getAnimationClasses(string \$animation = "fadeIn"): string
+    public static function getAnimationClasses(string $animation = "fadeIn"): string
     {
-        return "animate__animated animate__\$animation";
+        return "animate__animated animate__$animation";
     }
 
     public static function getHeaderAnimation(): string
@@ -315,9 +235,6 @@ class {$className} implements ThemeInterface
 
         public static function getAvailablePresets(): array
     {
-        return array_keys(self::\$presets);
-    }
-}
-EOT;
+        return array_keys(self::$presets);
     }
 }

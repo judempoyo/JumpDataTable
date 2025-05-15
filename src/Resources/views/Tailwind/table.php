@@ -153,7 +153,7 @@
             <label class="inline-flex items-center cursor-pointer">
                 <input type="checkbox" 
                        id="selectAll" 
-                       class="  form-checkbox h-4 w-4 text-teal-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-teal-500 focus:border-teal-500" />
+                       class="form-checkbox h-4 w-4 text-teal-600 transition duration-150 ease-in-out rounded border-gray-300 focus:ring-teal-500 focus:border-teal-500" />
             </label>
         </th>
                         <?php endif; ?>
@@ -311,7 +311,6 @@
     <?php endif; ?>
 </div>
 <script>
-    // Gestion de la sélection multiple
     document.addEventListener('DOMContentLoaded', function () {
         <?php if ($enableRowSelection): ?>
             const selectAll = document.getElementById('selectAll');
@@ -321,7 +320,6 @@
             const clearSelection = document.getElementById('clearSelection');
 
             if (selectAll && checkboxes.length > 0) {
-                // Sélection/désélection globale
                 selectAll.addEventListener('change', function () {
                     const isChecked = selectAll.checked;
                     checkboxes.forEach(checkbox => {
@@ -331,7 +329,6 @@
                     updateBulkActionsBar();
                 });
 
-                // Mise à jour de la case "Tout sélectionner"
                 checkboxes.forEach(checkbox => {
                     checkbox.addEventListener('change', function () {
                         selectAll.checked = [...checkboxes].every(cb => cb.checked);
@@ -339,7 +336,6 @@
                     });
                 });
 
-                // Mise à jour de la barre d'actions groupées
                 function updateBulkActionsBar() {
                     const selected = [...checkboxes].filter(cb => cb.checked).length;
                     if (selected > 0) {
@@ -352,7 +348,6 @@
                     }
                 }
 
-                // Annulation de la sélection
                 clearSelection?.addEventListener('click', function () {
                     checkboxes.forEach(checkbox => {
                         checkbox.checked = false;
@@ -362,7 +357,6 @@
                     updateBulkActionsBar();
                 });
 
-                // Gestion des actions groupées
                 document.querySelectorAll('.bulk-action-btn').forEach(button => {
                     button.addEventListener('click', function () {
                         const selectedIds = [...checkboxes]
@@ -375,7 +369,7 @@
                         }
 
                         const actionUrl = button.dataset.action;
-                        // Exemple avec une confirmation avant suppression
+                       
                         if (button.textContent.includes('Supprimer')) {
                             if (confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.length} élément${selectedIds.length > 1 ? 's' : ''} ?`)) {
                                 // Implémentez ici la logique de suppression
@@ -383,7 +377,7 @@
                                 // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
                             }
                         } else {
-                            // Autres actions
+                          
                             console.log('Action:', actionUrl, 'IDs:', selectedIds);
                             // window.location.href = `${actionUrl}?ids=${selectedIds.join(',')}`;
                         }
@@ -391,8 +385,6 @@
                 });
             }
         <?php endif; ?>
-
-
     });
 </script>
 <script>

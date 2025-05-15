@@ -2,6 +2,8 @@
 
 namespace Jump\JumpDataTable;
 
+use Jump\JumpDataTable\Themes\ThemeRegistry;
+
 /**
  * Handles rendering of the DataTable using the specified theme
  * 
@@ -18,6 +20,8 @@ class DataTableRenderer
     
     /** @var string Path to the views directory */
     private string $viewsPath;
+     /** @var string Path to the theme directory */
+     private string $themePath;
 
     /**
      * Constructor
@@ -26,16 +30,34 @@ class DataTableRenderer
      * @param string|null $viewsPath Optional custom path to views directory
      * @throws \InvalidArgumentException If theme is not supported
      */
+    /* 
     public function __construct(string $theme, ?string $viewsPath = null)
     {
         $this->theme = $theme;
-        $this->themeClass = "Jump\\JumpDataTable\\Themes\\" . ucfirst($theme) . "Theme";
+        $this->themeClass = ThemeRegistry::get($theme);
+        //$this->themeClass = "Jump\\JumpDataTable\\Themes\\" . ucfirst($theme) . "Theme";
         $this->viewsPath = $viewsPath ?? __DIR__ . '/Resources/views';
         
         if (!class_exists($this->themeClass)) {
             throw new \InvalidArgumentException("Theme {$theme} is not supported");
         }
     }
+ */
+ public function __construct(string $theme, ?string $viewsPath = null)
+    {
+        $this->theme = $theme;
+        $this->themeClass = ThemeRegistry::get($theme);
+        $this->viewsPath = $viewsPath ?? __DIR__ . '/Resources/views';
+        
+        // Get the path where the theme class is located
+        $reflector = new \ReflectionClass($this->themeClass);
+        $this->themePath = dirname($reflector->getFileName());
+        
+        if (!class_exists($this->themeClass)) {
+            throw new \InvalidArgumentException("Theme {$theme} is not supported");
+        }
+    }
+    
 
     /**
      * Renders the DataTable with the given parameters
@@ -145,8 +167,34 @@ class DataTableRenderer
      * 
      * @return string The view file path
      */
-    protected function getViewPath(): string
+   /*  protected function getViewPath(): string
     {
         return $this->viewsPath . '/' . ucfirst($this->theme) . '/table.php';
+    } */
+
+
+    protected function getViewPath(): string
+    {
+        // First try to find template in theme's directory
+        $themeViewPath = $this->themePath . '/views/table.php';
+        
+        if (file_exists($themeViewPath)) {
+            return $themeViewPath;
+        }
+        
+        // Then try the standard location
+        $defaultViewPath = $this->viewsPath . '/' . ucfirst($this->theme) . '/table.php';
+        
+        if (file_exists($defaultViewPath)) {
+            return $defaultViewPath;
+        }
+        
+        // Finally fallback to default theme if exists
+        $fallbackPath = $this->viewsPath . '/Tailwind/table.php';
+        if (file_exists($fallbackPath)) {
+            return $fallbackPath;
+        }
+
+        throw new \RuntimeException("No table template found for theme {$this->theme}");
     }
 }

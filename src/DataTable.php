@@ -2,6 +2,8 @@
 
 namespace Jump\JumpDataTable;
 
+use Jump\JumpDataTable\Themes\ThemeRegistry;
+
 /**
  * Main DataTable class that represents a complete data table with columns, data, actions, etc.
  * 
@@ -346,7 +348,7 @@ class DataTable
      * @return self
      * @throws \InvalidArgumentException If theme is not supported
      */
-    public function useTheme(string $theme, array $customConfig = []): self
+    /* public function useTheme(string $theme, array $customConfig = []): self
     {
         if (!isset($this->themes[$theme])) {
             throw new \InvalidArgumentException("Theme $theme is not supported. Available: " . implode(', ', array_keys($this->themes)));
@@ -357,8 +359,110 @@ class DataTable
         $this->config = array_merge($this->getDefaultConfig(), $customConfig);
         
         return $this;
+    } */
+
+       public function useTheme(string $theme, array $customConfig = [], ?string $customThemeClass = null): self
+    {
+        try {
+            // Try to get theme from registry first
+            $themeClass = ThemeRegistry::get($theme);
+        } catch (\InvalidArgumentException $e) {
+            // Fallback to direct class loading if provided
+            if ($customThemeClass && class_exists($customThemeClass)) {
+                $themeClass = $customThemeClass;
+                ThemeRegistry::register($theme, $themeClass);
+            } else {
+                throw new \InvalidArgumentException(
+                    "Theme '$theme' is not registered. Available themes: " . 
+                    implode(', ', ThemeRegistry::all())
+                );
+            }
+        }
+
+        $this->theme = $theme;
+        $this->renderer = new DataTableRenderer($theme);
+        
+        // Merge default config with customizations
+        $defaultConfig = $themeClass::getDefaultConfig();
+        $this->config = array_merge($defaultConfig, $customConfig);
+        
+        return $this;
     }
 
+    /**
+     * Registers a custom theme class
+     * 
+     * @param string $name Theme name
+     * @param string $class Theme class
+     * @return self
+     */
+    public function registerTheme(string $name, string $class): self
+    {
+        ThemeRegistry::register($name, $class);
+        return $this;
+    }
+
+    /**
+     * Discovers themes in a directory
+     * 
+     * @param string $directory Path to directory
+     * @param string $namespace Namespace prefix
+     * @return self
+     */
+    public function discoverThemes(string $directory, string $namespace): self
+    {
+        ThemeRegistry::discover($directory, $namespace);
+        return $this;
+    }
+
+    /**
+     * Gets the default configuration for the current theme
+     * 
+     * @return array
+     */
+    protected function getDefaultConfig(): array
+    {
+        $themeClass = ThemeRegistry::get($this->theme);
+        
+        if (!method_exists($themeClass, 'getDefaultConfig')) {
+            throw new \RuntimeException(
+                "Theme class {$themeClass} must implement getDefaultConfig() method"
+            );
+        }
+        
+        $config = $themeClass::getDefaultConfig();
+        $this->validateThemeConfig($config);
+        
+        return $config;
+    }
+
+    /**
+     * Validates theme configuration
+     * 
+     * @param array $config
+     * @throws \RuntimeException
+     */
+    protected function validateThemeConfig(array $config): void
+    {
+       $requiredKeys = [
+            'containerClass', 'titleClass', 'countBadgeClass', 'filterButtonClass',
+            'addButtonClass', 'resetButtonClass', 'applyButtonClass', 'actionButtonClass',
+            'filtersContainerClass', 'filterInputClass', 'filterLabelClass', 'tableClass',
+            'tableHeaderClass', 'tableHeaderCellClass', 'tableBodyClass', 'tableRowClass',
+            'tableCellClass', 'emptyStateClass', 'paginationClass', 'pageItemClass',
+            'pageLinkClass', 'animationClass'
+        ];
+        
+        $missing = array_diff($requiredKeys, array_keys($config));
+        
+        if (!empty($missing)) {
+            throw new \RuntimeException(
+                "Missing required theme config keys: " . implode(', ', $missing)
+            );
+        }
+    }
+
+    
     /**
      * Sets the theme mode (light or dark)
      * 
@@ -478,7 +582,7 @@ class DataTable
      * @return array
      * @throws \RuntimeException If required config keys are missing
      */
-    protected function getDefaultConfig(): array
+ /*    protected function getDefaultConfig(): array
     {
         $themeClass = $this->themes[$this->theme];
         $config = $themeClass::getDefaultConfig();
@@ -499,5 +603,5 @@ class DataTable
         }
         
         return $config;
-    }
+    } */
 }

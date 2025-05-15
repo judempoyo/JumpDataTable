@@ -56,6 +56,10 @@ class MakeThemeCommand extends Command
         $filesystem->mkdir($targetDir);
         $filesystem->dumpFile($fullPath, $this->generateTemplate($namespace, $className));
 
+        $viewDir = "$targetDir/views";
+        $filesystem->mkdir($viewDir);
+        $filesystem->dumpFile("$viewDir/table.php", $this->generateViewTemplate());
+
         $io->success("Theme created successfully!");
         $io->text([
             "Next steps:",
@@ -317,7 +321,36 @@ class {$className} implements ThemeInterface
     {
         return array_keys(self::\$presets);
     }
+        public static function getViewPath(): string
+    {
+        return __DIR__.'/views/table.php';
+    }
 }
 EOT;
     }
+  
+    private function generateViewTemplate(): string
+{
+    return <<<'EOT'
+<div class="<?= $themeClasses['container'] ?>">
+    <!-- Header Section -->
+    <div class="<?= $themeClasses['filtersContainer'].' '. $themeClasses['animations']['header'] ?>">
+        <h1 class="<?= $themeClasses['title'] ?>">
+            <?= htmlspecialchars($title) ?>
+        </h1>
+        
+        <!-- Add your theme-specific HTML structure here -->
+    </div>
+
+    <!-- Table Section -->
+    <div class="<?= $themeClasses['animations']['table'] ?>">
+        <table class="<?= $themeClasses['table'] ?>">
+            <!-- Table content -->
+        </table>
+    </div>
+</div>
+EOT;
+
+}
+
 }

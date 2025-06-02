@@ -150,19 +150,31 @@
                                     </div>
                                 </td>
                             <?php endforeach; ?>
-
-                            <?php if (!empty($actions)): ?>
-                                <td class="<?= $themeClasses['tableCell'] ?> text-end">
-                                    <div class="d-flex justify-content-end gap-2">
-                                        <?php foreach ($actions as $action): ?>
-                                            <a href="<?= $action['url']($item) ?>" class="<?= $themeClasses['actionButton'] ?>"
-                                                title="<?= htmlspecialchars($action['label']) ?>">
-                                                <?= $action['icon'] ?? '<i class="bi bi-three-dots"></i>' ?>
-                                            </a>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </td>
-                            <?php endif; ?>
+<?php if (!empty($actions)): ?>
+    <td class="<?= $themeClasses['tableCell'] ?> text-end">
+        <div class="d-flex justify-content-end gap-2">
+            <?php foreach ($actions as $action): ?>
+                <?php if ($action['type'] === 'delete'): ?>
+                    <form action="<?= $action['url']($item) ?>" method="POST" class="d-inline">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" 
+                                class="<?= $themeClasses['actionButton'] ?> btn btn-outline-danger btn-sm"
+                                title="<?= htmlspecialchars($action['label']) ?>"
+                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+                            <?= $action['icon'] ?? '<i class="bi bi-trash"></i>' ?>
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <a href="<?= $action['url']($item) ?>" 
+                       class="<?= $themeClasses['actionButton'] ?> btn btn-outline-primary btn-sm"
+                       title="<?= htmlspecialchars($action['label']) ?>">
+                        <?= $action['icon'] ?? '<i class="bi bi-three-dots"></i>' ?>
+                    </a>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </td>
+<?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>

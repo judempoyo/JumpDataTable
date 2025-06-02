@@ -30,7 +30,8 @@ class DataAction
     
     /** @var bool Whether the action is enabled */
     private bool $isEnabled = true;
-
+    /** @var string http method */
+    private string $method = 'GET'; 
     /**
      * Constructor
      * 
@@ -63,6 +64,7 @@ class DataAction
         $action->options = $config['options'] ?? [];
         $action->classes = isset($config['class']) ? explode(' ', $config['class']) : [];
         $action->isEnabled = $config['enabled'] ?? true;
+        $action->method = strtoupper($config['method'] ?? 'GET');
 
         return $action;
     }
@@ -216,8 +218,25 @@ class DataAction
             ->setIcon($icon ?? self::defaultEditIcon());
     }
 
+     /**
+     * Gets the HTTP method for the action
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
     /**
-     * Creates a delete action
+     * Sets the HTTP method for the action
+     */
+    public function setMethod(string $method): self
+    {
+        $this->method = strtoupper($method);
+        return $this;
+    }
+
+    /**
+      * Creates a delete action  with POST method by default
      * 
      * @param string $label The action label
      * @param callable $urlGenerator A callable that generates the URL
@@ -227,7 +246,9 @@ class DataAction
     public static function delete(string $label, callable $urlGenerator, ?string $icon = null): self
     {
         return (new self('delete', $label, $urlGenerator))
-            ->setIcon($icon ?? self::defaultDeleteIcon());
+            ->setIcon($icon ?? self::defaultDeleteIcon())
+            ->setMethod('POST')
+            ->addClass('delete-action');
     }
 
     /**
@@ -245,6 +266,7 @@ class DataAction
             'options' => $this->options,
             'class' => implode(' ', $this->classes),
             'enabled' => $this->isEnabled,
+            'method' => $this->method,
         ];
     }
 

@@ -11,7 +11,8 @@
     "authors": [
         {
             "name": "Jude mpoyo",
-            "email": "mpoyojude0@gmail.com"
+            "email": "mpoyojude0@gmail.com",
+            "homepage": "https://judempoyo.vercel.app"
         }
     ],
     "require": {
